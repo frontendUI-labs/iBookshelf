@@ -1,3 +1,34 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* .listLayout[id="lista"]:checked {
+  @apply bg-[#000];
+}
+.gridLayout[id="grid"]:checked {
+  @apply bg-[red];
+} */
+@layer components {
+  .grid__mode {
+    @apply mt-10 grid grid-cols-5 gap-x-20 gap-y-14;
+  }
+  .list__mode {
+    @apply mt-10 grid grid-cols-1 gap-x-20 items-center;
+  }
+  .list__li {
+    @apply flex justify-between border-b-2 pb-7 py-10 items-center;
+  }
+  .grid__li {
+    @apply flex flex-col gap-2;
+  }
+  .img__list {
+    @apply h-32  object-cover;
+  }
+  .img__grid {
+    @apply aspect-[2/3];
+  }
+
+  .layout-actions label {
+    @apply bg-[#f2f2f2] px-6 py-3 rounded-full mx-3 cursor-pointer;
+  }
+}

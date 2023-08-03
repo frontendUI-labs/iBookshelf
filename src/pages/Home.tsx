@@ -1,6 +1,6 @@
 import type { FunctionComponent } from "../common/types";
 import bookList from "../data/books.json";
-import React, { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 type Author = {
   name: string;
@@ -53,6 +53,7 @@ const Home = (): FunctionComponent => {
   const { minPage, maxPage } = getMinMaxPages(books);
   const [numberPage, setNumberPage] = useState(maxPage);
   const [selectedGenre, setSelectedGenre] = useState("Todas");
+  const [layout, setLayout] = useState("grid");
 
   const handlePageNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNumberPage(Number(event.target.value));
@@ -86,7 +87,7 @@ const Home = (): FunctionComponent => {
         )}
       </h1>
       <div>
-        <div className="flex gap-10">
+        <div className="flex gap-10 justify-between items-center">
           <div className="flex flex-col gap-4">
             <label htmlFor="volume">Filtrar por paginas</label>
             <div className="flex gap-5">
@@ -120,13 +121,49 @@ const Home = (): FunctionComponent => {
               <option value="Anime"> Anime</option>
             </select>
           </div>
+          <div className="layout-actions">
+            <label htmlFor="lista">
+              <span>List</span>
+            </label>
+            <input
+              hidden
+              onChange={(event) => {
+                setLayout(event.target.value);
+              }}
+              type="radio"
+              name="display"
+              id="lista"
+              value={"list"}
+            />
+            <label htmlFor="grid">
+              <span>Grid</span>
+            </label>
+            <input
+              hidden
+              type="radio"
+              name="display"
+              id="grid"
+              value={"grid"}
+              onChange={(event) => {
+                setLayout(event.target.value);
+              }}
+            />
+          </div>
         </div>
       </div>
-      <ul className="mt-10 grid grid-cols-5 gap-x-20 gap-y-14">
+      <ul className={layout === "grid" ? "grid__mode" : "list__mode"}>
+        {/* <ul className={}> */}
         {filteredBooks.length > 0 ? (
           filteredBooks.map((book) => (
-            <li key={book.book.ISBN} className="flex flex-col gap-2">
-              <img className="aspect-[2/3]" src={book.book.cover} alt="" />
+            <li
+              key={book.book.ISBN}
+              className={layout === "grid" ? "grid__li" : "list__li"}
+            >
+              <img
+                className={layout === "grid" ? "img__grid" : "img__list"}
+                src={book.book.cover}
+                alt=""
+              />
               <h2 className="text-xl font-bold capitalize">
                 {book.book.title}
               </h2>
