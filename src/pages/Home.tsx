@@ -152,7 +152,6 @@ const Home = (): FunctionComponent => {
         </div>
       </div>
       <ul className={layout === "grid" ? "grid__mode" : "list__mode"}>
-        {/* <ul className={}> */}
         {filteredBooks.length > 0 ? (
           filteredBooks.map((book) => (
             <li
