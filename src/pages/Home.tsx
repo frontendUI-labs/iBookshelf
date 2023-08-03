@@ -1,6 +1,9 @@
 import type { FunctionComponent } from "../common/types";
 import bookList from "../data/books.json";
-import { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
+import { twMerge } from "tailwind-merge";
+import LayoutTypeInput from "../components/ui/LayoutTypeInput.tsx";
+import { GridLayoutIcon, ListLayoutIcon } from "../assets/icons";
 
 type Author = {
   name: string;
@@ -46,6 +49,8 @@ const getMinMaxPages = (
   return { minPage, maxPage };
 };
 
+type LayoutType = "grid" | "list";
+
 const Home = (): FunctionComponent => {
   const [books] = useState(bookList.library);
 
@@ -53,7 +58,7 @@ const Home = (): FunctionComponent => {
   const { minPage, maxPage } = getMinMaxPages(books);
   const [numberPage, setNumberPage] = useState(maxPage);
   const [selectedGenre, setSelectedGenre] = useState("Todas");
-  const [layout, setLayout] = useState("grid");
+  const [layout, setLayout] = useState<LayoutType>("grid"); // grid | list
 
   const handlePageNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNumberPage(Number(event.target.value));
@@ -75,6 +80,8 @@ const Home = (): FunctionComponent => {
   const filteredBooks = useMemo(() => {
     return filteredGenreBooks.filter((b) => b.book.pages <= numberPage);
   }, [filteredGenreBooks, numberPage]);
+
+  const isGridLayout = layout === "grid";
 
   return (
     <div className="container mx-auto px-4 py-10">
@@ -98,7 +105,7 @@ const Home = (): FunctionComponent => {
                 name="volume"
                 min={minPage}
                 max={maxPage}
-                className="w-[500px]"
+                className="w-[300px]"
                 value={numberPage}
                 onChange={handlePageNumber}
               />
@@ -121,45 +128,48 @@ const Home = (): FunctionComponent => {
               <option value="Anime"> Anime</option>
             </select>
           </div>
-          <div className="layout-actions">
-            <label htmlFor="lista">
-              <span>List</span>
-            </label>
-            <input
-              hidden
-              onChange={(event) => {
-                setLayout(event.target.value);
+          <div className="flex items-center gap-2">
+            <LayoutTypeInput
+              value="list"
+              id="list"
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                setLayout(event.target.value as LayoutType);
               }}
-              type="radio"
-              name="display"
-              id="lista"
-              value={"list"}
+              label="List"
+              icon={<ListLayoutIcon />}
+              isChecked={!isGridLayout}
             />
-            <label htmlFor="grid">
-              <span>Grid</span>
-            </label>
-            <input
-              hidden
-              type="radio"
-              name="display"
+            <LayoutTypeInput
+              value="grid"
               id="grid"
-              value={"grid"}
-              onChange={(event) => {
-                setLayout(event.target.value);
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                setLayout(event.target.value as LayoutType);
               }}
+              label="Grid"
+              icon={<GridLayoutIcon />}
+              isChecked={isGridLayout}
             />
           </div>
         </div>
       </div>
-      <ul className={layout === "grid" ? "grid__mode" : "list__mode"}>
+      <ul
+        className={twMerge(
+          "mt-10 grid gap-x-20",
+          isGridLayout ? "grid-cols-5 gap-y-14" : "grid-cols-1 items-center"
+        )}
+      >
         {filteredBooks.length > 0 ? (
           filteredBooks.map((book) => (
             <li
               key={book.book.ISBN}
-              className={layout === "grid" ? "grid__li" : "list__li"}
+              className={
+                isGridLayout
+                  ? "flex flex-col gap-2"
+                  : "flex justify-between border-b-2 pb-7 py-10 items-center"
+              }
             >
               <img
-                className={layout === "grid" ? "img__grid" : "img__list"}
+                className={isGridLayout ? "aspect-[2/3]" : "h-32  object-cover"}
                 src={book.book.cover}
                 alt=""
               />
