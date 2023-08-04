@@ -231,7 +231,7 @@ const Home = (): FunctionComponent => {
           <div className="flex flex-col gap-2">
             <label htmlFor="search">Buscar por nombre del libro</label>
             <input
-              className="outline-white h-[40px] p-3 bg-slate-200 text-base"
+              className="h-[40px] p-3 bg-white border-[1px] border-[rgb(24_24_27)] text-base placeholder:text-neutral-700 rounded-[10px] focus:outline-none focus:ring-[1px] focus:ring-[rgb(24_24_27)]"
               value={searchBook}
               onChange={(event) => {
                 setSearchBook(event.target.value);
