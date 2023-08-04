@@ -91,31 +91,39 @@ const DeleteBookButton = ({ onDelete }: { onDelete: () => void }) => {
 };
 
 type SliderDemoProps = {
+  value: number;
   minPage: number;
   maxPage: number;
+  onChange: (value: number[]) => void;
 };
 
-const SliderDemo: React.FC<SliderDemoProps> = ({ minPage, maxPage }) => {
+const PagesSlider: React.FC<SliderDemoProps> = ({
+  value,
+  onChange,
+  minPage,
+  maxPage,
+}) => {
   return (
     <form>
       <p className="text-[18px] font-semibold">Filter by pages</p>
       <div className="flex items-center gap-3 mt-4">
-        <p className="italic">MIN: {minPage} </p>
         <Slider.Root
           className="relative flex items-center select-none touch-none w-[300px] h-5"
-          defaultValue={[0]}
-          max={100}
-          step={1}
+          max={maxPage}
+          min={minPage}
+          step={20}
+          value={[value]}
+          onValueChange={onChange}
         >
-          <Slider.Track className="bg-[#9fb3b551] relative grow rounded-full h-[8px]">
-            <Slider.Range className="absolute bg-[#215073] rounded-full h-full" />
+          <Slider.Track className="relative grow rounded-full h-[8px] bg-[rgb(244_244_245)]">
+            <Slider.Range className="absolute bg-[rgb(24_24_27)] rounded-full h-full" />
           </Slider.Track>
           <Slider.Thumb
-            className="block w-5 h-5 bg-[#215073] shadow-[0_2px_10px] shadow-blackA7 rounded-[10px] hover:bg-violet3 focus:outline-none focus:shadow-[0_0_0_5px] focus:shadow-[#A1B7B9]"
+            className="block w-5 h-5 bg-white rounded-[10px] border-2 border-[rgb(24_24_27)]"
             aria-label="Volume"
           />
         </Slider.Root>
-        <p className="italic">MAX: {maxPage} </p>
+        <p className="italic">MAX: {value} </p>
       </div>
     </form>
   );
@@ -163,8 +171,9 @@ const Home = (): FunctionComponent => {
   const [layout, setLayout] = useState<LayoutType>("grid"); // grid | list
   const [searchBook, setSearchBook] = useState("");
 
-  const handlePageNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNumberPage(Number(event.target.value));
+  const handlePageNumber = (values: number[]) => {
+    const [value] = values;
+    setNumberPage(value ?? minPage);
   };
 
   const handleGenre = useCallback((genre: string) => {
@@ -208,24 +217,12 @@ const Home = (): FunctionComponent => {
       </h1>
       <div>
         <div className="flex gap-10 justify-between items-center">
-          <SliderDemo minPage={minPage} maxPage={maxPage} />
-          <div className="flex flex-col gap-4">
-            <label htmlFor="volume">Filtrar por paginas</label>
-            <div className="flex gap-5">
-              <span>Min:{minPage}</span>
-              <input
-                type="range"
-                id="volume"
-                name="volume"
-                min={minPage}
-                max={maxPage}
-                className="w-[300px]"
-                value={numberPage}
-                onChange={handlePageNumber}
-              />
-              <span>Max:{maxPage}</span>
-            </div>
-          </div>
+          <PagesSlider
+            value={numberPage}
+            onChange={handlePageNumber}
+            minPage={minPage}
+            maxPage={maxPage}
+          />
           <GenreSelect
             value={selectedGenre}
             onChange={handleGenre}
