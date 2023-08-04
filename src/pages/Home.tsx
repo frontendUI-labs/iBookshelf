@@ -200,22 +200,6 @@ const Home = (): FunctionComponent => {
             onChange={handleGenre}
             options={["Todas", ...genres]}
           />
-          {/*<div className="flex flex-col gap-4">*/}
-          {/*  <label htmlFor="genre">Filtrar por genero</label>*/}
-          {/*  <select*/}
-          {/*    value={selectedGenre}*/}
-          {/*    onChange={handleGenre}*/}
-          {/*    name="genre"*/}
-          {/*    id="genre"*/}
-          {/*  >*/}
-          {/*    {["Todas", ...genres].map((genre) => (*/}
-          {/*      <option key={genre} value={genre}>*/}
-          {/*        {genre}*/}
-          {/*      </option>*/}
-          {/*    ))}*/}
-          {/*    <option value="Anime"> Anime</option>*/}
-          {/*  </select>*/}
-          {/*</div>*/}
           <div className="flex flex-col gap-2">
             <label htmlFor="search">Buscar por nombre del libro</label>
             <input
