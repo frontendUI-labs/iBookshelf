@@ -5,6 +5,7 @@ import { twMerge } from "tailwind-merge";
 import LayoutTypeInput from "../components/ui/LayoutTypeInput.tsx";
 import { GridLayoutIcon, ListLayoutIcon } from "../assets/icons";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
+import GenreSelect from "../components/ui/GenreSelect.tsx";
 
 type Author = {
   name: string;
@@ -89,26 +90,6 @@ const DeleteBookButton = ({ onDelete }: { onDelete: () => void }) => {
   );
 };
 
-// <div className="absolute bg-[#232222cf] w-full h-full">
-//   <div className="absolute left-1/2 top-1/4 -translate-x-1/2 z-10  bg-[#F2F2F2]  p-10 flex flex-col items-center gap-10 w-60">
-//     <p>Are you sure to delete this book?</p>
-//     <div className="flex gap-4">
-//       <button
-//         className="bg-[#b3aeaee7] text-[#ffffff] border-double border-4 rounded-md w-24 py-2"
-//         onClick={onClose}
-//       >
-//         Close
-//       </button>
-//       <button
-//         onClick={onDelete}
-//         className="bg-[#1C73E8] text-[#ffffff] border-double border-4 rounded-md w-24 py-2"
-//       >
-//         Confirm
-//       </button>
-//     </div>
-//   </div>
-// </div>
-
 type BookCardProps = {
   book: Library;
   isGridLayout: boolean;
@@ -155,12 +136,9 @@ const Home = (): FunctionComponent => {
     setNumberPage(Number(event.target.value));
   };
 
-  const handleGenre = useCallback(
-    (event: React.ChangeEvent<HTMLSelectElement>) => {
-      setSelectedGenre(event.target.value);
-    },
-    []
-  );
+  const handleGenre = useCallback((genre: string) => {
+    setSelectedGenre(genre);
+  }, []);
 
   const filteredGenreBooks = useMemo(() => {
     return selectedGenre === "Todas"
@@ -217,22 +195,27 @@ const Home = (): FunctionComponent => {
               <span>Max:{maxPage}</span>
             </div>
           </div>
-          <div className="flex flex-col gap-4">
-            <label htmlFor="genre">Filtrar por genero</label>
-            <select
-              value={selectedGenre}
-              onChange={handleGenre}
-              name="genre"
-              id="genre"
-            >
-              {["Todas", ...genres].map((genre) => (
-                <option key={genre} value={genre}>
-                  {genre}
-                </option>
-              ))}
-              <option value="Anime"> Anime</option>
-            </select>
-          </div>
+          <GenreSelect
+            value={selectedGenre}
+            onChange={handleGenre}
+            options={["Todas", ...genres]}
+          />
+          {/*<div className="flex flex-col gap-4">*/}
+          {/*  <label htmlFor="genre">Filtrar por genero</label>*/}
+          {/*  <select*/}
+          {/*    value={selectedGenre}*/}
+          {/*    onChange={handleGenre}*/}
+          {/*    name="genre"*/}
+          {/*    id="genre"*/}
+          {/*  >*/}
+          {/*    {["Todas", ...genres].map((genre) => (*/}
+          {/*      <option key={genre} value={genre}>*/}
+          {/*        {genre}*/}
+          {/*      </option>*/}
+          {/*    ))}*/}
+          {/*    <option value="Anime"> Anime</option>*/}
+          {/*  </select>*/}
+          {/*</div>*/}
           <div className="flex flex-col gap-2">
             <label htmlFor="search">Buscar por nombre del libro</label>
             <input
