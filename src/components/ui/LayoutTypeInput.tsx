@@ -22,6 +22,7 @@ function LayoutTypeInput({
     <>
       <label
         htmlFor={id}
+        tabIndex={0}
         className={twMerge(
           "flex items-center justify-center w-10 h-10 bg-[#f2f2f2] rounded-full cursor-pointer",
           "transition-colors duration-100",
