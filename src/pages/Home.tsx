@@ -7,6 +7,7 @@ import { GridLayoutIcon, ListLayoutIcon } from "../assets/icons";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import * as Slider from "@radix-ui/react-slider";
 import GenreSelect from "../components/ui/GenreSelect.tsx";
+import Button from "../common/Button.tsx";
 
 type Author = {
   name: string;
@@ -52,27 +53,6 @@ const getMinMaxPages = (
   return { minPage, maxPage };
 };
 
-type ButonModalProps = {
-  onClick: any;
-  backgroundColor: string;
-  textColor: string;
-  text: string;
-};
-const ButonModal: React.FC<ButonModalProps> = ({
-  onClick,
-  textColor,
-  backgroundColor,
-  text,
-}) => {
-  return (
-    <button
-      onClick={onClick}
-      className={`inline-flex items-center rounded-md px-4 text-base shadow-[0_0_0_2px] outline-none font-medium h-9 text-[${textColor}] bg-[${backgroundColor}] hover:scale-105 duration-100 focus:scale-110`}
-    >
-      {text}
-    </button>
-  );
-};
 type LayoutType = "grid" | "list";
 const DeleteBookButton = ({ onDelete }: { onDelete: () => void }) => {
   return (
@@ -94,22 +74,14 @@ const DeleteBookButton = ({ onDelete }: { onDelete: () => void }) => {
           <AlertDialog.Title className="text-xl mb-10">
             Are you absolutely sure to delete?
           </AlertDialog.Title>
-          <div style={{ display: "flex", gap: 25, justifyContent: "flex-end" }}>
+          <div className="flex gap-5 justify-end">
             <AlertDialog.Cancel asChild>
-              <ButonModal
-                backgroundColor="#EEEDEF"
-                text="Cancel"
-                textColor="#686770"
-                onClick={() => {}}
-              />
+              <Button variant="secondary">Cancel</Button>
             </AlertDialog.Cancel>
             <AlertDialog.Action asChild>
-              <ButonModal
-                backgroundColor="#FFE5E4"
-                text="Yes, delete"
-                textColor="#CD2B30"
-                onClick={onDelete}
-              />
+              <Button variant="danger" onClick={onDelete}>
+                Yes, delete
+              </Button>
             </AlertDialog.Action>
           </div>
         </AlertDialog.Content>
@@ -117,6 +89,7 @@ const DeleteBookButton = ({ onDelete }: { onDelete: () => void }) => {
     </AlertDialog.Root>
   );
 };
+
 type SliderDemoProps = {
   minPage: number;
   maxPage: number;
