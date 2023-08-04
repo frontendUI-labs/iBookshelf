@@ -5,8 +5,8 @@ import { twMerge } from "tailwind-merge";
 import LayoutTypeInput from "../components/ui/LayoutTypeInput.tsx";
 import { GridLayoutIcon, ListLayoutIcon } from "../assets/icons";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
-import GenreSelect from "../components/ui/GenreSelect.tsx";
 import * as Slider from "@radix-ui/react-slider";
+import GenreSelect from "../components/ui/GenreSelect.tsx";
 
 type Author = {
   name: string;
