@@ -8,6 +8,7 @@ import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import * as Slider from "@radix-ui/react-slider";
 import GenreSelect from "../components/ui/GenreSelect.tsx";
 import Button from "../common/Button.tsx";
+import { Trash2 } from "lucide-react";
 
 type Author = {
   name: string;
@@ -60,19 +61,15 @@ const DeleteBookButton = ({ onDelete }: { onDelete: () => void }) => {
       <AlertDialog.Trigger asChild className="">
         <div className="absolute z-0 group-hover:bg-black opacity-80 w-full h-full">
           <button className="hidden group-hover:block absolute right-1 top-2 w-8 h-8">
-            <img
-              className="w-full h-full hover:-rotate-[20deg] duration-75"
-              src="/icons/trash-icon.svg"
-              alt=""
-            />
+            <Trash2 color="red" aria-label="Remover libro" />
           </button>
         </div>
       </AlertDialog.Trigger>
       <AlertDialog.Portal>
         <AlertDialog.Overlay className="bg-neutral-800 opacity-70 fixed inset-0" />
-        <AlertDialog.Content className="w-[90vw] max-w-[500px] max-h-[85vh] p-6 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-orange-50 rounded-md shadow-[hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px]">
+        <AlertDialog.Content className="w-[90vw] max-w-[500px] max-h-[85vh] p-6 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-md shadow-[hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px]">
           <AlertDialog.Title className="text-xl mb-10">
-            Are you absolutely sure to delete?
+            Estás seguro que deseas eliminar este libro?
           </AlertDialog.Title>
           <div className="flex gap-5 justify-end">
             <AlertDialog.Cancel asChild>
@@ -104,8 +101,8 @@ const PagesSlider: React.FC<SliderDemoProps> = ({
   maxPage,
 }) => {
   return (
-    <form>
-      <p className="text-[18px] font-semibold">Filter by pages</p>
+    <div>
+      <p>Filter by pages</p>
       <div className="flex items-center gap-3 mt-4">
         <Slider.Root
           className="relative flex items-center select-none touch-none w-[300px] h-5"
@@ -125,7 +122,7 @@ const PagesSlider: React.FC<SliderDemoProps> = ({
         </Slider.Root>
         <p className="italic">MAX: {value} </p>
       </div>
-    </form>
+    </div>
   );
 };
 
