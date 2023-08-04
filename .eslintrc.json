@@ -56,6 +56,7 @@
 		"@typescript-eslint/prefer-enum-initializers": "error",
 		"@typescript-eslint/prefer-readonly": "error",
 		"no-return-await": "off",
+		"unicorn/prefer-string-replace-all": "off",
 		"@typescript-eslint/return-await": "error",
 		"react-refresh/only-export-components": [
 			"warn",

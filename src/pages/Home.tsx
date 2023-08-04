@@ -138,6 +138,9 @@ function BookCard({ book, isGridLayout, onDelete }: BookCardProps) {
   );
 }
 
+const removeAccents = (text: string): string =>
+  text.normalize("NFD").replace(/[\u0300-\u036F]/g, "");
+
 const Home = (): FunctionComponent => {
   const [books, setBooks] = useState(bookList.library);
 
@@ -165,20 +168,17 @@ const Home = (): FunctionComponent => {
       : books.filter((b) => b.book.genre === selectedGenre);
   }, [books, selectedGenre]);
 
-  const filteredBooks = useMemo(() => {
+  const filteredPagesBooks = useMemo(() => {
     return filteredGenreBooks.filter((b) => b.book.pages <= numberPage);
   }, [filteredGenreBooks, numberPage]);
 
-  const findbooks = useMemo(() => {
-    return filteredBooks.filter((b) => {
-      const noTildes = (text: string): string => {
-        return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-      };
-      const TodoTextLC = noTildes(b.book.title.toLowerCase());
-      const searchTextLC = noTildes(searchBook.toLowerCase());
-      return TodoTextLC.includes(searchTextLC);
+  const bookResults = useMemo(() => {
+    return filteredPagesBooks.filter((b) => {
+      const cleanTitle = removeAccents(b.book.title.toLowerCase());
+      const cleanSearchText = removeAccents(searchBook.trim().toLowerCase());
+      return cleanTitle.includes(cleanSearchText);
     });
-  }, [searchBook, filteredBooks]);
+  }, [searchBook, filteredPagesBooks]);
 
   const isGridLayout = layout === "grid";
 
@@ -192,9 +192,9 @@ const Home = (): FunctionComponent => {
       x
       <h1 className="text-4xl mb-10 font-bold text-center">
         Lista de libros{" "}
-        {findbooks.length > 0 && (
+        {bookResults.length > 0 && (
           <span className="mb-6 text-base">
-            ({findbooks.length} libros disponibles)
+            ({bookResults.length} libros disponibles)
           </span>
         )}
       </h1>
@@ -233,19 +233,17 @@ const Home = (): FunctionComponent => {
               <option value="Anime"> Anime</option>
             </select>
           </div>
-          <div>
-            <label className="sr-only" htmlFor="">
-              Filtra por nombre del libro
-            </label>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="search">Buscar por nombre del libro</label>
             <input
-              className="outline-white p-6 bg-slate-200"
+              className="outline-white h-[40px] p-3 bg-slate-200 text-base"
+              value={searchBook}
               onChange={(event) => {
-                setTimeout(() => {
-                  setSearchBook(event.target.value);
-                }, 500);
+                setSearchBook(event.target.value);
               }}
+              id="search"
               type="text"
-              placeholder="Filtra por nombre..."
+              placeholder="Eg: Harry Potter"
             />
           </div>
           <div className="flex items-center gap-2">
@@ -278,8 +276,8 @@ const Home = (): FunctionComponent => {
           isGridLayout ? "grid-cols-5 gap-y-14" : "grid-cols-1 items-center"
         )}
       >
-        {filteredBooks.length > 0 ? (
-          findbooks.map((book) => {
+        {bookResults.length > 0 ? (
+          bookResults.map((book) => {
             return (
               <BookCard
                 key={book.book.ISBN}
