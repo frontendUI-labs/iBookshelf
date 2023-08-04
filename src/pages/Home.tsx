@@ -146,6 +146,7 @@ const Home = (): FunctionComponent => {
   const [numberPage, setNumberPage] = useState(maxPage);
   const [selectedGenre, setSelectedGenre] = useState("Todas");
   const [layout, setLayout] = useState<LayoutType>("grid"); // grid | list
+  const [searchBook, setSearchBook] = useState("");
 
   const handlePageNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNumberPage(Number(event.target.value));
@@ -168,6 +169,17 @@ const Home = (): FunctionComponent => {
     return filteredGenreBooks.filter((b) => b.book.pages <= numberPage);
   }, [filteredGenreBooks, numberPage]);
 
+  const findbooks = useMemo(() => {
+    return filteredBooks.filter((b) => {
+      const noTildes = (text: string): string => {
+        return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      };
+      const TodoTextLC = noTildes(b.book.title.toLowerCase());
+      const searchTextLC = noTildes(searchBook.toLowerCase());
+      return TodoTextLC.includes(searchTextLC);
+    });
+  }, [searchBook, filteredBooks]);
+
   const isGridLayout = layout === "grid";
 
   const handleDelete = (ISBN: string) => {
@@ -178,16 +190,16 @@ const Home = (): FunctionComponent => {
   return (
     <div className="relative container mx-auto px-4 py-10">
       x
-      <h1 className="text-4xl mb-10 font-bold">
+      <h1 className="text-4xl mb-10 font-bold text-center">
         Lista de libros{" "}
-        {filteredBooks.length > 0 && (
+        {findbooks.length > 0 && (
           <span className="mb-6 text-base">
-            ({filteredBooks.length} libros disponibles)
+            ({findbooks.length} libros disponibles)
           </span>
         )}
       </h1>
       <div>
-        <div className="flex gap-10 justify-between items-center">
+        <div className="flex gap-4 justify-between items-center flex-wrap">
           <div className="flex flex-col gap-4">
             <label htmlFor="volume">Filtrar por paginas</label>
             <div className="flex gap-5">
@@ -221,6 +233,21 @@ const Home = (): FunctionComponent => {
               <option value="Anime"> Anime</option>
             </select>
           </div>
+          <div>
+            <label className="sr-only" htmlFor="">
+              Filtra por nombre del libro
+            </label>
+            <input
+              className="outline-white p-6 bg-slate-200"
+              onChange={(event) => {
+                setTimeout(() => {
+                  setSearchBook(event.target.value);
+                }, 500);
+              }}
+              type="text"
+              placeholder="Filtra por nombre..."
+            />
+          </div>
           <div className="flex items-center gap-2">
             <LayoutTypeInput
               value="list"
@@ -252,7 +279,7 @@ const Home = (): FunctionComponent => {
         )}
       >
         {filteredBooks.length > 0 ? (
-          filteredBooks.map((book) => {
+          findbooks.map((book) => {
             return (
               <BookCard
                 key={book.book.ISBN}
