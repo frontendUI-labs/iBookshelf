@@ -47,7 +47,6 @@
 		"camelcase": "error",
 		"@typescript-eslint/adjacent-overload-signatures": "error",
 		"@typescript-eslint/consistent-type-exports": "error",
-		"@typescript-eslint/consistent-type-imports": "error",
 		"@typescript-eslint/explicit-member-accessibility": "error",
 		"@typescript-eslint/no-confusing-void-expression": "error",
 		"@typescript-eslint/no-import-type-side-effects": "error",

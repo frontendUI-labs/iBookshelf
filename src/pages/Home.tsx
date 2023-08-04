@@ -1,9 +1,10 @@
 import type { FunctionComponent } from "../common/types";
 import bookList from "../data/books.json";
-import { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import LayoutTypeInput from "../components/ui/LayoutTypeInput.tsx";
 import { GridLayoutIcon, ListLayoutIcon } from "../assets/icons";
+import * as AlertDialog from "@radix-ui/react-alert-dialog";
 
 type Author = {
   name: string;
@@ -50,6 +51,92 @@ const getMinMaxPages = (
 };
 
 type LayoutType = "grid" | "list";
+const DeleteBookButton = ({ onDelete }: { onDelete: () => void }) => {
+  return (
+    <AlertDialog.Root>
+      <AlertDialog.Trigger asChild>
+        <button className="relative right-2 top-2 w-8 h-8">
+          <img
+            className="absolute w-full h-full"
+            src="/icons/trash-icon.svg"
+            alt=""
+          />
+        </button>
+      </AlertDialog.Trigger>
+      <AlertDialog.Portal>
+        <AlertDialog.Overlay className="bg-neutral-800 opacity-70 fixed inset-0" />
+        <AlertDialog.Content className="w-[90vw] max-w-[500px] max-h-[85vh] p-6 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-md shadow-[hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px]">
+          <AlertDialog.Title className="AlertDialogTitle">
+            Are you absolutely sure?
+          </AlertDialog.Title>
+          <AlertDialog.Description className="AlertDialogDescription">
+            This action cannot be undone. This will permanently delete your
+            account and remove your data from our servers.
+          </AlertDialog.Description>
+          <div style={{ display: "flex", gap: 25, justifyContent: "flex-end" }}>
+            <AlertDialog.Cancel asChild>
+              <button className="Button mauve">Cancel</button>
+            </AlertDialog.Cancel>
+            <AlertDialog.Action asChild>
+              <button className="Button red" onClick={onDelete}>
+                Yes, delete account
+              </button>
+            </AlertDialog.Action>
+          </div>
+        </AlertDialog.Content>
+      </AlertDialog.Portal>
+    </AlertDialog.Root>
+  );
+};
+
+// <div className="absolute bg-[#232222cf] w-full h-full">
+//   <div className="absolute left-1/2 top-1/4 -translate-x-1/2 z-10  bg-[#F2F2F2]  p-10 flex flex-col items-center gap-10 w-60">
+//     <p>Are you sure to delete this book?</p>
+//     <div className="flex gap-4">
+//       <button
+//         className="bg-[#b3aeaee7] text-[#ffffff] border-double border-4 rounded-md w-24 py-2"
+//         onClick={onClose}
+//       >
+//         Close
+//       </button>
+//       <button
+//         onClick={onDelete}
+//         className="bg-[#1C73E8] text-[#ffffff] border-double border-4 rounded-md w-24 py-2"
+//       >
+//         Confirm
+//       </button>
+//     </div>
+//   </div>
+// </div>
+
+type BookCardProps = {
+  book: Library;
+  isGridLayout: boolean;
+  onDelete: () => void;
+};
+function BookCard({ book, isGridLayout, onDelete }: BookCardProps) {
+  return (
+    <li
+      className={
+        isGridLayout
+          ? "flex flex-col gap-2"
+          : "flex justify-between border-b-2 pb-7 py-10 items-center"
+      }
+    >
+      <div className="">
+        <DeleteBookButton onDelete={onDelete} />
+        <img
+          className={isGridLayout ? "aspect-[2/3]" : "h-32  object-cover"}
+          src={book.book.cover}
+          alt=""
+        />
+      </div>
+
+      <h2 className="text-xl font-bold capitalize">{book.book.title}</h2>
+      <p>{book.book.author.name}</p>
+    </li>
+  );
+}
 
 const Home = (): FunctionComponent => {
   const [books, setBooks] = useState(bookList.library);
@@ -59,15 +146,6 @@ const Home = (): FunctionComponent => {
   const [numberPage, setNumberPage] = useState(maxPage);
   const [selectedGenre, setSelectedGenre] = useState("Todas");
   const [layout, setLayout] = useState<LayoutType>("grid"); // grid | list
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-
-  const handleOpenDialog = () => {
-    setIsDialogOpen(true);
-  };
-
-  const handleCloseDialog = () => {
-    setIsDialogOpen(false);
-  };
 
   const handlePageNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNumberPage(Number(event.target.value));
@@ -92,48 +170,14 @@ const Home = (): FunctionComponent => {
 
   const isGridLayout = layout === "grid";
 
-  // const handleDelete = (ISBN: string) => {
-  //   const deleteBooks = books.filter((books) => books.book.ISBN !== ISBN);
-  //   setBooks(deleteBooks);
-  // };
-  const Dialog = ({
-    isOpen,
-    onClose,
-  }: {
-    isOpen: boolean;
-    onClose: () => void;
-  }) => {
-    if (!isOpen) return null;
-
-    return (
-      <div className="absolute bg-[#232222cf]  w-full h-full">
-        <div className="absolute left-1/2 top-1/4 -translate-x-1/2 z-10  bg-[#F2F2F2]  p-10 flex flex-col items-center gap-10 w-60">
-          <p>Are you sure to delete this book?</p>
-          <div className="flex gap-4">
-            <button
-              className="bg-[#b3aeaee7] text-[#ffffff] border-double border-4 rounded-md w-24 py-2"
-              onClick={onClose}
-            >
-              Close
-            </button>
-            <button
-              onClick={() => {
-                // handleDelete(books.book.ISBN);
-              }}
-              className="bg-[#1C73E8] text-[#ffffff] border-double border-4 rounded-md w-24 py-2"
-            >
-              Confirm
-            </button>
-          </div>
-        </div>
-      </div>
-    );
+  const handleDelete = (ISBN: string) => {
+    const deleteBooks = books.filter((books) => books.book.ISBN !== ISBN);
+    setBooks(deleteBooks);
   };
 
   return (
     <div className="relative container mx-auto px-4 py-10">
-      <Dialog isOpen={isDialogOpen} onClose={handleCloseDialog} />
-
+      x
       <h1 className="text-4xl mb-10 font-bold">
         Lista de libros{" "}
         {filteredBooks.length > 0 && (
@@ -208,47 +252,18 @@ const Home = (): FunctionComponent => {
         )}
       >
         {filteredBooks.length > 0 ? (
-          filteredBooks.map((book) => (
-            <li
-              key={book.book.ISBN}
-              className={
-                isGridLayout
-                  ? "flex flex-col gap-2"
-                  : "flex justify-between border-b-2 pb-7 py-10 items-center"
-              }
-            >
-              <div className="group relative">
-                <div className="absolute w-full h-full hover:bg-[#1e1e1e6e] ">
-                  <div></div>
-                  <button
-                    onClick={handleOpenDialog}
-                    // onClick={() => {
-                    //   handleDelete(book.book.ISBN);
-                    // }}
-                    className="hidden group-hover:flex absolute right-2 top-2 w-8 h-8"
-                  >
-                    <img
-                      className="absolute w-full h-full"
-                      src="/icons/trash-icon.svg"
-                      alt=""
-                    />
-                  </button>
-                </div>
-                <img
-                  className={
-                    isGridLayout ? "aspect-[2/3]" : "h-32  object-cover"
-                  }
-                  src={book.book.cover}
-                  alt=""
-                />
-              </div>
-
-              <h2 className="text-xl font-bold capitalize">
-                {book.book.title}
-              </h2>
-              <p>{book.book.author.name}</p>
-            </li>
-          ))
+          filteredBooks.map((book) => {
+            return (
+              <BookCard
+                key={book.book.ISBN}
+                book={book}
+                isGridLayout={isGridLayout}
+                onDelete={() => {
+                  handleDelete(book.book.ISBN);
+                }}
+              />
+            );
+          })
         ) : (
           <p>No hay libros disponibles</p>
         )}
