@@ -6,6 +6,7 @@ import LayoutTypeInput from "../components/ui/LayoutTypeInput.tsx";
 import { GridLayoutIcon, ListLayoutIcon } from "../assets/icons";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import GenreSelect from "../components/ui/GenreSelect.tsx";
+import * as Slider from "@radix-ui/react-slider";
 
 type Author = {
   name: string;
@@ -51,42 +52,99 @@ const getMinMaxPages = (
   return { minPage, maxPage };
 };
 
+type ButonModalProps = {
+  onClick: any;
+  backgroundColor: string;
+  textColor: string;
+  text: string;
+};
+const ButonModal: React.FC<ButonModalProps> = ({
+  onClick,
+  textColor,
+  backgroundColor,
+  text,
+}) => {
+  return (
+    <button
+      onClick={onClick}
+      className={`inline-flex items-center rounded-md px-4 text-base shadow-[0_0_0_2px] outline-none font-medium h-9 text-[${textColor}] bg-[${backgroundColor}] hover:scale-105 duration-100 focus:scale-110`}
+    >
+      {text}
+    </button>
+  );
+};
 type LayoutType = "grid" | "list";
 const DeleteBookButton = ({ onDelete }: { onDelete: () => void }) => {
   return (
     <AlertDialog.Root>
-      <AlertDialog.Trigger asChild>
-        <button className="relative right-2 top-2 w-8 h-8">
-          <img
-            className="absolute w-full h-full"
-            src="/icons/trash-icon.svg"
-            alt=""
-          />
-        </button>
+      <AlertDialog.Trigger asChild className="">
+        <div className="absolute z-0 group-hover:bg-black opacity-80 w-full h-full">
+          <button className="hidden group-hover:block absolute right-1 top-2 w-8 h-8">
+            <img
+              className="w-full h-full hover:-rotate-[20deg] duration-75"
+              src="/icons/trash-icon.svg"
+              alt=""
+            />
+          </button>
+        </div>
       </AlertDialog.Trigger>
       <AlertDialog.Portal>
         <AlertDialog.Overlay className="bg-neutral-800 opacity-70 fixed inset-0" />
-        <AlertDialog.Content className="w-[90vw] max-w-[500px] max-h-[85vh] p-6 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-md shadow-[hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px]">
-          <AlertDialog.Title className="AlertDialogTitle">
-            Are you absolutely sure?
+        <AlertDialog.Content className="w-[90vw] max-w-[500px] max-h-[85vh] p-6 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-orange-50 rounded-md shadow-[hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px]">
+          <AlertDialog.Title className="text-xl mb-10">
+            Are you absolutely sure to delete?
           </AlertDialog.Title>
-          <AlertDialog.Description className="AlertDialogDescription">
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </AlertDialog.Description>
           <div style={{ display: "flex", gap: 25, justifyContent: "flex-end" }}>
             <AlertDialog.Cancel asChild>
-              <button className="Button mauve">Cancel</button>
+              <ButonModal
+                backgroundColor="#EEEDEF"
+                text="Cancel"
+                textColor="#686770"
+                onClick={() => {}}
+              />
             </AlertDialog.Cancel>
             <AlertDialog.Action asChild>
-              <button className="Button red" onClick={onDelete}>
-                Yes, delete account
-              </button>
+              <ButonModal
+                backgroundColor="#FFE5E4"
+                text="Yes, delete"
+                textColor="#CD2B30"
+                onClick={onDelete}
+              />
             </AlertDialog.Action>
           </div>
         </AlertDialog.Content>
       </AlertDialog.Portal>
     </AlertDialog.Root>
+  );
+};
+type SliderDemoProps = {
+  minPage: number;
+  maxPage: number;
+};
+
+const SliderDemo: React.FC<SliderDemoProps> = ({ minPage, maxPage }) => {
+  return (
+    <form>
+      <p className="text-[18px] font-semibold">Filter by pages</p>
+      <div className="flex items-center gap-3 mt-4">
+        <p className="italic">MIN: {minPage} </p>
+        <Slider.Root
+          className="relative flex items-center select-none touch-none w-[300px] h-5"
+          defaultValue={[0]}
+          max={100}
+          step={1}
+        >
+          <Slider.Track className="bg-[#9fb3b551] relative grow rounded-full h-[8px]">
+            <Slider.Range className="absolute bg-[#215073] rounded-full h-full" />
+          </Slider.Track>
+          <Slider.Thumb
+            className="block w-5 h-5 bg-[#215073] shadow-[0_2px_10px] shadow-blackA7 rounded-[10px] hover:bg-violet3 focus:outline-none focus:shadow-[0_0_0_5px] focus:shadow-[#A1B7B9]"
+            aria-label="Volume"
+          />
+        </Slider.Root>
+        <p className="italic">MAX: {maxPage} </p>
+      </div>
+    </form>
   );
 };
 
@@ -104,7 +162,7 @@ function BookCard({ book, isGridLayout, onDelete }: BookCardProps) {
           : "flex justify-between border-b-2 pb-7 py-10 items-center"
       }
     >
-      <div className="">
+      <div className="group relative">
         <DeleteBookButton onDelete={onDelete} />
         <img
           className={isGridLayout ? "aspect-[2/3]" : "h-32  object-cover"}
@@ -167,8 +225,7 @@ const Home = (): FunctionComponent => {
 
   return (
     <div className="relative container mx-auto px-4 py-10">
-      x
-      <h1 className="text-4xl mb-10 font-bold text-center">
+      <h1 className="text-4xl mb-10 font-bold">
         Lista de libros{" "}
         {bookResults.length > 0 && (
           <span className="mb-6 text-base">
@@ -177,7 +234,8 @@ const Home = (): FunctionComponent => {
         )}
       </h1>
       <div>
-        <div className="flex gap-4 justify-between items-center flex-wrap">
+        <div className="flex gap-10 justify-between items-center">
+          <SliderDemo minPage={minPage} maxPage={maxPage} />
           <div className="flex flex-col gap-4">
             <label htmlFor="volume">Filtrar por paginas</label>
             <div className="flex gap-5">
