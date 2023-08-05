@@ -9,6 +9,8 @@ import * as Slider from "@radix-ui/react-slider";
 import GenreSelect from "../components/ui/GenreSelect.tsx";
 import Button from "../common/Button.tsx";
 import { Trash2 } from "lucide-react";
+import { Pencil } from "lucide-react";
+import EditInput from "../components/ui/EditInput.tsx";
 
 type Author = {
   name: string;
@@ -26,7 +28,7 @@ type Book = {
   author: Author;
 };
 
-type Library = {
+export type Library = {
   book: Book;
 };
 
@@ -59,8 +61,8 @@ const DeleteBookButton = ({ onDelete }: { onDelete: () => void }) => {
   return (
     <AlertDialog.Root>
       <AlertDialog.Trigger asChild className="">
-        <div className="absolute z-0 group-hover:bg-black opacity-80 w-full h-full">
-          <button className="hidden group-hover:block absolute right-1 top-2 w-8 h-8">
+        <div className=" hidden group-hover:block bg-black rounded-full ">
+          <button className=" group-hover:block absolute right-0 top-2 w-8 h-8">
             <Trash2 color="red" aria-label="Remover libro" />
           </button>
         </div>
@@ -82,6 +84,76 @@ const DeleteBookButton = ({ onDelete }: { onDelete: () => void }) => {
             </AlertDialog.Action>
           </div>
         </AlertDialog.Content>
+      </AlertDialog.Portal>
+    </AlertDialog.Root>
+  );
+};
+
+export const EditBookButton = ({ book }: { book: Library }) => {
+  const [valueTitle, SetValueTitle] = useState(book.book.title);
+  // const [valueImg, SetValueImg] = useState(book.book.cover);
+  // const [valueAuthor, SetValueAuthor] = useState(book.book.author.name);
+
+  return (
+    <AlertDialog.Root>
+      <AlertDialog.Trigger asChild className="">
+        <div className="hidden group-hover:block bg-black opacity-80 ">
+          <button className=" group-hover:block absolute left-1 bottom-2 w-8 h-8">
+            <Pencil color="white" aria-label="Remover libro" />
+          </button>
+        </div>
+      </AlertDialog.Trigger>
+      <AlertDialog.Portal>
+        <AlertDialog.Overlay className="bg-neutral-800 opacity-70 fixed inset-0" />
+        <form
+          action=""
+          onSubmit={(e) => {
+            console.log(e, "aqui");
+          }}
+        >
+          <AlertDialog.Content className="w-[90vw] max-w-[500px] max-h-[85vh] p-6 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-md shadow-[hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px]">
+            <AlertDialog.Title className="text-xl mb-4">
+              Edita este libro
+            </AlertDialog.Title>
+
+            {/* <EditInput
+              book={book}
+              value={value}
+              children="Inserta un link"
+              id="img"
+              SetValueImg={SetValueImg}
+            /> */}
+            <EditInput
+              SetValueTitle={SetValueTitle}
+              book={book}
+              value={valueTitle}
+              children="Nuevo titulo?"
+              id="title"
+            />
+            {/* <EditInput
+              book={book}
+              value={book.book.author.name}
+              children="Nuevo autor?"
+              id="author"
+            /> */}
+
+            <div className="flex gap-5 justify-end">
+              <AlertDialog.Cancel asChild>
+                <Button variant="secondary">Cancelar</Button>
+              </AlertDialog.Cancel>
+              <AlertDialog.Action asChild>
+                <Button
+                  onClick={() => {
+                    console.log(valueTitle, "click");
+                  }}
+                  variant="primary"
+                >
+                  Guardar
+                </Button>
+              </AlertDialog.Action>
+            </div>
+          </AlertDialog.Content>
+        </form>
       </AlertDialog.Portal>
     </AlertDialog.Root>
   );
@@ -140,8 +212,10 @@ function BookCard({ book, isGridLayout, onDelete }: BookCardProps) {
           : "flex justify-between border-b-2 pb-7 py-10 items-center"
       }
     >
-      <div className="group relative">
+      <div className="group relative  ">
+        <EditBookButton book={book} />
         <DeleteBookButton onDelete={onDelete} />
+
         <img
           className={isGridLayout ? "aspect-[2/3]" : "h-32  object-cover"}
           src={book.book.cover}
