@@ -8,9 +8,9 @@ import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import * as Slider from "@radix-ui/react-slider";
 import GenreSelect from "../components/ui/GenreSelect.tsx";
 import Button from "../common/Button.tsx";
-import { Trash2 } from "lucide-react";
-import { Pencil } from "lucide-react";
+import { Trash2, Pencil } from "lucide-react";
 import EditInput from "../components/ui/EditInput.tsx";
+import * as Dialog from "@radix-ui/react-dialog";
 
 type Author = {
   name: string;
@@ -61,8 +61,8 @@ const DeleteBookButton = ({ onDelete }: { onDelete: () => void }) => {
   return (
     <AlertDialog.Root>
       <AlertDialog.Trigger asChild className="">
-        <div className=" hidden group-hover:block bg-black rounded-full ">
-          <button className=" group-hover:block absolute right-0 top-2 w-8 h-8">
+        <div className=" hidden group-hover:block">
+          <button className=" group-hover:block absolute right-0 top-2 w-8 h-8 bg-white p-1">
             <Trash2 color="red" aria-label="Remover libro" />
           </button>
         </div>
@@ -89,73 +89,85 @@ const DeleteBookButton = ({ onDelete }: { onDelete: () => void }) => {
   );
 };
 
-export const EditBookButton = ({ book }: { book: Library }) => {
+const wait = () => new Promise((resolve) => setTimeout(resolve, 100));
+
+export const EditBookButton = ({
+  book,
+  books,
+  onChangeBook,
+}: {
+  book: Library;
+}) => {
   const [valueTitle, SetValueTitle] = useState(book.book.title);
-  // const [valueImg, SetValueImg] = useState(book.book.cover);
-  // const [valueAuthor, SetValueAuthor] = useState(book.book.author.name);
+  const [open, setOpen] = useState(false);
+  const [valueImg, SetValueImg] = useState(book.book.cover);
+  const [valueAuthor, SetValueAuthor] = useState(book.book.author.name);
 
   return (
-    <AlertDialog.Root>
-      <AlertDialog.Trigger asChild className="">
-        <div className="hidden group-hover:block bg-black opacity-80 ">
-          <button className=" group-hover:block absolute left-1 bottom-2 w-8 h-8">
-            <Pencil color="white" aria-label="Remover libro" />
-          </button>
-        </div>
-      </AlertDialog.Trigger>
-      <AlertDialog.Portal>
-        <AlertDialog.Overlay className="bg-neutral-800 opacity-70 fixed inset-0" />
-        <form
-          action=""
-          onSubmit={(e) => {
-            console.log(e, "aqui");
-          }}
-        >
-          <AlertDialog.Content className="w-[90vw] max-w-[500px] max-h-[85vh] p-6 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-md shadow-[hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px]">
-            <AlertDialog.Title className="text-xl mb-4">
-              Edita este libro
-            </AlertDialog.Title>
+    <Dialog.Root open={open} onOpenChange={setOpen}>
+      <Dialog.Trigger asChild>
+        <button className="hidden group-hover:block absolute items-center justify-center  rounded-[4px] bg-white p-1 font-medium leading-none right-0 top-12 focus:shadow-[0_0_0_2px]   focus:outline-none">
+          <Pencil color="black" aria-label="Editar libro" />{" "}
+        </button>
+      </Dialog.Trigger>
+      <Dialog.Portal>
+        <Dialog.Overlay className="bg-[rgba(0,0,0,.7)] data-[state=open]:animate-overlayShow fixed inset-0" />
+        <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
+          <Dialog.Title className="m-0 text-[20px] font-medium">
+            Edita un Libro
+          </Dialog.Title>
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              wait().then(() => setOpen(false));
 
-            {/* <EditInput
+              const newBooks = [...books];
+              const bookIndex = newBooks.findIndex((b) => {
+                return b.book.ISBN === book.book.ISBN;
+              });
+              newBooks[bookIndex].book.cover = valueImg;
+              newBooks[bookIndex].book.title = valueTitle;
+              newBooks[bookIndex].book.author.name = valueAuthor;
+              onChangeBook(newBooks);
+            }}
+          >
+            <EditInput
+              onChange={(event) => {
+                SetValueImg(event.target.value);
+              }}
               book={book}
-              value={value}
+              value={valueImg}
               children="Inserta un link"
               id="img"
-              SetValueImg={SetValueImg}
-            /> */}
+            />
             <EditInput
-              SetValueTitle={SetValueTitle}
+              onChange={(event) => {
+                SetValueTitle(event.target.value);
+              }}
               book={book}
               value={valueTitle}
               children="Nuevo titulo?"
               id="title"
             />
-            {/* <EditInput
+
+            <EditInput
+              onChange={(event) => {
+                SetValueAuthor(event.target.value);
+              }}
               book={book}
-              value={book.book.author.name}
+              value={valueAuthor}
               children="Nuevo autor?"
               id="author"
-            /> */}
+            />
 
-            <div className="flex gap-5 justify-end">
-              <AlertDialog.Cancel asChild>
-                <Button variant="secondary">Cancelar</Button>
-              </AlertDialog.Cancel>
-              <AlertDialog.Action asChild>
-                <Button
-                  onClick={() => {
-                    console.log(valueTitle, "click");
-                  }}
-                  variant="primary"
-                >
-                  Guardar
-                </Button>
-              </AlertDialog.Action>
-            </div>
-          </AlertDialog.Content>
-        </form>
-      </AlertDialog.Portal>
-    </AlertDialog.Root>
+            <Button variant="primary">Guardar</Button>
+            <Dialog.Close asChild>
+              <Button variant="secondary">Cancelar</Button>
+            </Dialog.Close>
+          </form>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 };
 
@@ -202,8 +214,15 @@ type BookCardProps = {
   book: Library;
   isGridLayout: boolean;
   onDelete: () => void;
+  books: Book;
 };
-function BookCard({ book, isGridLayout, onDelete }: BookCardProps) {
+function BookCard({
+  book,
+  onChangeBook,
+  books,
+  isGridLayout,
+  onDelete,
+}: BookCardProps) {
   return (
     <li
       className={
@@ -213,7 +232,7 @@ function BookCard({ book, isGridLayout, onDelete }: BookCardProps) {
       }
     >
       <div className="group relative  ">
-        <EditBookButton book={book} />
+        <EditBookButton onChangeBook={onChangeBook} books={books} book={book} />
         <DeleteBookButton onDelete={onDelete} />
 
         <img
@@ -268,6 +287,7 @@ const Home = (): FunctionComponent => {
       return cleanTitle.includes(cleanSearchText);
     });
   }, [searchBook, filteredPagesBooks]);
+  console.log([...bookResults, "Gola"], "bookResults");
 
   const isGridLayout = layout === "grid";
 
@@ -287,7 +307,7 @@ const Home = (): FunctionComponent => {
         )}
       </h1>
       <div>
-        <div className="flex gap-10 justify-between items-center">
+        <div className="flex gap-10 justify-between items-center flex-wrap">
           <PagesSlider
             value={numberPage}
             onChange={handlePageNumber}
@@ -339,13 +359,17 @@ const Home = (): FunctionComponent => {
       <ul
         className={twMerge(
           "mt-10 grid gap-x-20",
-          isGridLayout ? "grid-cols-5 gap-y-14" : "grid-cols-1 items-center"
+          isGridLayout
+            ? "grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-y-14"
+            : "grid-cols-1 items-center"
         )}
       >
         {bookResults.length > 0 ? (
           bookResults.map((book) => {
             return (
               <BookCard
+                books={books}
+                onChangeBook={setBooks}
                 key={book.book.ISBN}
                 book={book}
                 isGridLayout={isGridLayout}

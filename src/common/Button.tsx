@@ -10,14 +10,18 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   children,
   variant = "primary",
+  type,
+  id,
 }) => {
   return (
     <button
       onClick={onClick}
+      type={type}
+      id={id}
       className={twMerge(
         "inline-flex items-center rounded-md px-4 text-base font-medium h-9",
         "ring-white ring-opacity-60 ring-offset-2 ring-offset-neutral-800 focus:outline-none focus:ring-2",
-        "hover:scale-105 duration-100 focus:scale-110",
+        "hover:scale-105 duration-100 focus:scale-110 m-2",
         variant === "primary" && "text-[rgb(250_250_250)] bg-[rgb(24_24_27)]",
         variant === "secondary" &&
           "text-[rgb(24_24_27)] bg-[rgba(228_228_231)]",
