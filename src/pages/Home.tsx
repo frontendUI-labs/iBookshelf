@@ -175,17 +175,20 @@ const AddBookButton = ({
   addTitle,
   SetAddTitle,
   handleAddItem,
+  books,
 }: {
   addTitle: string;
   handleAddItem: string;
   SetAddTitle: (value: string) => void;
+  books: Library[];
 }) => {
+  const [open, setOpen] = useState(false);
   // const [addTitle, SetAddTitle] = useState("");
   // const [valueImg, SetValueImg] = useState(book.book.cover);
   // const [valueAuthor, SetValueAuthor] = useState(book.book.author.name);
 
   return (
-    <AlertDialog.Root>
+    <AlertDialog.Root open={open} onOpenChange={setOpen}>
       <AlertDialog.Trigger asChild>
         <div className="w-full h-3/4 bg-[#F2F2F2] border-2 border-[#E6E6E6] parent hover:bg-[#c2c2c2]">
           <button className="flex flex-col items-center justify-center w-full h-full font-bold font-xs child hover:scale-110">
@@ -199,7 +202,12 @@ const AddBookButton = ({
         <form
           action=""
           onSubmit={(e) => {
-            console.log(e, "nuevo");
+            const handleAddBook = () => {
+              if (addTitle.trim() !== "") {
+                setBooks([...books, addTitle]);
+                SetAddTitle("");
+              }
+            };
           }}
         >
           <AlertDialog.Content className="w-[90vw] max-w-[500px] max-h-[85vh] p-6 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-md shadow-[hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px]">
@@ -367,13 +375,6 @@ const Home = (): FunctionComponent => {
   const handleDelete = (ISBN: string) => {
     const deleteBooks = books.filter((books) => books.book.ISBN !== ISBN);
     setBooks(deleteBooks);
-  };
-
-  const handleAddBook = () => {
-    if (addTitle.trim() !== "") {
-      setBooks([...books, addTitle]);
-      SetAddTitle("");
-    }
   };
 
   return (
