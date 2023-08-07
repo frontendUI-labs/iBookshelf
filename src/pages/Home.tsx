@@ -8,9 +8,10 @@ import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import * as Slider from "@radix-ui/react-slider";
 import GenreSelect from "../components/ui/GenreSelect.tsx";
 import Button from "../common/Button.tsx";
-import { Trash2, Pencil } from "lucide-react";
+import { Trash2, Pencil, PlusSquare } from "lucide-react";
 import EditInput from "../components/ui/EditInput.tsx";
 import * as Dialog from "@radix-ui/react-dialog";
+import AddInput from "../components/ui/addInput.tsx";
 
 type Author = {
   name: string;
@@ -170,6 +171,73 @@ export const EditBookButton = ({
   );
 };
 
+const AddBookButton = ({
+  addTitle,
+  SetAddTitle,
+  handleAddItem,
+}: {
+  addTitle: string;
+  handleAddItem: string;
+  SetAddTitle: (value: string) => void;
+}) => {
+  // const [addTitle, SetAddTitle] = useState("");
+  // const [valueImg, SetValueImg] = useState(book.book.cover);
+  // const [valueAuthor, SetValueAuthor] = useState(book.book.author.name);
+
+  return (
+    <AlertDialog.Root>
+      <AlertDialog.Trigger asChild>
+        <div className="w-full h-3/4 bg-[#F2F2F2] border-2 border-[#E6E6E6] parent hover:bg-[#c2c2c2]">
+          <button className="flex flex-col items-center justify-center w-full h-full font-bold font-xs child hover:scale-110">
+            <PlusSquare className="w-1/3 h-1/3" />
+            CREAR UN LIBRO
+          </button>
+        </div>
+      </AlertDialog.Trigger>
+      <AlertDialog.Portal>
+        <AlertDialog.Overlay className="bg-neutral-800 opacity-70 fixed inset-0" />
+        <form
+          action=""
+          onSubmit={(e) => {
+            console.log(e, "nuevo");
+          }}
+        >
+          <AlertDialog.Content className="w-[90vw] max-w-[500px] max-h-[85vh] p-6 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-md shadow-[hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px]">
+            <AlertDialog.Title className="text-xl mb-2">
+              Crea un Libro!
+            </AlertDialog.Title>
+
+            <AddInput
+              // SetAddTitle={SetAddTitle}
+              value={addTitle}
+              children="Inserta el titulo"
+              id="title"
+              // onChange={(event) => SetAddTitle(event.target.value)}
+            />
+
+            <div className="flex gap-5 justify-end mt-8">
+              <AlertDialog.Cancel asChild>
+                <Button variant="secondary">Cancelar</Button>
+              </AlertDialog.Cancel>
+              <AlertDialog.Action asChild>
+                <Button
+                  // onClick={handleAddItem}
+                  onClick={() => {
+                    console.log(addTitle, "nuevo");
+                  }}
+                  variant="primary"
+                >
+                  Crear
+                </Button>
+              </AlertDialog.Action>
+            </div>
+          </AlertDialog.Content>
+        </form>
+      </AlertDialog.Portal>
+    </AlertDialog.Root>
+  );
+};
+
 type SliderDemoProps = {
   value: number;
   minPage: number;
@@ -185,7 +253,7 @@ const PagesSlider: React.FC<SliderDemoProps> = ({
 }) => {
   return (
     <div>
-      <p>Filter by pages</p>
+      <p>Filtrar por paginas</p>
       <div className="flex items-center gap-3 mt-4">
         <Slider.Root
           className="relative flex items-center select-none touch-none w-[300px] h-5"
@@ -265,6 +333,8 @@ const Home = (): FunctionComponent => {
   const [layout, setLayout] = useState<LayoutType>("grid"); // grid | list
   const [searchBook, setSearchBook] = useState("");
 
+  const [addTitle, SetAddTitle] = useState("");
+
   const handlePageNumber = (values: number[]) => {
     const [value] = values;
     setNumberPage(value ?? minPage);
@@ -297,6 +367,13 @@ const Home = (): FunctionComponent => {
   const handleDelete = (ISBN: string) => {
     const deleteBooks = books.filter((books) => books.book.ISBN !== ISBN);
     setBooks(deleteBooks);
+  };
+
+  const handleAddBook = () => {
+    if (addTitle.trim() !== "") {
+      setBooks([...books, addTitle]);
+      SetAddTitle("");
+    }
   };
 
   return (
@@ -332,7 +409,7 @@ const Home = (): FunctionComponent => {
               }}
               id="search"
               type="text"
-              placeholder="Eg: Harry Potter"
+              placeholder="Ej: Harry Potter"
             />
           </div>
           <div className="flex items-center gap-2">
@@ -368,7 +445,7 @@ const Home = (): FunctionComponent => {
         )}
       >
         {bookResults.length > 0 ? (
-          bookResults.map((book) => {
+          bookResults.map((book, index) => {
             return (
               <BookCard
                 books={books}
@@ -385,6 +462,13 @@ const Home = (): FunctionComponent => {
         ) : (
           <p>No hay libros disponibles</p>
         )}
+        {/* <div className="w-full h-3/4 bg-[#F2F2F2] border-2 border-[#E6E6E6] parent hover:bg-[#c2c2c2]">
+          <button className="flex flex-col items-center justify-center w-full h-full font-bold font-xs child hover:scale-110">
+            <PlusSquare className="w-1/3 h-1/3" />
+            CREATE BOOK
+          </button>
+        </div> */}
+        <AddBookButton />
       </ul>
     </div>
   );
