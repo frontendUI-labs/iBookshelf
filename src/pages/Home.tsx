@@ -291,7 +291,6 @@ const Home = (): FunctionComponent => {
       return cleanTitle.includes(cleanSearchText);
     });
   }, [searchBook, filteredPagesBooks]);
-  console.log([...bookResults, "Gola"], "bookResults");
 
   const isGridLayout = layout === "grid";
 
