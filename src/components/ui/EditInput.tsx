@@ -1,21 +1,19 @@
-import { Library } from "../../pages/Home";
+import React from "react";
 
 const EditInput = ({
-  children,
+  label,
   id,
   value,
   onChange,
 }: {
-  children: string;
+  label: string;
   id: string;
   value: string;
-  book: Library;
-  onChange: () => void;
-  SetValueTitle: (value: string) => void;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
   return (
     <div className="flex flex-col gap-4 p-3">
-      <label htmlFor={id}>{children}</label>
+      <label htmlFor={id}>{label}</label>
       <input
         onChange={onChange}
         className="border-2 border-neutral-700 p-3 rounded-md"

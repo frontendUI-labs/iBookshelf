@@ -89,19 +89,20 @@ const DeleteBookButton = ({ onDelete }: { onDelete: () => void }) => {
   );
 };
 
-const wait = () => new Promise((resolve) => setTimeout(resolve, 100));
-
 export const EditBookButton = ({
   book,
   books,
-  onChangeBook,
+  onBooksChange,
 }: {
   book: Library;
+  books: Library[];
+  onBooksChange: (books: Library[]) => void;
 }) => {
-  const [valueTitle, SetValueTitle] = useState(book.book.title);
   const [open, setOpen] = useState(false);
-  const [valueImg, SetValueImg] = useState(book.book.cover);
-  const [valueAuthor, SetValueAuthor] = useState(book.book.author.name);
+
+  const [title, setTitle] = useState(book.book.title);
+  const [img, setImg] = useState(book.book.cover);
+  const [authorName, setAuthorName] = useState(book.book.author.name);
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
@@ -119,47 +120,45 @@ export const EditBookButton = ({
           <form
             onSubmit={(event) => {
               event.preventDefault();
-              wait().then(() => setOpen(false));
 
               const newBooks = [...books];
               const bookIndex = newBooks.findIndex((b) => {
                 return b.book.ISBN === book.book.ISBN;
               });
-              newBooks[bookIndex].book.cover = valueImg;
-              newBooks[bookIndex].book.title = valueTitle;
-              newBooks[bookIndex].book.author.name = valueAuthor;
-              onChangeBook(newBooks);
+              const selectedBook = newBooks[bookIndex];
+              if (selectedBook) {
+                selectedBook.book.cover = img;
+                selectedBook.book.title = title;
+                selectedBook.book.author.name = authorName;
+                onBooksChange(newBooks);
+                setOpen(false);
+              }
             }}
           >
             <EditInput
               onChange={(event) => {
-                SetValueImg(event.target.value);
+                setImg(event.target.value);
               }}
-              book={book}
-              value={valueImg}
-              children="Inserta un link"
+              value={img}
+              label="Inserta un link"
               id="img"
             />
             <EditInput
               onChange={(event) => {
-                SetValueTitle(event.target.value);
+                setTitle(event.target.value);
               }}
-              book={book}
-              value={valueTitle}
-              children="Nuevo titulo?"
+              value={title}
+              label="Nuevo titulo?"
               id="title"
             />
-
             <EditInput
               onChange={(event) => {
-                SetValueAuthor(event.target.value);
+                setAuthorName(event.target.value);
               }}
-              book={book}
-              value={valueAuthor}
-              children="Nuevo autor?"
+              value={authorName}
+              label="Nuevo autor?"
               id="author"
             />
-
             <Button variant="primary">Guardar</Button>
             <Dialog.Close asChild>
               <Button variant="secondary">Cancelar</Button>
@@ -214,11 +213,12 @@ type BookCardProps = {
   book: Library;
   isGridLayout: boolean;
   onDelete: () => void;
-  books: Book;
+  books: Library[];
+  onBooksChange: (books: Library[]) => void;
 };
 function BookCard({
   book,
-  onChangeBook,
+  onBooksChange,
   books,
   isGridLayout,
   onDelete,
@@ -231,13 +231,17 @@ function BookCard({
           : "flex justify-between border-b-2 pb-7 py-10 items-center"
       }
     >
-      <div className="group relative  ">
-        <EditBookButton onChangeBook={onChangeBook} books={books} book={book} />
+      <div className="group relative">
+        <EditBookButton
+          onBooksChange={onBooksChange}
+          books={books}
+          book={book}
+        />
         <DeleteBookButton onDelete={onDelete} />
 
         <img
           className={isGridLayout ? "aspect-[2/3]" : "h-32  object-cover"}
-          src={book.book.cover}
+          src={book.book.cover || "https://picsum.photos/200/300"}
           alt=""
         />
       </div>
@@ -336,7 +340,7 @@ const Home = (): FunctionComponent => {
             <LayoutTypeInput
               value="list"
               id="list"
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              onChange={(event) => {
                 setLayout(event.target.value as LayoutType);
               }}
               label="List"
@@ -346,7 +350,7 @@ const Home = (): FunctionComponent => {
             <LayoutTypeInput
               value="grid"
               id="grid"
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              onChange={(event) => {
                 setLayout(event.target.value as LayoutType);
               }}
               label="Grid"
@@ -369,7 +373,7 @@ const Home = (): FunctionComponent => {
             return (
               <BookCard
                 books={books}
-                onChangeBook={setBooks}
+                onBooksChange={setBooks}
                 key={book.book.ISBN}
                 book={book}
                 isGridLayout={isGridLayout}
