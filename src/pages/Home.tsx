@@ -12,6 +12,7 @@ import { Trash2, Pencil, PlusSquare } from "lucide-react";
 import EditInput from "../components/ui/EditInput.tsx";
 import * as Dialog from "@radix-ui/react-dialog";
 import AddInputorText from "../components/ui/AddInput.tsx";
+import { randomID } from "../utils";
 
 type Author = {
   name: string;
@@ -174,7 +175,7 @@ export const EditBookButton = ({
 type NewBookState = {
   title: string;
   pages?: number;
-  genre: string;
+  genre?: string;
   cover: string;
   synopsis: string;
   year?: number;
@@ -182,6 +183,19 @@ type NewBookState = {
   authorName: string;
   authorOtherBooks: string[];
 };
+
+const initialAddBookState: NewBookState = {
+  title: "",
+  pages: undefined,
+  genre: undefined,
+  cover: "",
+  synopsis: "",
+  year: undefined,
+  ISBN: "",
+  authorName: "",
+  authorOtherBooks: [],
+};
+
 export const AddBookButton = ({
   books,
   onBooksChange,
@@ -191,17 +205,12 @@ export const AddBookButton = ({
 }) => {
   const [open, setOpen] = useState(false);
   const genres = getGenres(books);
-  const [newBook, setNewBook] = useState<NewBookState>({
-    title: "",
-    pages: undefined,
-    genre: "",
-    cover: "",
-    synopsis: "",
-    year: undefined,
-    ISBN: "",
-    authorName: "",
-    authorOtherBooks: [],
-  });
+  const [newBook, setNewBook] = useState<NewBookState>(initialAddBookState);
+
+  console.log(books, "books");
+  const resetNewBookState = () => {
+    setNewBook(initialAddBookState);
+  };
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
@@ -228,11 +237,12 @@ export const AddBookButton = ({
                   book: {
                     title: newBook.title,
                     pages: newBook.pages ?? 0,
-                    genre: newBook.genre,
+                    genre: newBook.genre ?? "",
                     cover: newBook.cover,
                     synopsis: newBook.synopsis,
                     year: newBook.year ?? 0,
-                    ISBN: newBook.ISBN,
+                    // DO NOT DO THIS
+                    ISBN: randomID(),
                     author: {
                       name: newBook.authorName,
                       otherBooks: newBook.authorOtherBooks,
@@ -242,6 +252,8 @@ export const AddBookButton = ({
                 ...books,
               ];
               onBooksChange(newBooks);
+
+              resetNewBookState();
               setOpen(false);
             }}
           >
@@ -256,10 +268,10 @@ export const AddBookButton = ({
             <div className="grid grid-cols-[2fr,1fr] items-center gap-3">
               <div className="px-2">
                 <GenreSelect
-                  onChange={(event) => {
+                  onChange={(value) => {
                     setNewBook({
                       ...newBook,
-                      genre: event,
+                      genre: value,
                     });
                   }}
                   label="Genero"
@@ -294,14 +306,6 @@ export const AddBookButton = ({
               isTextArea={true}
             />
             <div className="grid grid-cols-[2fr,1fr] gap-3">
-              <AddInputorText
-                onChange={(event) => {
-                  setNewBook({ ...newBook, ISBN: event.target.value });
-                }}
-                value={newBook.ISBN}
-                label="ID del libro"
-                id="isbn"
-              />
               <AddInputorText
                 onChange={(event) => {
                   setNewBook({ ...newBook, year: +event.target.value });
