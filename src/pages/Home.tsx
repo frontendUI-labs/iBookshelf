@@ -11,7 +11,7 @@ import Button from "../common/Button.tsx";
 import { Trash2, Pencil, PlusSquare } from "lucide-react";
 import EditInput from "../components/ui/EditInput.tsx";
 import * as Dialog from "@radix-ui/react-dialog";
-import AddInput from "../components/ui/addInput.tsx";
+import AddInputorText from "../components/ui/addInput.tsx";
 
 type Author = {
   name: string;
@@ -171,81 +171,169 @@ export const EditBookButton = ({
   );
 };
 
-const AddBookButton = ({
-  addTitle,
-  SetAddTitle,
-  handleAddItem,
+export const AddBookButton = ({
   books,
+  onBooksChange,
 }: {
-  addTitle: string;
-  handleAddItem: string;
-  SetAddTitle: (value: string) => void;
   books: Library[];
+  onBooksChange: (books: Library[]) => void;
 }) => {
   const [open, setOpen] = useState(false);
-  // const [addTitle, SetAddTitle] = useState("");
-  // const [valueImg, SetValueImg] = useState(book.book.cover);
-  // const [valueAuthor, SetValueAuthor] = useState(book.book.author.name);
+  const genres = getGenres(books);
+  const [newBook, setNewBook] = useState({
+    title: "",
+    pages: "0",
+    genre: "",
+    cover: "",
+    synopsis: "",
+    year: "0",
+    ISBN: "",
+    authorName: "",
+    authorOtherBooks: "",
+  });
 
   return (
-    <AlertDialog.Root open={open} onOpenChange={setOpen}>
-      <AlertDialog.Trigger asChild>
-        <div className="w-full h-3/4 bg-[#F2F2F2] border-2 border-[#E6E6E6] parent hover:bg-[#c2c2c2]">
-          <button className="flex flex-col items-center justify-center w-full h-full font-bold font-xs child hover:scale-110">
-            <PlusSquare className="w-1/3 h-1/3" />
-            CREAR UN LIBRO
+    <Dialog.Root open={open} onOpenChange={setOpen}>
+      <Dialog.Trigger asChild>
+        <div className="w-full h-full bg-[#F2F2F2] border-2 border-[#E6E6E6] parent hover:bg-[#c2c2c2]">
+          <button className="flex flex-col items-center justify-center w-full h-full font-bold font-md child hover:scale-110">
+            <PlusSquare className="w-1/3 h-1/3" aria-label="Crear libro" />
+            AGREGA UN LIBRO
           </button>
         </div>
-      </AlertDialog.Trigger>
-      <AlertDialog.Portal>
-        <AlertDialog.Overlay className="bg-neutral-800 opacity-70 fixed inset-0" />
-        <form
-          action=""
-          onSubmit={(e) => {
-            const handleAddBook = () => {
-              if (addTitle.trim() !== "") {
-                setBooks([...books, addTitle]);
-                SetAddTitle("");
-              }
-            };
-          }}
-        >
-          <AlertDialog.Content className="w-[90vw] max-w-[500px] max-h-[85vh] p-6 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-md shadow-[hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px]">
-            <AlertDialog.Title className="text-xl mb-2">
-              Crea un Libro!
-            </AlertDialog.Title>
-
-            <AddInput
-              // SetAddTitle={SetAddTitle}
-              value={addTitle}
-              children="Inserta el titulo"
+      </Dialog.Trigger>
+      <Dialog.Portal>
+        <Dialog.Overlay className="bg-[rgba(0,0,0,.7)] data-[state=open]:animate-overlayShow fixed inset-0" />
+        <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[600px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] overflow-auto focus:outline-none">
+          <Dialog.Title className="m-0 text-[20px] font-medium">
+            <p> Adiciona un Libro!</p>
+            <span>Inserta:</span>
+          </Dialog.Title>
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              const newBooks = [
+                {
+                  book: {
+                    title: newBook.title,
+                    pages: parseInt(newBook.pages),
+                    genre: newBook.genre,
+                    cover: newBook.cover,
+                    synopsis: newBook.synopsis,
+                    year: parseInt(newBook.year),
+                    ISBN: newBook.ISBN,
+                    author: {
+                      name: newBook.authorName,
+                      otherBooks: newBook.authorOtherBooks,
+                    },
+                  },
+                },
+                ...books,
+              ];
+              onBooksChange(newBooks);
+              setOpen(false);
+              console.log(newBooks, "new");
+            }}
+          >
+            <AddInputorText
+              onChange={(event) => {
+                setNewBook({ ...newBook, title: event.target.value });
+              }}
+              value={newBook.title}
+              label="Titulo"
               id="title"
-              // onChange={(event) => SetAddTitle(event.target.value)}
             />
-
-            <div className="flex gap-5 justify-end mt-8">
-              <AlertDialog.Cancel asChild>
-                <Button variant="secondary">Cancelar</Button>
-              </AlertDialog.Cancel>
-              <AlertDialog.Action asChild>
-                <Button
-                  // onClick={handleAddItem}
-                  onClick={() => {
-                    console.log(addTitle, "nuevo");
+            <div className="grid grid-cols-[2fr,1fr] items-center gap-3">
+              <div className="px-2">
+                <GenreSelect
+                  onChange={(event) => {
+                    setNewBook({
+                      ...newBook,
+                      genre: event,
+                    });
                   }}
-                  variant="primary"
-                >
-                  Crear
-                </Button>
-              </AlertDialog.Action>
+                  label="Genero"
+                  value={newBook.genre}
+                  options={genres}
+                />
+              </div>
+              <AddInputorText
+                onChange={(event) => {
+                  setNewBook({ ...newBook, pages: event.target.value });
+                }}
+                value={newBook.pages}
+                label="Numero de paginas"
+                id="pages"
+              />
             </div>
-          </AlertDialog.Content>
-        </form>
-      </AlertDialog.Portal>
-    </AlertDialog.Root>
+            <AddInputorText
+              onChange={(event) => {
+                setNewBook({ ...newBook, cover: event.target.value });
+              }}
+              value={newBook.cover}
+              label="Link de la imagen"
+              id="cover"
+            />
+            <AddInputorText
+              onChange={(event) => {
+                setNewBook({ ...newBook, synopsis: event.target.value });
+              }}
+              value={newBook.synopsis}
+              label="Synopsis"
+              id="sypnosis"
+              isTextArea={true}
+            />
+            <div className="grid grid-cols-[2fr,1fr] gap-3">
+              <AddInputorText
+                onChange={(event) => {
+                  setNewBook({ ...newBook, ISBN: event.target.value });
+                }}
+                value={newBook.ISBN}
+                label="ID del libro"
+                id="isbn"
+              />
+              <AddInputorText
+                onChange={(event) => {
+                  setNewBook({ ...newBook, year: event.target.value });
+                }}
+                value={newBook.year}
+                label="Año"
+                id="year"
+              />
+            </div>
+            <AddInputorText
+              onChange={(event) => {
+                setNewBook({ ...newBook, authorName: event.target.value });
+              }}
+              value={newBook.authorName}
+              label="Autor"
+              id="author"
+            />
+            <AddInputorText
+              onChange={(event) => {
+                setNewBook({
+                  ...newBook,
+                  authorOtherBooks: event.target.value,
+                });
+              }}
+              value={newBook.authorOtherBooks}
+              label="Otros libros escritos"
+              id="otherBooks"
+            />
+            <div className="mt-3 text-end">
+              <Dialog.Close asChild>
+                <Button variant="secondary">Cancelar</Button>
+              </Dialog.Close>
+              <Button type="submit" variant="primary">
+                Guardar
+              </Button>
+            </div>
+          </form>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 };
-
 type SliderDemoProps = {
   value: number;
   minPage: number;
@@ -316,7 +404,7 @@ function BookCard({
         <DeleteBookButton onDelete={onDelete} />
 
         <img
-          className={isGridLayout ? "aspect-[2/3]" : "h-32  object-cover"}
+          className={isGridLayout ? "aspect-[2/3] " : "h-32  object-cover"}
           src={book.book.cover || "https://picsum.photos/200/300"}
           alt=""
         />
@@ -340,8 +428,6 @@ const Home = (): FunctionComponent => {
   const [selectedGenre, setSelectedGenre] = useState("Todas");
   const [layout, setLayout] = useState<LayoutType>("grid"); // grid | list
   const [searchBook, setSearchBook] = useState("");
-
-  const [addTitle, SetAddTitle] = useState("");
 
   const handlePageNumber = (values: number[]) => {
     const [value] = values;
@@ -396,6 +482,7 @@ const Home = (): FunctionComponent => {
             maxPage={maxPage}
           />
           <GenreSelect
+            label="Filtrar por genero"
             value={selectedGenre}
             onChange={handleGenre}
             options={["Todas", ...genres]}
@@ -437,6 +524,7 @@ const Home = (): FunctionComponent => {
           </div>
         </div>
       </div>
+
       <ul
         className={twMerge(
           "mt-10 grid gap-x-20",
@@ -445,8 +533,9 @@ const Home = (): FunctionComponent => {
             : "grid-cols-1 items-center"
         )}
       >
+        <AddBookButton onBooksChange={setBooks} books={books} />
         {bookResults.length > 0 ? (
-          bookResults.map((book, index) => {
+          bookResults.map((book) => {
             return (
               <BookCard
                 books={books}
@@ -463,13 +552,6 @@ const Home = (): FunctionComponent => {
         ) : (
           <p>No hay libros disponibles</p>
         )}
-        {/* <div className="w-full h-3/4 bg-[#F2F2F2] border-2 border-[#E6E6E6] parent hover:bg-[#c2c2c2]">
-          <button className="flex flex-col items-center justify-center w-full h-full font-bold font-xs child hover:scale-110">
-            <PlusSquare className="w-1/3 h-1/3" />
-            CREATE BOOK
-          </button>
-        </div> */}
-        <AddBookButton />
       </ul>
     </div>
   );

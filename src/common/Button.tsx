@@ -5,6 +5,8 @@ type ButtonProps = {
   onClick?: () => void;
   children: ReactNode;
   variant?: "primary" | "danger" | "secondary";
+  type?: "button" | "submit";
+  id?: string;
 };
 const Button: React.FC<ButtonProps> = ({
   onClick,
