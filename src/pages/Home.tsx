@@ -12,11 +12,12 @@ import Button from "../common/Button.tsx";
 import { Trash2, Pencil, PlusSquare, XSquare } from "lucide-react";
 import EditInput from "../components/ui/EditInput.tsx";
 import AddInputorText from "../components/ui/AddInput.tsx";
-import * as Dialog from "@radix-ui/react-dialog";
 import { randomID } from "../utils";
 import { AddBookButton } from "../components/ui/AddBookButton.tsx";
 import { EditBookButton } from "../components/ui/EditBookButton.tsx";
 import DeleteBookButton from "../components/ui/DeleteBookButton.tsx";
+import ImgInputChange from "../components/ui/FileInput.tsx";
+import CreateBookButton from "../components/ui/CreateBook.tsx";
 
 type Author = {
   name: string;
@@ -110,10 +111,9 @@ export const EditBookButton = ({
   onBooksChange: (books: Library[]) => void;
 }) => {
   const [open, setOpen] = useState(false);
-
   const [title, setTitle] = useState(book.book.title);
-  const [img, setImg] = useState(book.book.cover);
   const [authorName, setAuthorName] = useState(book.book.author.name);
+  const [img, setImg] = useState(book.book.cover);
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
@@ -146,19 +146,21 @@ export const EditBookButton = ({
                 selectedBook.book.cover = img;
                 selectedBook.book.title = title;
                 selectedBook.book.author.name = authorName;
+
                 onBooksChange(newBooks);
                 setOpen(false);
               }
             }}
           >
-            <EditInput
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setImg(event.target.value);
+            <ImgInputChange
+              actualImg={img}
+              id="ImgInput"
+              onChange={(event) => {
+                const file = URL.createObjectURL(event.target.files[0]);
+                setImg(file);
               }}
-              value={img}
-              label="Inserta un link"
-              id="img"
             />
+
             <EditInput
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setTitle(event.target.value);
@@ -547,9 +549,9 @@ const Home = (): FunctionComponent => {
               placeholder="Ej: Harry Potter"
             />
           </div>
-          {/* <div>
+          <div>
             <CreateBookButton books={books} addNewBooks={setBooks} />
-          </div> */}
+          </div>
           <div className="flex items-center gap-2">
             <LayoutTypeInput
               value="list"
