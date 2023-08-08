@@ -207,7 +207,6 @@ export const AddBookButton = ({
   const genres = getGenres(books);
   const [newBook, setNewBook] = useState<NewBookState>(initialAddBookState);
 
-  console.log(books, "books");
   const resetNewBookState = () => {
     setNewBook(initialAddBookState);
   };
@@ -217,7 +216,7 @@ export const AddBookButton = ({
       <Dialog.Trigger asChild>
         <div className="w-full h-full bg-[#F2F2F2] border-2 border-[#E6E6E6] parent hover:bg-[#c2c2c2]">
           <button className="flex flex-col items-center justify-center w-full h-full font-bold font-md child hover:scale-110">
-            <PlusSquare className="w-1/3 h-1/3" aria-label="Crear libro" />
+            <PlusSquare className="w-1/3 h-1/3" />
             AGREGA UN LIBRO
           </button>
         </div>
