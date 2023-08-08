@@ -13,7 +13,7 @@ import EditInput from "../components/ui/EditInput.tsx";
 import * as Dialog from "@radix-ui/react-dialog";
 import { randomID } from "../utils";
 import ImgInputChange from "../components/ui/FileInput.tsx";
-import CreateBookButton from "../components/ui/CreateBook.tsx";
+// import CreateBookButton from "../components/ui/CreateBook.tsx";
 import AddInputorText from "../components/ui/AddInput.tsx";
 
 type Author = {
@@ -525,9 +525,9 @@ const Home = (): FunctionComponent => {
               placeholder="Ej: Harry Potter"
             />
           </div>
-          <div>
+          {/* <div>
             <CreateBookButton books={books} addNewBooks={setBooks} />
-          </div>
+          </div> */}
           <div className="flex items-center gap-2">
             <LayoutTypeInput
               value="list"
