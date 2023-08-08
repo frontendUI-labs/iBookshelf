@@ -16,10 +16,13 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <button
 <<<<<<< HEAD
+<<<<<<< HEAD
       type={type}
       id={id}
 =======
 >>>>>>> 393d1fd (create new book)
+=======
+>>>>>>> 53fa306 (create new book)
       onClick={onClick}
       className={twMerge(
         "inline-flex items-center rounded-md px-4 text-base font-medium h-9",
