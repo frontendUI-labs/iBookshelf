@@ -5,12 +5,14 @@ const AddInputorText = ({
   id,
   value,
   onChange,
-  isTextArea,
+  isTextArea = false,
 }: {
   label: string;
   id: string;
-  value: string | number | string[];
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  value: string | number | undefined;
+  onChange: (
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => void;
   isTextArea?: boolean;
 }) => {
   return (
