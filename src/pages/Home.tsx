@@ -17,7 +17,7 @@ import { AddBookButton } from "../components/ui/AddBookButton.tsx";
 import { EditBookButton } from "../components/ui/EditBookButton.tsx";
 import DeleteBookButton from "../components/ui/DeleteBookButton.tsx";
 import ImgInputChange from "../components/ui/FileInput.tsx";
-import CreateBookButton from "../components/ui/CreateBook.tsx";
+// import CreateBookButton from "../components/ui/CreateBook.tsx";
 import AddInputorText from "../components/ui/AddInput.tsx";
 
 type Author = {
@@ -550,9 +550,9 @@ const Home = (): FunctionComponent => {
               placeholder="Ej: Harry Potter"
             />
           </div>
-          <div>
+          {/* <div>
             <CreateBookButton books={books} addNewBooks={setBooks} />
-          </div>
+          </div> */}
           <div className="flex items-center gap-2">
             <LayoutTypeInput
               value="list"
