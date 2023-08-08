@@ -13,6 +13,8 @@ import EditInput from "../components/ui/EditInput.tsx";
 import * as Dialog from "@radix-ui/react-dialog";
 import AddInputorText from "../components/ui/AddInput.tsx";
 import { randomID } from "../utils";
+import ImgInputChange from "../components/ui/FileInput.tsx";
+import CreateBookButton from "../components/ui/CreateBook.tsx";
 
 type Author = {
   name: string;
@@ -101,10 +103,9 @@ export const EditBookButton = ({
   onBooksChange: (books: Library[]) => void;
 }) => {
   const [open, setOpen] = useState(false);
-
   const [title, setTitle] = useState(book.book.title);
-  const [img, setImg] = useState(book.book.cover);
   const [authorName, setAuthorName] = useState(book.book.author.name);
+  const [img, setImg] = useState(book.book.cover);
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
@@ -115,7 +116,7 @@ export const EditBookButton = ({
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="bg-[rgba(0,0,0,.7)] data-[state=open]:animate-overlayShow fixed inset-0" />
-        <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
+        <Dialog.Content className=" overflow-y-auto data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
           <Dialog.Title className="m-0 text-[20px] font-medium">
             Edita un Libro
           </Dialog.Title>
@@ -132,19 +133,21 @@ export const EditBookButton = ({
                 selectedBook.book.cover = img;
                 selectedBook.book.title = title;
                 selectedBook.book.author.name = authorName;
+
                 onBooksChange(newBooks);
                 setOpen(false);
               }
             }}
           >
-            <EditInput
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setImg(event.target.value);
+            <ImgInputChange
+              actualImg={img}
+              id="ImgInput"
+              onChange={(event) => {
+                const file = URL.createObjectURL(event.target.files[0]);
+                setImg(file);
               }}
-              value={img}
-              label="Inserta un link"
-              id="img"
             />
+
             <EditInput
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setTitle(event.target.value);
@@ -365,7 +368,7 @@ const PagesSlider: React.FC<SliderDemoProps> = ({
 }) => {
   return (
     <div>
-      <p>Filtrar por paginas</p>
+      <p>Filtrar por páginas</p>
       <div className="flex items-center gap-3 mt-4">
         <Slider.Root
           className="relative flex items-center select-none touch-none w-[300px] h-5"
@@ -420,8 +423,10 @@ function BookCard({
         <DeleteBookButton onDelete={onDelete} />
 
         <img
-          className={isGridLayout ? "aspect-[2/3] " : "h-32  object-cover"}
-          src={book.book.cover || "https://picsum.photos/200/300"}
+          className={
+            isGridLayout ? "aspect-[2/3] object-cover" : "h-32  object-cover "
+          }
+          src={book.book.cover}
           alt=""
         />
       </div>
@@ -494,7 +499,7 @@ const Home = (): FunctionComponent => {
         )}
       </h1>
       <div>
-        <div className="flex gap-10 justify-between items-center flex-wrap">
+        <div className="flex gap-10 justify-between items-center flex-wrap ">
           <PagesSlider
             value={numberPage}
             onChange={handlePageNumber}
@@ -519,6 +524,9 @@ const Home = (): FunctionComponent => {
               type="text"
               placeholder="Ej: Harry Potter"
             />
+          </div>
+          <div>
+            <CreateBookButton books={books} addNewBooks={setBooks} />
           </div>
           <div className="flex items-center gap-2">
             <LayoutTypeInput

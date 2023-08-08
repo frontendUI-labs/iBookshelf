@@ -9,3 +9,36 @@
   @apply bg-[red];
 } */
 
+.custom-file-input::-webkit-file-upload-button {
+  @apply invisible;
+}
+
+.custom-file-input::before {
+  @apply content-['Selecciona_tu_image'] inline-block bg-neutral-800 p-3 cursor-pointer whitespace-nowrap text-base rounded-lg  text-white;
+}
+.custom-file-input {
+  @apply text-transparent;
+}
+
+/* .custom-file-input::before {
+  content: "Select some files";
+  display: inline-block;
+  background: linear-gradient(top, #f9f9f9, #e3e3e3);
+  border: 1px solid #999;
+  border-radius: 3px;
+  padding: 5px 8px;
+  outline: none;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  cursor: pointer;
+  text-shadow: 1px 1px #fff;
+  font-weight: 700;
+  font-size: 10pt;
+} */
+/* 
+.custom-file-input:hover::before {
+  border-color: black;
+}
+.custom-file-input:active::before {
+  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+} */

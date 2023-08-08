@@ -12,14 +12,10 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   children,
   variant = "primary",
-  type,
-  id,
 }) => {
   return (
     <button
       onClick={onClick}
-      type={type}
-      id={id}
       className={twMerge(
         "inline-flex items-center rounded-md px-4 text-base font-medium h-9",
         "ring-white ring-opacity-60 ring-offset-2 ring-offset-neutral-800 focus:outline-none focus:ring-2",
