@@ -10,8 +10,8 @@ import GenreSelect from "../components/ui/GenreSelect.tsx";
 import Button from "../common/Button.tsx";
 import { Trash2, Pencil, PlusSquare } from "lucide-react";
 import EditInput from "../components/ui/EditInput.tsx";
-import * as Dialog from "@radix-ui/react-dialog";
 import AddInputorText from "../components/ui/AddInput.tsx";
+import * as Dialog from "@radix-ui/react-dialog";
 
 type Author = {
   name: string;
