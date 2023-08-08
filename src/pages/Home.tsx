@@ -11,7 +11,7 @@ import Button from "../common/Button.tsx";
 import { Trash2, Pencil, PlusSquare } from "lucide-react";
 import EditInput from "../components/ui/EditInput.tsx";
 import * as Dialog from "@radix-ui/react-dialog";
-import AddInputorText from "../components/ui/addInput.tsx";
+import AddInputorText from "../components/ui/AddInput.tsx";
 
 type Author = {
   name: string;
@@ -137,7 +137,7 @@ export const EditBookButton = ({
             }}
           >
             <EditInput
-              onChange={(event) => {
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setImg(event.target.value);
               }}
               value={img}
@@ -145,7 +145,7 @@ export const EditBookButton = ({
               id="img"
             />
             <EditInput
-              onChange={(event) => {
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setTitle(event.target.value);
               }}
               value={title}
@@ -153,7 +153,7 @@ export const EditBookButton = ({
               id="title"
             />
             <EditInput
-              onChange={(event) => {
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setAuthorName(event.target.value);
               }}
               value={authorName}
@@ -171,6 +171,17 @@ export const EditBookButton = ({
   );
 };
 
+type NewBookState = {
+  title: string;
+  pages?: number;
+  genre: string;
+  cover: string;
+  synopsis: string;
+  year?: number;
+  ISBN: string;
+  authorName: string;
+  authorOtherBooks: string[];
+};
 export const AddBookButton = ({
   books,
   onBooksChange,
@@ -180,16 +191,16 @@ export const AddBookButton = ({
 }) => {
   const [open, setOpen] = useState(false);
   const genres = getGenres(books);
-  const [newBook, setNewBook] = useState({
+  const [newBook, setNewBook] = useState<NewBookState>({
     title: "",
-    pages: "0",
+    pages: undefined,
     genre: "",
     cover: "",
     synopsis: "",
-    year: "0",
+    year: undefined,
     ISBN: "",
     authorName: "",
-    authorOtherBooks: "",
+    authorOtherBooks: [],
   });
 
   return (
@@ -216,11 +227,11 @@ export const AddBookButton = ({
                 {
                   book: {
                     title: newBook.title,
-                    pages: parseInt(newBook.pages),
+                    pages: newBook.pages ?? 0,
                     genre: newBook.genre,
                     cover: newBook.cover,
                     synopsis: newBook.synopsis,
-                    year: parseInt(newBook.year),
+                    year: newBook.year ?? 0,
                     ISBN: newBook.ISBN,
                     author: {
                       name: newBook.authorName,
@@ -232,7 +243,6 @@ export const AddBookButton = ({
               ];
               onBooksChange(newBooks);
               setOpen(false);
-              console.log(newBooks, "new");
             }}
           >
             <AddInputorText
@@ -259,7 +269,7 @@ export const AddBookButton = ({
               </div>
               <AddInputorText
                 onChange={(event) => {
-                  setNewBook({ ...newBook, pages: event.target.value });
+                  setNewBook({ ...newBook, pages: +event.target.value });
                 }}
                 value={newBook.pages}
                 label="Numero de paginas"
@@ -294,7 +304,7 @@ export const AddBookButton = ({
               />
               <AddInputorText
                 onChange={(event) => {
-                  setNewBook({ ...newBook, year: event.target.value });
+                  setNewBook({ ...newBook, year: +event.target.value });
                 }}
                 value={newBook.year}
                 label="Año"
@@ -311,12 +321,15 @@ export const AddBookButton = ({
             />
             <AddInputorText
               onChange={(event) => {
+                const otherBooks = event.target.value
+                  .split(",")
+                  .map((value) => value.trim());
                 setNewBook({
                   ...newBook,
-                  authorOtherBooks: event.target.value,
+                  authorOtherBooks: otherBooks,
                 });
               }}
-              value={newBook.authorOtherBooks}
+              value={newBook.authorOtherBooks.join(", ")}
               label="Otros libros escritos"
               id="otherBooks"
             />
@@ -421,13 +434,17 @@ const removeAccents = (text: string): string =>
 
 const Home = (): FunctionComponent => {
   const [books, setBooks] = useState(bookList.library);
-
   const genres = getGenres(books);
   const { minPage, maxPage } = getMinMaxPages(books);
+
   const [numberPage, setNumberPage] = useState(maxPage);
   const [selectedGenre, setSelectedGenre] = useState("Todas");
   const [layout, setLayout] = useState<LayoutType>("grid"); // grid | list
   const [searchBook, setSearchBook] = useState("");
+
+  React.useEffect(() => {
+    setNumberPage(maxPage);
+  }, [maxPage]);
 
   const handlePageNumber = (values: number[]) => {
     const [value] = values;
