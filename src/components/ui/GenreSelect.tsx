@@ -8,7 +8,7 @@ export default function GenreSelect({
   label,
 }: {
   options: string[];
-  value: string;
+  value?: string;
   onChange: (value: string) => void;
   label: string;
 }) {
