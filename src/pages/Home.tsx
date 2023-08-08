@@ -18,6 +18,7 @@ import { EditBookButton } from "../components/ui/EditBookButton.tsx";
 import DeleteBookButton from "../components/ui/DeleteBookButton.tsx";
 import ImgInputChange from "../components/ui/FileInput.tsx";
 import CreateBookButton from "../components/ui/CreateBook.tsx";
+import AddInputorText from "../components/ui/AddInput.tsx";
 
 type Author = {
   name: string;

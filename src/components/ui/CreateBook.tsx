@@ -143,19 +143,6 @@ const CreateBookButton = ({
               id="año"
               placeholder={2023}
             />
-            <EditInput
-              onChange={(event) => {
-                setBookDetails({
-                  ...bookDetails,
-                  ISBN: event.target.value,
-                });
-              }}
-              value={bookDetails.ISBN}
-              label="Código"
-              id="ISBN"
-              placeholder={94}
-            />
-
             <Button variant="primary">Guardar</Button>
             <Dialog.Close asChild>
               <Button variant="secondary">Cancelar</Button>
