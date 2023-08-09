@@ -1,12 +1,12 @@
+import React from "react";
+
 const ImgInputChange = ({
   id,
   onChange,
-  // inputRef,
   actualImg,
 }: {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   id: string;
-  // inputRef: HTMLElement;
   actualImg: string;
 }) => {
   return (
@@ -18,9 +18,9 @@ const ImgInputChange = ({
         type="file"
         accept="image/jpg,image/jpeg, image/png"
         onChange={onChange}
-        multiple
+        // multiple
       />
-      <img width={200} height={200} id="prevImage" src={actualImg} alt="" />
+      <img width={200} height={200} src={actualImg} alt="" />
     </div>
   );
 };

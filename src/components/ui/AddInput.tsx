@@ -1,6 +1,6 @@
 import React from "react";
 
-const AddInputorText = ({
+const AddInput = ({
   label,
   id,
   value,
@@ -40,4 +40,4 @@ const AddInputorText = ({
     </div>
   );
 };
-export default AddInputorText;
+export default AddInput;

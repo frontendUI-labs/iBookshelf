@@ -13,8 +13,7 @@ import EditInput from "../components/ui/EditInput.tsx";
 import * as Dialog from "@radix-ui/react-dialog";
 import { randomID } from "../utils";
 import ImgInputChange from "../components/ui/FileInput.tsx";
-// import CreateBookButton from "../components/ui/CreateBook.tsx";
-import AddInputorText from "../components/ui/AddInput.tsx";
+import AddInput from "../components/ui/AddInput.tsx";
 
 type Author = {
   name: string;
@@ -106,6 +105,7 @@ export const EditBookButton = ({
   const [title, setTitle] = useState(book.book.title);
   const [authorName, setAuthorName] = useState(book.book.author.name);
   const [img, setImg] = useState(book.book.cover);
+  const [imgError, setImgError] = useState(false);
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
@@ -133,7 +133,6 @@ export const EditBookButton = ({
                 selectedBook.book.cover = img;
                 selectedBook.book.title = title;
                 selectedBook.book.author.name = authorName;
-
                 onBooksChange(newBooks);
                 setOpen(false);
               }
@@ -143,10 +142,22 @@ export const EditBookButton = ({
               actualImg={img}
               id="ImgInput"
               onChange={(event) => {
-                const file = URL.createObjectURL(event.target.files[0]);
-                setImg(file);
+                const file = event.target.files?.[0];
+                if (!file) return;
+                if (file.size > 1024) {
+                  setImgError(true);
+                  return;
+                }
+                const imgUrl = URL.createObjectURL(file);
+                setImg(imgUrl);
               }}
             />
+
+            {imgError && (
+              <p className="text-red-500 text-sm">
+                La imagen debe ser menor a 1mb
+              </p>
+            )}
 
             <EditInput
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -258,7 +269,7 @@ export const AddBookButton = ({
               setOpen(false);
             }}
           >
-            <AddInputorText
+            <AddInput
               onChange={(event) => {
                 setNewBook({ ...newBook, title: event.target.value });
               }}
@@ -280,7 +291,7 @@ export const AddBookButton = ({
                   options={genres}
                 />
               </div>
-              <AddInputorText
+              <AddInput
                 onChange={(event) => {
                   setNewBook({ ...newBook, pages: +event.target.value });
                 }}
@@ -289,7 +300,7 @@ export const AddBookButton = ({
                 id="pages"
               />
             </div>
-            <AddInputorText
+            <AddInput
               onChange={(event) => {
                 setNewBook({ ...newBook, cover: event.target.value });
               }}
@@ -297,7 +308,7 @@ export const AddBookButton = ({
               label="Link de la imagen"
               id="cover"
             />
-            <AddInputorText
+            <AddInput
               onChange={(event) => {
                 setNewBook({ ...newBook, synopsis: event.target.value });
               }}
@@ -307,7 +318,7 @@ export const AddBookButton = ({
               isTextArea={true}
             />
             <div className="grid grid-cols-[2fr,1fr] gap-3">
-              <AddInputorText
+              <AddInput
                 onChange={(event) => {
                   setNewBook({ ...newBook, year: +event.target.value });
                 }}
@@ -316,7 +327,7 @@ export const AddBookButton = ({
                 id="year"
               />
             </div>
-            <AddInputorText
+            <AddInput
               onChange={(event) => {
                 setNewBook({ ...newBook, authorName: event.target.value });
               }}
@@ -324,7 +335,7 @@ export const AddBookButton = ({
               label="Autor"
               id="author"
             />
-            <AddInputorText
+            <AddInput
               onChange={(event) => {
                 const otherBooks = event.target.value
                   .split(",")
