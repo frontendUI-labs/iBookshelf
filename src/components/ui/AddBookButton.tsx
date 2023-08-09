@@ -265,11 +265,21 @@ export const AddBookButton = ({
                     const file = event.target.files?.[0];
                     if (!file) return;
                     const imgUrl = URL.createObjectURL(file);
-                    const newImage = new Image();
-                    console.log(newImage, "newImage");
-                    setNewBook({
-                      ...newBook,
-                      cover: imgUrl,
+                    const imgElement = new Image();
+                    imgElement.src = imgUrl;
+                    imgElement.addEventListener("load", () => {
+                      if (imgElement.width > 1000 || imgElement.height > 1000) {
+                        setErrors({
+                          ...errors,
+                          cover:
+                            "Imagen muy grande, debe ser como max 1000 x 1000",
+                        });
+                        return;
+                      }
+                      setNewBook({
+                        ...newBook,
+                        cover: imgUrl,
+                      });
                     });
                   }}
                 />
