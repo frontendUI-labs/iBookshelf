@@ -20,7 +20,7 @@ const ImgInputChange = ({
         onChange={onChange}
         // multiple
       />
-      <img width={200} height={200} src={actualImg} alt="" />
+      {actualImg && <img width={200} height={200} src={actualImg} alt="" />}
     </div>
   );
 };

@@ -6,6 +6,7 @@ const AddInput = ({
   value,
   onChange,
   isTextArea = false,
+  placeholder,
 }: {
   label: string;
   id: string;
@@ -14,6 +15,7 @@ const AddInput = ({
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => void;
   isTextArea?: boolean;
+  placeholder: string;
 }) => {
   return (
     <div className="w-full flex flex-col gap-2 p-2">
@@ -22,15 +24,17 @@ const AddInput = ({
         <textarea
           className="border-2 p-3 rounded-md hover:border-indigo-600"
           name="textarea"
+          placeholder={placeholder}
           id={id}
           value={value}
-          rows={5}
+          rows={3}
           cols={8}
           onChange={onChange}
         ></textarea>
       ) : (
         <input
           onChange={onChange}
+          placeholder={placeholder}
           className="border-2 p-3 rounded-md hover:border-indigo-600"
           type="text"
           id={id}

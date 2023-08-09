@@ -37,7 +37,7 @@ export default function GenreSelect({
               <Select.Item
                 key={option}
                 value={option}
-                className="text-sm leading-none text-violet11 rounded-[3px] flex items-center h-[25px] pr-[35px] pl-[25px] relative select-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1 hover:bg-slate-300"
+                className="text-sm leading-none text-violet11 rounded-[3px] flex items-center h-[25px] pr-[35px] pl-[25px] relative select-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1 hover:bg-slate-300 focus:bg-slate-300"
               >
                 <Select.ItemText>{option}</Select.ItemText>
                 <Select.ItemIndicator className="absolute left-0 w-[25px] inline-flex items-center justify-center">

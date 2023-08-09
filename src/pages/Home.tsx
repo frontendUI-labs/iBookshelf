@@ -217,9 +217,23 @@ export const AddBookButton = ({
   books: Library[];
   onBooksChange: (books: Library[]) => void;
 }) => {
+  const [img, setImg] = useState();
+  const [emptyInput, setEmptyInput] = useState(false);
+
   const [open, setOpen] = useState(false);
   const genres = getGenres(books);
   const [newBook, setNewBook] = useState<NewBookState>(initialAddBookState);
+  const [errors, setErrors] = useState({
+    title: "",
+    pages: "",
+    genre: "",
+    cover: "",
+    synopsis: "",
+    year: "",
+    ISBN: "",
+    authorName: "",
+    authorOtherBooks: "",
+  });
 
   const resetNewBookState = () => {
     setNewBook(initialAddBookState);
@@ -228,7 +242,7 @@ export const AddBookButton = ({
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger asChild>
-        <div className="w-full h-full bg-[#F2F2F2] border-2 border-[#E6E6E6] parent hover:bg-[#c2c2c2]">
+        <div className="w-full h-[80%] bg-[#F2F2F2] border-2 border-[#E6E6E6] parent hover:bg-[#c2c2c2]">
           <button className="flex flex-col items-center justify-center w-full h-full font-bold font-md child hover:scale-110">
             <PlusSquare className="w-1/3 h-1/3" />
             AGREGA UN LIBRO
@@ -237,20 +251,31 @@ export const AddBookButton = ({
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="bg-[rgba(0,0,0,.7)] data-[state=open]:animate-overlayShow fixed inset-0" />
-        <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[600px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] overflow-auto focus:outline-none">
-          <Dialog.Title className="m-0 text-[20px] font-medium sticky top-0 bg-white p-6">
+        <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[600px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px]  focus:outline-none">
+          <Dialog.Title className="m-0 text-[20px] font-medium">
             Agrega un Libro
           </Dialog.Title>
           <form
             onSubmit={(event) => {
               event.preventDefault();
+
+              if (newBook.title === "") {
+                setErrors({ ...errors, title: "Campo requerido" });
+                return;
+              }
+
+              if (newBook.title.length <= 10) {
+                setErrors({ ...errors, title: "Minimo 10 caracteres" });
+                return;
+              }
+
               const newBooks = [
                 {
                   book: {
                     title: newBook.title,
                     pages: newBook.pages ?? 0,
                     genre: newBook.genre ?? "",
-                    cover: newBook.cover,
+                    cover: img,
                     synopsis: newBook.synopsis,
                     year: newBook.year ?? 0,
                     // DO NOT DO THIS
@@ -263,92 +288,128 @@ export const AddBookButton = ({
                 },
                 ...books,
               ];
+
               onBooksChange(newBooks);
 
               resetNewBookState();
               setOpen(false);
             }}
           >
-            <AddInput
-              onChange={(event) => {
-                setNewBook({ ...newBook, title: event.target.value });
-              }}
-              value={newBook.title}
-              label="Titulo"
-              id="title"
-            />
-            <div className="grid grid-cols-[2fr,1fr] items-center gap-3">
-              <div className="px-2">
-                <GenreSelect
-                  onChange={(value) => {
-                    setNewBook({
-                      ...newBook,
-                      genre: value,
-                    });
+            <div className=" overflow-auto max-h-[65vh]">
+              <AddInput
+                onChange={(event) => {
+                  setErrors({ ...errors, title: "" });
+                  setNewBook({ ...newBook, title: event.target.value });
+                }}
+                value={newBook.title}
+                label="Titulo"
+                id="title"
+                placeholder="Ej. Harry Potter y la piedra filosofal"
+              />
+              {errors.title && (
+                <p className="text-red-500 text-sm">{errors.title}</p>
+              )}
+
+              <div className="grid grid-cols-[1fr,1fr] items-center gap-3">
+                <div className="px-2">
+                  <GenreSelect
+                    onChange={(value) => {
+                      setNewBook({
+                        ...newBook,
+                        genre: value,
+                      });
+                    }}
+                    label="Genero"
+                    value={newBook.genre}
+                    options={genres}
+                  />
+                  {emptyInput && (
+                    <p className="text-red-500 text-sm">
+                      La imagen debe ser menor a 1mb
+                    </p>
+                  )}
+                </div>
+                <AddInput
+                  onChange={(event) => {
+                    setNewBook({ ...newBook, authorName: event.target.value });
                   }}
-                  label="Genero"
-                  value={newBook.genre}
-                  options={genres}
+                  value={newBook.authorName}
+                  label="Autor"
+                  id="author"
+                  placeholder="Ej. J. K. Rowling"
                 />
               </div>
+              <ImgInputChange
+                id="imgInput"
+                actualImg={img}
+                onChange={(event) => {
+                  const file = event.target.files?.[0];
+                  if (!file) return;
+                  const imgUrl = URL.createObjectURL(file);
+                  const newImage = new Image();
+                  console.log(newImage, "newImage");
+
+                  setImg(imgUrl);
+                }}
+              />
               <AddInput
                 onChange={(event) => {
-                  setNewBook({ ...newBook, pages: +event.target.value });
+                  setNewBook({ ...newBook, synopsis: event.target.value });
                 }}
-                value={newBook.pages}
-                label="Numero de paginas"
-                id="pages"
+                value={newBook.synopsis}
+                label="Synopsis"
+                id="sypnosis"
+                isTextArea={true}
+                placeholder="Ej. Harry Potter y la piedra filosofal, es el primer libro..."
               />
-            </div>
-            <AddInput
-              onChange={(event) => {
-                setNewBook({ ...newBook, cover: event.target.value });
-              }}
-              value={newBook.cover}
-              label="Link de la imagen"
-              id="cover"
-            />
-            <AddInput
-              onChange={(event) => {
-                setNewBook({ ...newBook, synopsis: event.target.value });
-              }}
-              value={newBook.synopsis}
-              label="Synopsis"
-              id="sypnosis"
-              isTextArea={true}
-            />
-            <div className="grid grid-cols-[2fr,1fr] gap-3">
+              {emptyInput && (
+                <p className="text-red-500 text-sm">
+                  La imagen debe ser menor a 1mb
+                </p>
+              )}
+
+              <div className="grid grid-cols-[1fr,1fr] gap-3">
+                <AddInput
+                  onChange={(event) => {
+                    setNewBook({ ...newBook, pages: +event.target.value });
+                  }}
+                  value={newBook.pages}
+                  label="Numero de paginas"
+                  id="pages"
+                  placeholder="Ej. 1234"
+                />
+                {emptyInput && (
+                  <p className="text-red-500 text-sm">
+                    La imagen debe ser menor a 1mb
+                  </p>
+                )}
+                <AddInput
+                  onChange={(event) => {
+                    setNewBook({ ...newBook, year: +event.target.value });
+                  }}
+                  value={newBook.year}
+                  label="Año"
+                  id="year"
+                  placeholder="Ej. 2023"
+                />
+              </div>
+
               <AddInput
                 onChange={(event) => {
-                  setNewBook({ ...newBook, year: +event.target.value });
+                  const otherBooks = event.target.value
+                    .split(",")
+                    .map((value) => value.trim());
+                  setNewBook({
+                    ...newBook,
+                    authorOtherBooks: otherBooks,
+                  });
                 }}
-                value={newBook.year}
-                label="Año"
-                id="year"
+                value={newBook.authorOtherBooks.join(", ")}
+                label="Otros libros escritos"
+                id="otherBooks"
+                placeholder="Ej. Harry Potter y la cámara secreta, Harry Potter y el prisionero de Azkaban"
               />
             </div>
-            <AddInput
-              onChange={(event) => {
-                setNewBook({ ...newBook, authorName: event.target.value });
-              }}
-              value={newBook.authorName}
-              label="Autor"
-              id="author"
-            />
-            <AddInput
-              onChange={(event) => {
-                const otherBooks = event.target.value
-                  .split(",")
-                  .map((value) => value.trim());
-                setNewBook({
-                  ...newBook,
-                  authorOtherBooks: otherBooks,
-                });
-              }}
-              value={newBook.authorOtherBooks.join(", ")}
-              label="Otros libros escritos"
-              id="otherBooks"
-            />
             <div className="mt-3 text-end">
               <Dialog.Close asChild>
                 <Button variant="secondary">Cancelar</Button>
