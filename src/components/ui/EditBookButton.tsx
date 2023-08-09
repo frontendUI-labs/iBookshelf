@@ -62,8 +62,10 @@ export const EditBookButton = ({
               id="ImgInput"
               onChange={(event) => {
                 const file = event.target.files?.[0];
+                console.log(event.target.files, "filesss");
+
                 if (!file) return;
-                if (file.size > 1024) {
+                if (file.size > 2 * 1024 * 1024) {
                   setImgError(true);
                   return;
                 }
@@ -73,7 +75,7 @@ export const EditBookButton = ({
             />
 
             {imgError && (
-              <p className="text-red-500 text-sm">
+              <p className="text-red-500 text-sm px-3">
                 La imagen debe ser menor a 1mb
               </p>
             )}
