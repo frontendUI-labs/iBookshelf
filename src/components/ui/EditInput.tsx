@@ -10,7 +10,7 @@ const EditInput = ({
   label: string;
   id: string;
   value: string | number;
-  placeholder?: string | number;
+  placeholder?: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
   return (
