@@ -33,8 +33,8 @@ const AddInput = ({
         ></textarea>
       ) : (
         <input
-          onChange={onChange}
           placeholder={placeholder}
+          onChange={onChange}
           className="border-2 p-3 rounded-md hover:border-indigo-600"
           type="text"
           id={id}

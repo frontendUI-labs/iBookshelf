@@ -64,6 +64,7 @@ const getMinMaxPages = (
 };
 
 type LayoutType = "grid" | "list";
+
 type SliderDemoProps = {
   value: number;
   minPage: number;
