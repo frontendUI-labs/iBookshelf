@@ -31,6 +31,28 @@ const initialAddBookState: NewBookState = {
   authorName: "",
   authorOtherBooks: [],
 };
+type AddBookErrorState = {
+  title: string;
+  pages: string;
+  genre: string;
+  cover: string;
+  synopsis: string;
+  year: string;
+  ISBN: string;
+  authorName: string;
+  authorOtherBooks: string;
+};
+const initialAddBookErrorState: AddBookErrorState = {
+  title: "",
+  pages: "",
+  genre: "",
+  cover: "",
+  synopsis: "",
+  year: "",
+  ISBN: "",
+  authorName: "",
+  authorOtherBooks: "",
+};
 const getGenres = (books: Library[]): string[] => {
   const genres: string[] = [];
   books.forEach((book) => {
@@ -42,17 +64,12 @@ const getGenres = (books: Library[]): string[] => {
 };
 
 type ErrorMessageProps = {
-  textInput: string;
-  errors: any;
+  inputName: keyof AddBookErrorState;
+  errors: AddBookErrorState;
 };
-function ErrorMessage({ textInput, errors }: ErrorMessageProps) {
-  return (
-    <>
-      {errors[textInput] && (
-        <p className=" text-red-500 text-sm px-3">{errors[textInput]}</p>
-      )}
-    </>
-  );
+function ErrorMessage({ inputName, errors }: ErrorMessageProps) {
+  const error = errors[inputName];
+  return error && <p className="text-red-500 text-sm px-3">{error}</p>;
 }
 
 export const AddBookButton = ({
@@ -62,29 +79,27 @@ export const AddBookButton = ({
   books: Library[];
   onBooksChange: (books: Library[]) => void;
 }) => {
-  const [img, setImg] = useState();
+  // const [img, setImg] = useState("");
   const [open, setOpen] = useState(false);
   const genres = getGenres(books);
   const [newBook, setNewBook] = useState<NewBookState>(initialAddBookState);
-  const [errors, setErrors] = useState<NewBookState>(initialAddBookState);
-  //   {
-  //   title: "",
-  //   pages: undefined,
-  //   genre: "",
-  //   cover: "",
-  //   synopsis: "",
-  //   year: undefined,
-  //   ISBN: "",
-  //   authorName: "",
-  //   authorOtherBooks: "",
-  // }
-  // );
+  const [errors, setErrors] = useState<AddBookErrorState>(
+    initialAddBookErrorState
+  );
+
   const resetNewBookState = () => {
     setNewBook(initialAddBookState);
+    setErrors(initialAddBookErrorState);
   };
 
   return (
-    <Dialog.Root open={open} onOpenChange={setOpen}>
+    <Dialog.Root
+      open={open}
+      onOpenChange={() => {
+        setOpen(!open);
+        resetNewBookState();
+      }}
+    >
       <Dialog.Trigger asChild>
         <div className="w-full h-[80%] bg-[#F2F2F2] border-2 border-[#E6E6E6] parent hover:bg-[#c2c2c2]">
           <button className="flex flex-col items-center justify-center w-full h-full font-bold font-md child hover:scale-110">
@@ -107,69 +122,69 @@ export const AddBookButton = ({
           <form
             onSubmit={(event) => {
               event.preventDefault();
-              if (
-                newBook.title === "" ||
-                newBook.authorName === "" ||
-                newBook.synopsis === "" ||
-                newBook.pages === undefined ||
-                newBook.year === undefined
-              ) {
-                let allErrors = {};
-                if (newBook.title === "") {
-                  allErrors = {
-                    ...allErrors,
-                    title: "Campo requerido",
-                  };
-                }
-                if (newBook.authorName === "") {
-                  allErrors = {
-                    ...allErrors,
-                    authorName: "Campo requerido",
-                  };
-                }
-                if (newBook.synopsis === "") {
-                  allErrors = {
-                    ...allErrors,
-                    synopsis: "Campo requerido",
-                  };
-                }
-                if (newBook.pages === undefined) {
-                  allErrors = {
-                    ...allErrors,
-                    pages: "Campo requerido",
-                  };
-                }
-                if (newBook.year === undefined) {
-                  allErrors = {
-                    ...allErrors,
-                    year: "Campo requerido",
-                  };
-                }
-                if (newBook.genre === undefined) {
-                  allErrors = {
-                    ...allErrors,
-                    genre: "Campo requerido",
-                  };
-                }
-
-                setErrors(allErrors);
-                return;
+              let allErrors = { ...initialAddBookErrorState };
+              if (newBook.title === "") {
+                allErrors = {
+                  ...allErrors,
+                  title: "Campo requerido",
+                };
               }
-              // if (newBook.title === "") {
-              //   setErrors({ ...errors, title: "Campo requerido" });
-              //   return;
-
+              if (newBook.authorName === "") {
+                allErrors = {
+                  ...allErrors,
+                  authorName: "Campo requerido",
+                };
+              }
+              if (newBook.synopsis === "") {
+                allErrors = {
+                  ...allErrors,
+                  synopsis: "Campo requerido",
+                };
+              }
+              if (newBook.pages === undefined) {
+                allErrors = {
+                  ...allErrors,
+                  pages: "Campo requerido",
+                };
+              }
+              if (newBook.cover === "") {
+                allErrors = {
+                  ...allErrors,
+                  cover: "Campo requerido",
+                };
+              }
+              if (newBook.year === undefined) {
+                allErrors = {
+                  ...allErrors,
+                  year: "Campo requerido",
+                };
+              }
+              if (newBook.genre === undefined) {
+                allErrors = {
+                  ...allErrors,
+                  genre: "Campo requerido",
+                };
+              }
               if (newBook.synopsis.length <= 30) {
-                setErrors({ ...errors, synopsis: "Minimo 30 caracteres" });
-                return;
+                allErrors = {
+                  ...allErrors,
+                  synopsis: "Minimo 30 caracteres",
+                };
               }
+              setErrors(allErrors);
+
+              const hasError = Object.values(allErrors).some(
+                (message) => message !== ""
+              );
+              if (hasError) return;
+
               const newBooks = [
                 {
                   book: {
                     title: newBook.title,
                     pages: newBook.pages ?? 0,
                     genre: newBook.genre ?? "",
-                    cover: img,
+                    cover: newBook.cover,
                     synopsis: newBook.synopsis,
                     year: newBook.year ?? 0,
                     // DO NOT DO THIS
@@ -184,7 +199,6 @@ export const AddBookButton = ({
               ];
 
               onBooksChange(newBooks);
-              resetNewBookState();
               setOpen(false);
             }}
           >
@@ -199,7 +213,7 @@ export const AddBookButton = ({
                 id="title"
                 placeholder="Ej. Harry Potter y la piedra filosofal"
               />
-              <ErrorMessage textInput="title" errors={errors} />
+              <ErrorMessage inputName="title" errors={errors} />
               {/* {errors.title && (
                 <p className=" text-red-500 text-sm px-3">{errors.title}</p>
               )} */}
@@ -207,6 +221,7 @@ export const AddBookButton = ({
                 <div className="px-2">
                   <GenreSelect
                     onChange={(value) => {
+                      setErrors({ ...errors, genre: "" });
                       setNewBook({
                         ...newBook,
                         genre: value,
@@ -216,7 +231,7 @@ export const AddBookButton = ({
                     value={newBook.genre}
                     options={genres}
                   />
-                  <ErrorMessage textInput="genres" errors={errors} />
+                  <ErrorMessage inputName="genre" errors={errors} />
                 </div>
                 <div>
                   <AddInput
@@ -232,7 +247,7 @@ export const AddBookButton = ({
                     id="author"
                     placeholder="Ej. J. K. Rowling"
                   />
-                  <ErrorMessage textInput="authorName" errors={errors} />
+                  <ErrorMessage inputName="authorName" errors={errors} />
                   {/* {errors.authorName && (
                     <p className="text-red-500 text-sm px-3">
                       {errors.authorName}
@@ -240,18 +255,27 @@ export const AddBookButton = ({
                   )} */}
                 </div>
               </div>
-              <ImgInputChange
-                id="imgInput"
-                actualImg={img}
-                onChange={(event) => {
-                  const file = event.target.files?.[0];
-                  if (!file) return;
-                  const imgUrl = URL.createObjectURL(file);
-                  const newImage = new Image();
-                  console.log(newImage, "newImage");
-                  setImg(imgUrl);
-                }}
-              />
+              <div>
+                <ImgInputChange
+                  id="imgInput"
+                  actualImg={newBook.cover}
+                  onChange={(event) => {
+                    setErrors({ ...errors, cover: "" });
+
+                    const file = event.target.files?.[0];
+                    if (!file) return;
+                    const imgUrl = URL.createObjectURL(file);
+                    const newImage = new Image();
+                    console.log(newImage, "newImage");
+                    setNewBook({
+                      ...newBook,
+                      cover: imgUrl,
+                    });
+                  }}
+                />
+                <ErrorMessage inputName="cover" errors={errors} />
+              </div>
+
               <AddInput
                 onChange={(event) => {
                   setErrors({ ...errors, synopsis: "" });
@@ -263,12 +287,12 @@ export const AddBookButton = ({
                 isTextArea={true}
                 placeholder="Ej. Harry Potter y la piedra filosofal, es el primer libro..."
               />
-              <ErrorMessage textInput="synopsis" errors={errors} />
+              <ErrorMessage inputName="synopsis" errors={errors} />
               <div className="grid grid-cols-[1fr,1fr] gap-3">
                 <div>
                   <AddInput
                     onChange={(event) => {
-                      setErrors({ ...errors, pages: undefined });
+                      setErrors({ ...errors, pages: "" });
                       setNewBook({ ...newBook, pages: +event.target.value });
                     }}
                     value={newBook.pages}
@@ -276,12 +300,12 @@ export const AddBookButton = ({
                     id="pages"
                     placeholder="Ej. 1234"
                   />
-                  <ErrorMessage textInput="pages" errors={errors} />
+                  <ErrorMessage inputName="pages" errors={errors} />
                 </div>
                 <div>
                   <AddInput
                     onChange={(event) => {
-                      setErrors({ ...errors, year: undefined });
+                      setErrors({ ...errors, year: "" });
                       setNewBook({ ...newBook, year: +event.target.value });
                     }}
                     value={newBook.year}
@@ -289,7 +313,7 @@ export const AddBookButton = ({
                     id="year"
                     placeholder="Ej. 2023"
                   />
-                  <ErrorMessage textInput="year" errors={errors} />
+                  <ErrorMessage inputName="year" errors={errors} />
                 </div>
               </div>
               <AddInput
