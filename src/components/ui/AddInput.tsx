@@ -29,14 +29,12 @@ const AddInput = ({
           value={value}
           rows={3}
           cols={8}
-          placeholder={placeholder}
           onChange={onChange}
         ></textarea>
       ) : (
         <input
           placeholder={placeholder}
           onChange={onChange}
-          placeholder={placeholder}
           className="border-2 p-3 rounded-md hover:border-indigo-600"
           type="text"
           id={id}

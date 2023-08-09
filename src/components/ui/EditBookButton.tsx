@@ -3,7 +3,7 @@ import Button from "../../common/Button";
 import { Library } from "../../pages/Home";
 import EditInput from "./EditInput";
 import * as Dialog from "@radix-ui/react-dialog";
-import { Pencil } from "lucide-react";
+import { Pencil, XSquare } from "lucide-react";
 import ImgInputChange from "./FileInput";
 
 export const EditBookButton = ({
@@ -31,6 +31,11 @@ export const EditBookButton = ({
       <Dialog.Portal>
         <Dialog.Overlay className="bg-[rgba(0,0,0,.7)] data-[state=open]:animate-overlayShow fixed inset-0" />
         <Dialog.Content className=" overflow-y-auto data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
+          <Dialog.Close asChild>
+            <button className="absolute top-2 right-2 hover:bg-black hover:text-white">
+              <XSquare />
+            </button>
+          </Dialog.Close>
           <Dialog.Title className="m-0 text-[20px] font-medium">
             Edita un Libro
           </Dialog.Title>
