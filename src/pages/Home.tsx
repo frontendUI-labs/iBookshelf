@@ -6,18 +6,9 @@ import LayoutTypeInput from "../components/ui/LayoutTypeInput.tsx";
 import { GridLayoutIcon, ListLayoutIcon } from "../assets/icons";
 import * as Slider from "@radix-ui/react-slider";
 import GenreSelect from "../components/ui/GenreSelect.tsx";
-<<<<<<< HEAD
-import Button from "../common/Button.tsx";
-import { Trash2, Pencil, PlusSquare } from "lucide-react";
-import EditInput from "../components/ui/EditInput.tsx";
-import AddInputorText from "../components/ui/AddInput.tsx";
-import * as Dialog from "@radix-ui/react-dialog";
-import { randomID } from "../utils";
-=======
 import { AddBookButton } from "../components/ui/AddBookButton.tsx";
 import { EditBookButton } from "../components/ui/EditBookButton.tsx";
 import DeleteBookButton from "../components/ui/DeleteBookButton.tsx";
->>>>>>> e11ffe2eac6941106fe0ad590cd9ad73dd0a564e
 
 type Author = {
   name: string;
