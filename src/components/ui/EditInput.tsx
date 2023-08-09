@@ -5,10 +5,12 @@ const EditInput = ({
   id,
   value,
   onChange,
+  placeholder,
 }: {
   label: string;
   id: string;
-  value: string;
+  value: string | number;
+  placeholder?: string | number;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
   return (
@@ -20,6 +22,7 @@ const EditInput = ({
         type="text"
         id={id}
         value={value}
+        placeholder={placeholder}
       />
     </div>
   );
