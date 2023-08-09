@@ -17,8 +17,7 @@ import { AddBookButton } from "../components/ui/AddBookButton.tsx";
 import { EditBookButton } from "../components/ui/EditBookButton.tsx";
 import DeleteBookButton from "../components/ui/DeleteBookButton.tsx";
 import ImgInputChange from "../components/ui/FileInput.tsx";
-// import CreateBookButton from "../components/ui/CreateBook.tsx";
-import AddInputorText from "../components/ui/AddInput.tsx";
+import AddInput from "../components/ui/AddInput.tsx";
 
 type Author = {
   name: string;
@@ -115,6 +114,7 @@ export const EditBookButton = ({
   const [title, setTitle] = useState(book.book.title);
   const [authorName, setAuthorName] = useState(book.book.author.name);
   const [img, setImg] = useState(book.book.cover);
+  const [imgError, setImgError] = useState(false);
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
@@ -147,7 +147,6 @@ export const EditBookButton = ({
                 selectedBook.book.cover = img;
                 selectedBook.book.title = title;
                 selectedBook.book.author.name = authorName;
-
                 onBooksChange(newBooks);
                 setOpen(false);
               }
@@ -157,10 +156,22 @@ export const EditBookButton = ({
               actualImg={img}
               id="ImgInput"
               onChange={(event) => {
-                const file = URL.createObjectURL(event.target.files[0]);
-                setImg(file);
+                const file = event.target.files?.[0];
+                if (!file) return;
+                if (file.size > 1024) {
+                  setImgError(true);
+                  return;
+                }
+                const imgUrl = URL.createObjectURL(file);
+                setImg(imgUrl);
               }}
             />
+
+            {imgError && (
+              <p className="text-red-500 text-sm">
+                La imagen debe ser menor a 1mb
+              </p>
+            )}
 
             <EditInput
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -349,8 +360,15 @@ export const AddBookButton = ({
                 id="year"
               />
             </div>
-            <AddInputorText
-              placeholder="Ej: Tronos 1, Tronos 2"
+            <AddInput
+              onChange={(event) => {
+                setNewBook({ ...newBook, authorName: event.target.value });
+              }}
+              value={newBook.authorName}
+              label="Autor"
+              id="author"
+            />
+            <AddInput
               onChange={(event) => {
                 const otherBooks = event.target.value
                   .split(",")
