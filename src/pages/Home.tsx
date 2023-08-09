@@ -227,9 +227,8 @@ export const AddBookButton = ({
       <Dialog.Portal>
         <Dialog.Overlay className="bg-[rgba(0,0,0,.7)] data-[state=open]:animate-overlayShow fixed inset-0" />
         <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[600px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] overflow-auto focus:outline-none">
-          <Dialog.Title className="m-0 text-[20px] font-medium">
-            <p> Adiciona un Libro!</p>
-            <span>Inserta:</span>
+          <Dialog.Title className="m-0 text-[20px] font-medium sticky top-0 bg-white p-6">
+            Agrega un Libro
           </Dialog.Title>
           <form
             onSubmit={(event) => {
