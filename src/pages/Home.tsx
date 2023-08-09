@@ -231,9 +231,23 @@ export const AddBookButton = ({
   books: Library[];
   onBooksChange: (books: Library[]) => void;
 }) => {
+  const [img, setImg] = useState();
+  const [emptyInput, setEmptyInput] = useState(false);
+
   const [open, setOpen] = useState(false);
   const genres = getGenres(books);
   const [newBook, setNewBook] = useState<NewBookState>(initialAddBookState);
+  const [errors, setErrors] = useState({
+    title: "",
+    pages: "",
+    genre: "",
+    cover: "",
+    synopsis: "",
+    year: "",
+    ISBN: "",
+    authorName: "",
+    authorOtherBooks: "",
+  });
 
   const resetNewBookState = () => {
     setNewBook(initialAddBookState);
@@ -242,7 +256,7 @@ export const AddBookButton = ({
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger asChild>
-        <div className="w-full h-full bg-[#F2F2F2] border-2 border-[#E6E6E6] parent hover:bg-[#c2c2c2]">
+        <div className="w-full h-[80%] bg-[#F2F2F2] border-2 border-[#E6E6E6] parent hover:bg-[#c2c2c2]">
           <button className="flex flex-col items-center justify-center w-full h-full font-bold font-md child hover:scale-110">
             <PlusSquare className="w-1/3 h-1/3" />
             AGREGA UN LIBRO
@@ -263,13 +277,24 @@ export const AddBookButton = ({
           <form
             onSubmit={(event) => {
               event.preventDefault();
+
+              if (newBook.title === "") {
+                setErrors({ ...errors, title: "Campo requerido" });
+                return;
+              }
+
+              if (newBook.title.length <= 10) {
+                setErrors({ ...errors, title: "Minimo 10 caracteres" });
+                return;
+              }
+
               const newBooks = [
                 {
                   book: {
                     title: newBook.title,
                     pages: newBook.pages ?? 0,
                     genre: newBook.genre ?? "",
-                    cover: newBook.cover,
+                    cover: img,
                     synopsis: newBook.synopsis,
                     year: newBook.year ?? 0,
                     // DO NOT DO THIS
@@ -282,106 +307,128 @@ export const AddBookButton = ({
                 },
                 ...books,
               ];
+
               onBooksChange(newBooks);
 
               resetNewBookState();
               setOpen(false);
             }}
           >
-            <AddInputorText
-              placeholder="Ej: Juego de Tronos"
-              onChange={(event) => {
-                setNewBook({ ...newBook, title: event.target.value });
-              }}
-              value={newBook.title}
-              label="Titulo"
-              id="title"
-            />
-            <div className="grid grid-cols-[3fr,1fr] items-center gap-3">
-              <div className="px-2">
-                <GenreSelect
-                  onChange={(value) => {
-                    setNewBook({
-                      ...newBook,
-                      genre: value,
-                    });
+            <div className=" overflow-auto max-h-[65vh]">
+              <AddInput
+                onChange={(event) => {
+                  setErrors({ ...errors, title: "" });
+                  setNewBook({ ...newBook, title: event.target.value });
+                }}
+                value={newBook.title}
+                label="Titulo"
+                id="title"
+                placeholder="Ej. Harry Potter y la piedra filosofal"
+              />
+              {errors.title && (
+                <p className="text-red-500 text-sm">{errors.title}</p>
+              )}
+
+              <div className="grid grid-cols-[1fr,1fr] items-center gap-3">
+                <div className="px-2">
+                  <GenreSelect
+                    onChange={(value) => {
+                      setNewBook({
+                        ...newBook,
+                        genre: value,
+                      });
+                    }}
+                    label="Genero"
+                    value={newBook.genre}
+                    options={genres}
+                  />
+                  {emptyInput && (
+                    <p className="text-red-500 text-sm">
+                      La imagen debe ser menor a 1mb
+                    </p>
+                  )}
+                </div>
+                <AddInput
+                  onChange={(event) => {
+                    setNewBook({ ...newBook, authorName: event.target.value });
                   }}
-                  label="Genero"
-                  value={newBook.genre}
-                  options={genres}
+                  value={newBook.authorName}
+                  label="Autor"
+                  id="author"
+                  placeholder="Ej. J. K. Rowling"
                 />
               </div>
-              <AddInputorText
-                placeholder="Ej: 1200"
+              <ImgInputChange
+                id="imgInput"
+                actualImg={img}
                 onChange={(event) => {
-                  setNewBook({ ...newBook, pages: +event.target.value });
+                  const file = event.target.files?.[0];
+                  if (!file) return;
+                  const imgUrl = URL.createObjectURL(file);
+                  const newImage = new Image();
+                  console.log(newImage, "newImage");
+
+                  setImg(imgUrl);
                 }}
-                value={newBook.pages}
-                label="Numero de paginas"
-                id="pages"
+              />
+              <AddInput
+                onChange={(event) => {
+                  setNewBook({ ...newBook, synopsis: event.target.value });
+                }}
+                value={newBook.synopsis}
+                label="Synopsis"
+                id="sypnosis"
+                isTextArea={true}
+                placeholder="Ej. Harry Potter y la piedra filosofal, es el primer libro..."
+              />
+              {emptyInput && (
+                <p className="text-red-500 text-sm">
+                  La imagen debe ser menor a 1mb
+                </p>
+              )}
+
+              <div className="grid grid-cols-[1fr,1fr] gap-3">
+                <AddInput
+                  onChange={(event) => {
+                    setNewBook({ ...newBook, pages: +event.target.value });
+                  }}
+                  value={newBook.pages}
+                  label="Numero de paginas"
+                  id="pages"
+                  placeholder="Ej. 1234"
+                />
+                {emptyInput && (
+                  <p className="text-red-500 text-sm">
+                    La imagen debe ser menor a 1mb
+                  </p>
+                )}
+                <AddInput
+                  onChange={(event) => {
+                    setNewBook({ ...newBook, year: +event.target.value });
+                  }}
+                  value={newBook.year}
+                  label="Año"
+                  id="year"
+                  placeholder="Ej. 2023"
+                />
+              </div>
+
+              <AddInput
+                onChange={(event) => {
+                  const otherBooks = event.target.value
+                    .split(",")
+                    .map((value) => value.trim());
+                  setNewBook({
+                    ...newBook,
+                    authorOtherBooks: otherBooks,
+                  });
+                }}
+                value={newBook.authorOtherBooks.join(", ")}
+                label="Otros libros escritos"
+                id="otherBooks"
+                placeholder="Ej. Harry Potter y la cámara secreta, Harry Potter y el prisionero de Azkaban"
               />
             </div>
-            <AddInputorText
-              placeholder="Ej: https://m.media-amazon.com/images"
-              onChange={(event) => {
-                setNewBook({ ...newBook, cover: event.target.value });
-              }}
-              value={newBook.cover}
-              label="Link de la imagen"
-              id="cover"
-            />
-            <AddInputorText
-              placeholder="Ej: En un reino donde las estaciones duran años, una batalla épica por el trono se desarrolla..."
-              onChange={(event) => {
-                setNewBook({ ...newBook, synopsis: event.target.value });
-              }}
-              value={newBook.synopsis}
-              label="Synopsis"
-              id="sypnosis"
-              isTextArea={true}
-            />
-            <div className="grid grid-cols-[2fr,1fr] gap-3">
-              <AddInputorText
-                placeholder="Ej: George R. R. Martin"
-                onChange={(event) => {
-                  setNewBook({ ...newBook, authorName: event.target.value });
-                }}
-                value={newBook.authorName}
-                label="Autor"
-                id="author"
-              />
-              <AddInputorText
-                placeholder="Ej: 2023"
-                onChange={(event) => {
-                  setNewBook({ ...newBook, year: +event.target.value });
-                }}
-                value={newBook.year}
-                label="Año"
-                id="year"
-              />
-            </div>
-            <AddInput
-              onChange={(event) => {
-                setNewBook({ ...newBook, authorName: event.target.value });
-              }}
-              value={newBook.authorName}
-              label="Autor"
-              id="author"
-            />
-            <AddInput
-              onChange={(event) => {
-                const otherBooks = event.target.value
-                  .split(",")
-                  .map((value) => value.trim());
-                setNewBook({
-                  ...newBook,
-                  authorOtherBooks: otherBooks,
-                });
-              }}
-              value={newBook.authorOtherBooks.join(", ")}
-              label="Otros libros escritos"
-              id="otherBooks"
-            />
             <div className="mt-3 text-end">
               <Dialog.Close asChild>
                 <Button variant="secondary">Cancelar</Button>
