@@ -12,15 +12,17 @@ const ImgInputChange = ({
   return (
     <div className="flex flex-col gap-4 p-3">
       <label htmlFor={id}>Nueva Imagen</label>
-      <input
-        className="custom-file-input"
-        id={id}
-        type="file"
-        accept="image/jpg,image/jpeg, image/png"
-        onChange={onChange}
-        // multiple
-      />
-      {actualImg && <img width={200} height={200} src={actualImg} alt="" />}
+      <div className="w-[172px]">
+        <input
+          className="custom-file-input w-full mb-3"
+          id={id}
+          type="file"
+          accept="image/jpg,image/jpeg, image/png"
+          onChange={onChange}
+          // multiple
+        />
+        {actualImg && <img width={200} height={200} src={actualImg} alt="" />}
+      </div>
     </div>
   );
 };

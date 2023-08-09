@@ -7,7 +7,6 @@ import { randomID } from "../../utils";
 import GenreSelect from "./GenreSelect";
 import ImgInputChange from "./FileInput";
 import Button from "../../common/Button";
-// import { randomID } from "../utils";
 
 type NewBookState = {
   title: string;
@@ -41,6 +40,21 @@ const getGenres = (books: Library[]): string[] => {
   });
   return genres;
 };
+
+type ErrorMessageProps = {
+  textInput: string;
+  errors: any;
+};
+function ErrorMessage({ textInput, errors }: ErrorMessageProps) {
+  return (
+    <>
+      {errors[textInput] && (
+        <p className=" text-red-500 text-sm px-3">{errors[textInput]}</p>
+      )}
+    </>
+  );
+}
+
 export const AddBookButton = ({
   books,
   onBooksChange,
@@ -49,22 +63,22 @@ export const AddBookButton = ({
   onBooksChange: (books: Library[]) => void;
 }) => {
   const [img, setImg] = useState();
-
   const [open, setOpen] = useState(false);
   const genres = getGenres(books);
   const [newBook, setNewBook] = useState<NewBookState>(initialAddBookState);
-  const [errors, setErrors] = useState({
-    title: "",
-    pages: "",
-    genre: "",
-    cover: "",
-    synopsis: "",
-    year: "",
-    ISBN: "",
-    authorName: "",
-    authorOtherBooks: "",
-  });
-
+  const [errors, setErrors] = useState<NewBookState>(initialAddBookState);
+  //   {
+  //   title: "",
+  //   pages: undefined,
+  //   genre: "",
+  //   cover: "",
+  //   synopsis: "",
+  //   year: undefined,
+  //   ISBN: "",
+  //   authorName: "",
+  //   authorOtherBooks: "",
+  // }
+  // );
   const resetNewBookState = () => {
     setNewBook(initialAddBookState);
   };
@@ -75,7 +89,7 @@ export const AddBookButton = ({
         <div className="w-full h-[80%] bg-[#F2F2F2] border-2 border-[#E6E6E6] parent hover:bg-[#c2c2c2]">
           <button className="flex flex-col items-center justify-center w-full h-full font-bold font-md child hover:scale-110">
             <PlusSquare className="w-1/3 h-1/3" />
-            AGREGA UN LIBRO
+            AGREGAR LIBRO
           </button>
         </div>
       </Dialog.Trigger>
@@ -87,23 +101,68 @@ export const AddBookButton = ({
               <XSquare />
             </button>
           </Dialog.Close>
-          <Dialog.Title className="m-0 text-[20px] font-medium">
-            Agrega un Libro
+          <Dialog.Title className="m-0 text-[20px] font-medium text-center">
+            Inserta
           </Dialog.Title>
           <form
             onSubmit={(event) => {
               event.preventDefault();
+              if (
+                newBook.title === "" ||
+                newBook.authorName === "" ||
+                newBook.synopsis === "" ||
+                newBook.pages === undefined ||
+                newBook.year === undefined
+              ) {
+                let allErrors = {};
+                if (newBook.title === "") {
+                  allErrors = {
+                    ...allErrors,
+                    title: "Campo requerido",
+                  };
+                }
+                if (newBook.authorName === "") {
+                  allErrors = {
+                    ...allErrors,
+                    authorName: "Campo requerido",
+                  };
+                }
+                if (newBook.synopsis === "") {
+                  allErrors = {
+                    ...allErrors,
+                    synopsis: "Campo requerido",
+                  };
+                }
+                if (newBook.pages === undefined) {
+                  allErrors = {
+                    ...allErrors,
+                    pages: "Campo requerido",
+                  };
+                }
+                if (newBook.year === undefined) {
+                  allErrors = {
+                    ...allErrors,
+                    year: "Campo requerido",
+                  };
+                }
+                if (newBook.genre === undefined) {
+                  allErrors = {
+                    ...allErrors,
+                    genre: "Campo requerido",
+                  };
+                }
 
-              if (newBook.title === "") {
-                setErrors({ ...errors, title: "Campo requerido" });
+                setErrors(allErrors);
                 return;
               }
+              // if (newBook.title === "") {
+              //   setErrors({ ...errors, title: "Campo requerido" });
+              //   return;
 
-              if (newBook.title.length <= 10) {
-                setErrors({ ...errors, title: "Minimo 10 caracteres" });
+              if (newBook.synopsis.length <= 30) {
+                setErrors({ ...errors, synopsis: "Minimo 30 caracteres" });
                 return;
               }
-
               const newBooks = [
                 {
                   book: {
@@ -125,7 +184,6 @@ export const AddBookButton = ({
               ];
 
               onBooksChange(newBooks);
-
               resetNewBookState();
               setOpen(false);
             }}
@@ -141,10 +199,10 @@ export const AddBookButton = ({
                 id="title"
                 placeholder="Ej. Harry Potter y la piedra filosofal"
               />
-              {errors.title && (
-                <p className="text-red-500 text-sm">{errors.title}</p>
-              )}
-
+              <ErrorMessage textInput="title" errors={errors} />
+              {/* {errors.title && (
+                <p className=" text-red-500 text-sm px-3">{errors.title}</p>
+              )} */}
               <div className="grid grid-cols-[1fr,1fr] items-center gap-3">
                 <div className="px-2">
                   <GenreSelect
@@ -158,16 +216,29 @@ export const AddBookButton = ({
                     value={newBook.genre}
                     options={genres}
                   />
+                  <ErrorMessage textInput="genres" errors={errors} />
                 </div>
-                <AddInput
-                  onChange={(event) => {
-                    setNewBook({ ...newBook, authorName: event.target.value });
-                  }}
-                  value={newBook.authorName}
-                  label="Autor"
-                  id="author"
-                  placeholder="Ej. J. K. Rowling"
-                />
+                <div>
+                  <AddInput
+                    onChange={(event) => {
+                      setErrors({ ...errors, authorName: "" });
+                      setNewBook({
+                        ...newBook,
+                        authorName: event.target.value,
+                      });
+                    }}
+                    value={newBook.authorName}
+                    label="Autor"
+                    id="author"
+                    placeholder="Ej. J. K. Rowling"
+                  />
+                  <ErrorMessage textInput="authorName" errors={errors} />
+                  {/* {errors.authorName && (
+                    <p className="text-red-500 text-sm px-3">
+                      {errors.authorName}
+                    </p>
+                  )} */}
+                </div>
               </div>
               <ImgInputChange
                 id="imgInput"
@@ -178,43 +249,49 @@ export const AddBookButton = ({
                   const imgUrl = URL.createObjectURL(file);
                   const newImage = new Image();
                   console.log(newImage, "newImage");
-
                   setImg(imgUrl);
                 }}
               />
               <AddInput
                 onChange={(event) => {
+                  setErrors({ ...errors, synopsis: "" });
                   setNewBook({ ...newBook, synopsis: event.target.value });
                 }}
                 value={newBook.synopsis}
                 label="Synopsis"
-                id="sypnosis"
+                id="synopsis"
                 isTextArea={true}
                 placeholder="Ej. Harry Potter y la piedra filosofal, es el primer libro..."
               />
-
+              <ErrorMessage textInput="synopsis" errors={errors} />
               <div className="grid grid-cols-[1fr,1fr] gap-3">
-                <AddInput
-                  onChange={(event) => {
-                    setNewBook({ ...newBook, pages: +event.target.value });
-                  }}
-                  value={newBook.pages}
-                  label="Numero de paginas"
-                  id="pages"
-                  placeholder="Ej. 1234"
-                />
-
-                <AddInput
-                  onChange={(event) => {
-                    setNewBook({ ...newBook, year: +event.target.value });
-                  }}
-                  value={newBook.year}
-                  label="Año"
-                  id="year"
-                  placeholder="Ej. 2023"
-                />
+                <div>
+                  <AddInput
+                    onChange={(event) => {
+                      setErrors({ ...errors, pages: undefined });
+                      setNewBook({ ...newBook, pages: +event.target.value });
+                    }}
+                    value={newBook.pages}
+                    label="Numero de paginas"
+                    id="pages"
+                    placeholder="Ej. 1234"
+                  />
+                  <ErrorMessage textInput="pages" errors={errors} />
+                </div>
+                <div>
+                  <AddInput
+                    onChange={(event) => {
+                      setErrors({ ...errors, year: undefined });
+                      setNewBook({ ...newBook, year: +event.target.value });
+                    }}
+                    value={newBook.year}
+                    label="Año"
+                    id="year"
+                    placeholder="Ej. 2023"
+                  />
+                  <ErrorMessage textInput="year" errors={errors} />
+                </div>
               </div>
-
               <AddInput
                 onChange={(event) => {
                   const otherBooks = event.target.value
@@ -236,7 +313,7 @@ export const AddBookButton = ({
                 <Button variant="secondary">Cancelar</Button>
               </Dialog.Close>
               <Button type="submit" variant="primary">
-                Guardar
+                Agregar
               </Button>
             </div>
           </form>
