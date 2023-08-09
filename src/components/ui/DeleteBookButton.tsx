@@ -17,7 +17,8 @@ const DeleteBookButton = ({ onDelete }: { onDelete: () => void }) => {
         <AlertDialog.Content className="w-[90vw] max-w-[500px] max-h-[85vh] p-6 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-md shadow-[hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px]">
           <AlertDialog.Cancel asChild>
             <button className="absolute top-2 right-2 hover:bg-black hover:text-white">
-              <XSquare />
+              <XSquare aria-hidden />
+              <span className="sr-only">Close Modal</span>
             </button>
           </AlertDialog.Cancel>
           <AlertDialog.Title className="text-xl mb-10">
