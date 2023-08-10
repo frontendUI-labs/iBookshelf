@@ -9,6 +9,14 @@ import GenreSelect from "../components/ui/GenreSelect.tsx";
 import { AddBookButton } from "../components/ui/AddBookButton.tsx";
 import { EditBookButton } from "../components/ui/EditBookButton.tsx";
 import DeleteBookButton from "../components/ui/DeleteBookButton.tsx";
+import {
+  getUser,
+  signInWithGithub,
+  signInWithPassword,
+  signOut,
+  signUp,
+} from "../api/supabase/auth.ts";
+import { User } from "@supabase/supabase-js";
 
 type Author = {
   name: string;
@@ -144,6 +152,7 @@ const removeAccents = (text: string): string =>
   text.normalize("NFD").replace(/[\u0300-\u036F]/g, "");
 
 const Home = (): FunctionComponent => {
+  const [user, setUser] = useState<null | User>(null);
   const [books, setBooks] = useState(bookList.library);
   const genres = getGenres(books);
   const { minPage, maxPage } = getMinMaxPages(books);
@@ -191,8 +200,77 @@ const Home = (): FunctionComponent => {
     setBooks(deleteBooks);
   };
 
+  React.useEffect(() => {
+    getUser()
+      .then((data) => {
+        setUser(data.data.user);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <div className="relative container mx-auto px-4 py-10">
+      <div className="p-10 border-2 border-gray-300 rounded-2xl mb-10 space-y-4">
+        {user != null && (
+          <div>
+            <img
+              className="h-20 w-20 rounded-full"
+              src={
+                user.user_metadata?.avatar_url ??
+                "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fvectorified.com%2Fimages%2Fdefault-avatar-icon-12.png&f=1&nofb=1&ipt=5c37ba560af5326914a09c8cdcf43b4c7181d033ba6dc8404436eafa6589f077&ipo=images"
+              }
+              alt=""
+            />
+            <span>
+              {user.app_metadata.provider === "email"
+                ? user.email
+                : user?.user_metadata?.full_name}
+            </span>
+          </div>
+        )}
+        <button
+          className="block bg-blue-500 text-white px-4 py-2 rounded-lg"
+          onClick={async () => {
+            const result = await signUp();
+          }}
+        >
+          Sign up default user
+        </button>
+        <button
+          className="block bg-blue-500 text-white px-4 py-2 rounded-lg"
+          onClick={async () => {
+            const result = await signInWithPassword();
+            setUser(result.data.user);
+          }}
+        >
+          Sign in with default user
+        </button>
+        <button
+          className=" block bg-blue-500 text-white px-4 py-2 rounded-lg"
+          onClick={async () => {
+            const result = await signInWithGithub();
+          }}
+        >
+          Sign in with Github
+        </button>
+
+        <button
+          className="block bg-blue-500 text-white px-4 py-2 rounded-lg"
+          onClick={async () => {
+            try {
+              await signOut();
+              setUser(null);
+            } catch (err) {
+              console.log(err);
+            }
+          }}
+        >
+          Sign out
+        </button>
+      </div>
+
       <h1 className="text-4xl mb-10 font-bold">
         Lista de libros{" "}
         {bookResults.length > 0 && (
