@@ -7,6 +7,10 @@ import { randomID } from "../../utils";
 import GenreSelect from "./GenreSelect";
 import ImgInputChange from "./FileInput";
 import Button from "../../common/Button";
+import {
+  validateIfEmpty,
+  validateIfStringLength,
+} from "../utils/validate-forms.ts";
 
 type NewBookState = {
   title: string;
@@ -72,6 +76,19 @@ function ErrorMessage({ inputName, errors }: ErrorMessageProps) {
   return error && <p className="text-red-500 text-sm px-3">{error}</p>;
 }
 
+function validateAddBookForm(newBook: NewBookState) {
+  return {
+    ...initialAddBookErrorState,
+    title: validateIfEmpty(newBook.title, "Title"),
+    authorName: validateIfEmpty(newBook.authorName, "Author Name"),
+    pages: validateIfEmpty(newBook.pages, "Pages"),
+    cover: validateIfEmpty(newBook.cover, "Cover"),
+    year: validateIfEmpty(newBook.year, "Year"),
+    genre: validateIfEmpty(newBook.genre, "Genre"),
+    synopsis: validateIfStringLength(newBook.synopsis, 30, "Synopsis"),
+  };
+}
+
 export const AddBookButton = ({
   books,
   onBooksChange,
@@ -122,55 +139,7 @@ export const AddBookButton = ({
           <form
             onSubmit={(event) => {
               event.preventDefault();
-              let allErrors = { ...initialAddBookErrorState };
-              if (newBook.title === "") {
-                allErrors = {
-                  ...allErrors,
-                  title: "Campo requerido",
-                };
-              }
-              if (newBook.authorName === "") {
-                allErrors = {
-                  ...allErrors,
-                  authorName: "Campo requerido",
-                };
-              }
-              if (newBook.synopsis === "") {
-                allErrors = {
-                  ...allErrors,
-                  synopsis: "Campo requerido",
-                };
-              }
-              if (newBook.pages === undefined) {
-                allErrors = {
-                  ...allErrors,
-                  pages: "Campo requerido",
-                };
-              }
-              if (newBook.cover === "") {
-                allErrors = {
-                  ...allErrors,
-                  cover: "Campo requerido",
-                };
-              }
-              if (newBook.year === undefined) {
-                allErrors = {
-                  ...allErrors,
-                  year: "Campo requerido",
-                };
-              }
-              if (newBook.genre === undefined) {
-                allErrors = {
-                  ...allErrors,
-                  genre: "Campo requerido",
-                };
-              }
-              if (newBook.synopsis.length <= 30) {
-                allErrors = {
-                  ...allErrors,
-                  synopsis: "Minimo 30 caracteres",
-                };
-              }
+              const allErrors = validateAddBookForm(newBook);
               setErrors(allErrors);
 
               const hasError = Object.values(allErrors).some(
@@ -214,9 +183,6 @@ export const AddBookButton = ({
                 placeholder="Ej. Harry Potter y la piedra filosofal"
               />
               <ErrorMessage inputName="title" errors={errors} />
-              {/* {errors.title && (
-                <p className=" text-red-500 text-sm px-3">{errors.title}</p>
-              )} */}
               <div className="grid grid-cols-[1fr,1fr] items-center gap-3">
                 <div className="px-2">
                   <GenreSelect
