@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --primary: #6c5dd3;
+  --darkpurple: #11142d;
+  --white: #ffffff;
+  --gray-01: #aaaaaa;
+  --gray-02: #e1e1e1;
+  --gray-03: #f0f0f0;
+  --primary-soft: #f0eeff;
+  --orange: #ff754c;
+
+  --font-heading: 700 40px "Cairo", sans-serif;
+  --font-base: 400 18px "Open Sans", sans-serif;
+  --font-filterOptions: 700 18px "Open Sans", sans-serif;
+  --font-filterTitle: 700 24px "Cairo", sans-serif;
+  --card--title: 700 20px "Cairo", sans-serif;
+  --button: 700 18px "Cairo", sans-serif;
+}
 /* .listLayout[id="lista"]:checked {
   @apply bg-[#000];
 }
@@ -9,16 +26,16 @@
   @apply bg-[red];
 } */
 
-.custom-file-input::-webkit-file-upload-button {
+/* .custom-file-input::-webkit-file-upload-button {
   @apply invisible;
 }
 
 .custom-file-input::before {
-  @apply content-['Selecciona_tu_image'] inline-block bg-neutral-800 p-3 cursor-pointer whitespace-nowrap text-base rounded-lg  text-white;
+  @apply content-['drag_and_Drop'] inline-block n p-3 cursor-pointer whitespace-nowrap text-base rounded-lg  text-white w-[300px] h-[300px];
 }
 .custom-file-input {
-  @apply text-transparent;
-}
+  @apply text-transparent focus:bg-blue-600;
+} */
 
 /* .custom-file-input::before {
   content: "Select some files";

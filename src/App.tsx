@@ -11,6 +11,7 @@ const App = (): FunctionComponent => {
   return (
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
+
       {/* <TanStackRouterDevelopmentTools
 				router={router}
 				initialIsOpen={false}

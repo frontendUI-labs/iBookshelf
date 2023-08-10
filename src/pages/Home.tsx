@@ -9,6 +9,7 @@ import GenreSelect from "../components/ui/GenreSelect.tsx";
 import { AddBookButton } from "../components/ui/AddBookButton.tsx";
 import { EditBookButton } from "../components/ui/EditBookButton.tsx";
 import DeleteBookButton from "../components/ui/DeleteBookButton.tsx";
+import Header from "../components/filter-components/header.tsx";
 
 type Author = {
   name: string;
@@ -193,6 +194,7 @@ const Home = (): FunctionComponent => {
 
   return (
     <div className="relative container mx-auto px-4 py-10">
+      <Header />
       <h1 className="text-4xl mb-10 font-bold">
         Lista de libros{" "}
         {bookResults.length > 0 && (
