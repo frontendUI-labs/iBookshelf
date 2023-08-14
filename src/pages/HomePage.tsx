@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 import {
@@ -10,8 +11,19 @@ import {
 } from "lucide-react";
 
 import Benefits from "../components/ui/BenefitsCard";
-import { ReactNode, useState } from "react";
-import React from "react";
+// eslint-disable-next-line no-duplicate-imports
+import type { ReactNode } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import {
+  Navigation,
+  Pagination,
+  Scrollbar,
+  A11y,
+  Autoplay,
+} from "swiper/modules";
+
+import "swiper/css";
+import "swiper/css/bundle";
 
 const PointsIcon = ({
   color,
@@ -87,7 +99,6 @@ const PageCarousel = ({ color }: { color: string }) => {
 const CarouselContainer = ({ children }: { children: ReactNode }) => {
   const [activePage, setActivePage] = useState(0);
   const pages = React.Children.toArray(children);
-  console.log(pages, activePage);
   const currentPage = pages[activePage];
 
   function goBack() {
@@ -142,11 +153,75 @@ function BooksRecomended({
         </p>
       </div>
       <div>
-        <CarouselContainer>
-          <PageCarousel color="" />
-          <PageCarousel color="bg-orange-400" />
-          <PageCarousel color="bg-purple-600" />
-        </CarouselContainer>
+        <Swiper
+          modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
+          spaceBetween={50}
+          autoplay={{
+            delay: 1000,
+            disableOnInteraction: true,
+            pauseOnMouseEnter: true,
+          }}
+          loop
+          breakpoints={{
+            320: {
+              slidesPerView: 1,
+              slidesPerGroup: 1,
+              spaceBetween: 10,
+            },
+            640: {
+              slidesPerView: 2,
+              slidesPerGroup: 2,
+            },
+            768: {
+              slidesPerView: 3,
+              slidesPerGroup: 3,
+              spaceBetween: 10,
+            },
+            1024: {
+              slidesPerView: 4,
+              slidesPerGroup: 4,
+            },
+          }}
+          className="relative"
+          slidesPerView={4}
+          slidesPerGroup={4}
+          navigation={{
+            nextEl: ".feature-nextEl",
+            prevEl: ".feature-prevEl",
+            disabledClass: "hidden",
+          }}
+          pagination={{ clickable: true }}
+          scrollbar={{ draggable: true }}
+        >
+          {Array.from({ length: 12 }).map((_, id) => (
+            <SwiperSlide>
+              <div
+                key={id}
+                className={twMerge(
+                  "bg-gray-400  h-[195px] rounded-xl border-4 border-white",
+                  id > 6 ? "bg-red-400" : "bg-orange-400"
+                )}
+              />
+            </SwiperSlide>
+          ))}
+          {/*<SwiperSlide>*/}
+          {/*  <PageCarousel color="" />*/}
+          {/*</SwiperSlide>*/}
+          {/*<SwiperSlide>*/}
+          {/*  <PageCarousel color="bg-orange-400" />*/}
+          {/*</SwiperSlide>*/}
+          {/*<SwiperSlide>*/}
+          {/*  <PageCarousel color="bg-purple-600" />*/}
+          {/*</SwiperSlide>*/}
+          <div className="">
+            <button className="feature-prevEl absolute z-10 -left-5 top-1/2 -translate-y-1/2">
+              <ChevronLeftCircle className="fill-white  w-12 h-12 " />
+            </button>
+            <button className="feature-nextEl absolute z-10 right-0 top-1/2 -translate-y-1/2 ">
+              <ChevronRightCircle className=" fill-white w-12 h-12" />
+            </button>
+          </div>
+        </Swiper>
       </div>
     </div>
   );
