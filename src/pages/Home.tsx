@@ -17,6 +17,7 @@ import {
   signUp,
 } from "../api/supabase/auth.ts";
 import { User } from "@supabase/supabase-js";
+import { getAllBooks } from "../api/supabase/books.ts";
 
 type Author = {
   name: string;
@@ -151,6 +152,23 @@ function BookCard({
 const removeAccents = (text: string): string =>
   text.normalize("NFD").replace(/[\u0300-\u036F]/g, "");
 
+type RealBook = {
+  author: string;
+  cover: string;
+  created_at: string;
+  genreId: null;
+  id: number;
+  isFavorite: boolean;
+  pages: number;
+  price: number;
+  publisher: null;
+  reviewsCount: number;
+  reviewsStar: number;
+  synopsis: string;
+  title: string;
+  year: number;
+};
+
 const Home = (): FunctionComponent => {
   const [user, setUser] = useState<null | User>(null);
   const [books, setBooks] = useState(bookList.library);
@@ -201,6 +219,46 @@ const Home = (): FunctionComponent => {
   };
 
   React.useEffect(() => {
+    // const getAllBooks = async () => {
+    //   const response = await fetch(
+    //     "https://oytjtiafvlwbvupijhqy.supabase.co/rest/v1/Books?select=*",
+    //     {
+    //       headers: {
+    //         apikey:
+    //           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95dGp0aWFmdmx3YnZ1cGlqaHF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTE1NDk1NDAsImV4cCI6MjAwNzEyNTU0MH0.l0pS1sPjcEQmG4Z1aKqqsQQbr1imIxusgKfDnesiB1M",
+    //         Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95dGp0aWFmdmx3YnZ1cGlqaHF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTE1NDk1NDAsImV4cCI6MjAwNzEyNTU0MH0.l0pS1sPjcEQmG4Z1aKqqsQQbr1imIxusgKfDnesiB1M`,
+    //       },
+    //     }
+    //   );
+    //   return await response.json();
+    // };
+
+    getAllBooks()
+      .then((data) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const realBooks: RealBook[] = data.data ?? [];
+        const mapBooks = realBooks.map((b) => ({
+          book: {
+            title: b.title,
+            pages: b.pages,
+            genre: "horror",
+            cover: b.cover,
+            synopsis: "lorem",
+            year: 2010,
+            ISBN: b.id.toString(),
+            author: {
+              name: b.author,
+              otherBooks: ["a"],
+            },
+          },
+        }));
+        setBooks(mapBooks);
+      })
+      .catch((err) => {
+        console.log(err, "error");
+      });
+  }, []);
+  React.useEffect(() => {
     getUser()
       .then((data) => {
         setUser(data.data.user);
@@ -218,6 +276,9 @@ const Home = (): FunctionComponent => {
             <img
               className="h-20 w-20 rounded-full"
               src={
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                 user.user_metadata?.avatar_url ??
                 "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fvectorified.com%2Fimages%2Fdefault-avatar-icon-12.png&f=1&nofb=1&ipt=5c37ba560af5326914a09c8cdcf43b4c7181d033ba6dc8404436eafa6589f077&ipo=images"
               }
@@ -232,9 +293,7 @@ const Home = (): FunctionComponent => {
         )}
         <button
           className="block bg-blue-500 text-white px-4 py-2 rounded-lg"
-          onClick={async () => {
-            const result = await signUp();
-          }}
+          onClick={signUp}
         >
           Sign up default user
         </button>
@@ -249,9 +308,7 @@ const Home = (): FunctionComponent => {
         </button>
         <button
           className=" block bg-blue-500 text-white px-4 py-2 rounded-lg"
-          onClick={async () => {
-            const result = await signInWithGithub();
-          }}
+          onClick={signInWithGithub}
         >
           Sign in with Github
         </button>
