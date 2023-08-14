@@ -1,25 +1,23 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 // import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { RouterProvider } from "@tanstack/router";
 import type { FunctionComponent } from "./common/types";
-// import { TanStackRouterDevelopmentTools } from "./components/utils/development-tools/TanStackRouterDevelopmentTools";
-import { router } from "./routes";
-
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import FilterPage from "./pages/FilterPage";
 const queryClient = new QueryClient();
 
 const App = (): FunctionComponent => {
   return (
-    <>
+    <BrowserRouter>
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-        {/* <TanStackRouterDevelopmentTools
-				router={router}
-				initialIsOpen={false}
-				position="bottom-right"
-			/>
-			<ReactQueryDevtools initialIsOpen={false} /> */}
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/filter" element={<FilterPage />} />
+        </Routes>
+
+        {/* <ReactQueryDevtools initialIsOpen={false} />  */}
       </QueryClientProvider>
-    </>
+    </BrowserRouter>
   );
 };
 

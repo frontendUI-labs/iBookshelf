@@ -107,12 +107,12 @@ If you wish to remove any hooks, simply delete the corresponding file in the .hu
 
 3. [Faker](https://fakerjs.dev/) is included to encourage more isolated testing and allow for rapid development of demos and MVPs. However, please make note that, [due to a bug](https://github.com/faker-js/faker/issues/1791), importing Faker from the main package (without a locale) will result in the entire Faker lib being imported causing bundle sizes to increase up to 2+ MB. Instead prefer [localized imports](https://fakerjs.dev/guide/localization.html#individual-localized-packages) as shown below.
 
-	```
-	// import { faker } from '@faker-js/faker';
-	import { faker } from '@faker-js/faker/locale/en'; // prefer localization when possible
-	```
+   ```
+   // import { faker } from '@faker-js/faker';
+   import { faker } from '@faker-js/faker/locale/en'; // prefer localization when possible
+   ```
 
-	The imported lib will instead be around 600 KB. Nonetheless, Faker should **NOT** be used in production and instead be limited to testing and demos.
+   The imported lib will instead be around 600 KB. Nonetheless, Faker should **NOT** be used in production and instead be limited to testing and demos.
 
 ## Testing
 
@@ -206,7 +206,7 @@ Then have your web server pass requests to your web app at http://localhost:<por
   - Example: `docker build . -t todo-app`
 - **<port_number>** should be replaced with whatever port number the web application will be running on.
   - Example: `docker run todo-app -p 8080:80`
- 
+
 ### Continuous Integration
 
 Due to the vast array of tools, opinions, requirements and preferences a CI template is not included in this project.
@@ -218,7 +218,7 @@ This project includes a set of Devtools. Some are additional package dependencie
 ### Devtool dependencies:
 
 - [@tanstack/react-query-devtools](https://tanstack.com/query/v4/docs/react/devtools) - Dedicated dev tools to help visualize the inner workings of React Query
-- [@tanstack/router-devtools](https://tanstack.com/router/v1/docs/devtools) - Dedicated dev tools to help visualize the inner workings of TanStack Router
+- [react-router-dom](https://reactrouter.com/) - Dedicated dev tools to help visualize the inner workings of TanStack Router
 - [@tanstack/react-table-devtools](https://www.npmjs.com/package/@tanstack/react-table-devtools) - Dedicated dev tools to help visualize the inner workings of TanStack Table
 - [@hookform/DevTools](https://react-hook-form.com/dev-tools) - React Hook Form DevTools to help debug forms with validation
 
@@ -227,12 +227,6 @@ A set of utility components are provided in `src/components/utils/development-to
 **TanStack Query Devtools** are ready to go out of the box. The development vs. production rendering mechanism is built into the devtools. If you do wish to [render the devtools in production](https://tanstack.com/query/latest/docs/react/devtools) you can freely do so by following the TanStack Query Devtools documentation. The devtools component can be found in `src/App.tsx`.
 
 When running the application in development mode you can find the TanStack Query Devtools icon in the bottom left corner of the page sporting the [React Query Logo](https://img.stackshare.io/service/25599/default_c6db7125f2c663e452ba211df91b2ced3bb7f0ff.png).
-
-**TanStack Router Devtools**, however, utilizes its respective utility component in this project. The initial setup has been taken care of but if you wish to modify or remove the component, have a look in `src/App.tsx`.
-
-The TanStack Router Devtools icon can be found in the bottom right corner of the page denoted by the vertically stacked "TANSTACK ROUTER" logo.
-
-The above components, along with their imports, are commented out to start.
 
 **TanStack Table Devtools** Documentation is, at the time of writing this, non-existent. Having said that, usage is similar to the other TanStack devtools. A utility component restricting the devtools to development builds has been provided. The difference in comparison to the other TanStack devtools is the lack of floating mode. Instead, the Devtools are rendered as a component within the actual TanStack Table you define. An additional caveat being that the DevTools component (built-in and provided utility alike) require a table prop from the `useReactTable()` hook. In other words, if you have multiple tables, each table must have its own Devtools component. Check the simplified code below.
 
