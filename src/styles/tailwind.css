@@ -30,3 +30,8 @@
   --card--title: 700 20px "Cairo", sans-serif;
   --button: 700 18px "Cairo", sans-serif;
 }
+
+.slider-bullets {
+  --swiper-pagination-bullet-inactive-color: theme(colors.purple.600);
+  --swiper-pagination-color: theme(colors.purple.600);
+}
