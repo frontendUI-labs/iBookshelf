@@ -28,7 +28,7 @@ function AcordionComponent({
             variant === "secondary" && "justify-start"
           )}
         >
-          <Plus size={16} className="text-purple-600" />
+          <Plus className="text-purple-600 w-4 h-4" />
           <span className="text-purple-600 font-bold">{title}</span>
         </Accordion.Trigger>
         {options.map((option, index) => {

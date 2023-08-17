@@ -9,44 +9,22 @@ import {
 import Button from "../../common/Button";
 import Select from "../../common/Select";
 import CardComponent from "./card-component";
-import { Book } from "../../data/useGetBooks";
+import useGetBooksWithPagination from "../../hooks/use-get-pagination-with-book.ts";
 
 const BOOK_PAGINATION_COUNT = 12;
 
-function MainContent({
-  books,
-  pageRange,
-  setPageRange,
-}: {
-  books: Book[];
-  pageRange: number[];
-  setPageRange: any;
-}) {
-  const options = ["Newest", "Popular", "Featured"];
+function MainContent() {
+  const {
+    books,
+    pageRange,
+    setPageRange,
+    isLoading,
+    isError,
+    isSuccess,
+    error,
+  } = useGetBooksWithPagination();
 
-  // React.useEffect(() => {
-  //   const getAllBooks = async (): Promise<Book[]> => {
-  //     const response = await fetch(
-  //       "https://oytjtiafvlwbvupijhqy.supabase.co/rest/v1/Books?select=*",
-  //       {
-  //         headers: {
-  //           apikey: import.meta.env["VITE_APP_SUPABASE_KEY"] as string,
-  //           Authorization: `Bearer ${import.meta.env["VITE_APP_SUPABASE_KEY"]}`,
-  //           Range: pageRange.join("-"),
-  //         },
-  //       }
-  //     );
-  //     const books = await response.json();
-  //     return books as Book[];
-  //   };
-  //   getAllBooks()
-  //     .then((data) => {
-  //       setBooks(data);
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // }, [pageRange]);
+  const options = ["Newest", "Popular", "Featured"];
 
   const handlePreviousPage = () => {
     setPageRange(([startPage, endPage]) => [
@@ -61,7 +39,6 @@ function MainContent({
       endPage + BOOK_PAGINATION_COUNT,
     ]);
   };
-  console.log(pageRange, "PageRange");
 
   return (
     <div className=" p-4">
@@ -95,31 +72,38 @@ function MainContent({
         </div>
       </div>
       <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 py-8">
-        {books.map((book) => {
-          return (
-            <CardComponent
-              key={book.id}
-              author={book.author}
-              cover={book.cover}
-              value={book.reviewsStar}
-            />
-          );
-        })}
+        {isError && (
+          <p role={"alert"} className="text-red-600">
+            Ups, something went wrong! <br /> {error?.message}
+          </p>
+        )}
+        {isLoading && <p className={"bg-amber-500 w-10 h-10"}>Cargando...</p>}
+        {isSuccess &&
+          books.map((book) => {
+            return (
+              <CardComponent
+                key={book.id}
+                author={book.author}
+                cover={book.cover}
+                value={book.reviewsStar}
+              />
+            );
+          })}
       </div>
       <div className="flex items-center justify-between">
         <p>Showing {books.length} from 50 data</p>
         <div className="flex">
-          {(pageRange?.[0] as number) > 0 && (
+          {pageRange[0] > 0 && (
             <Button onClick={handlePreviousPage} variant="secondary">
               <div className="flex items-center justify-between">
-                <ChevronLeft color="var(--gray-01)" /> <span>Previous</span>
+                <ChevronLeft className="text-gray-100" /> <span>Previous</span>
               </div>
             </Button>
           )}
           {books.length === 12 && (
             <Button onClick={handleNextPage} variant="secondary">
               <div className="flex items-center justify-between">
-                <ChevronRight color="var(--gray-01)" /> <span>Next</span>
+                <ChevronRight className="text-gray-100" /> <span>Next</span>
               </div>
             </Button>
           )}
