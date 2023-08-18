@@ -645,20 +645,9 @@ function Home() {
     "w-[100px] h-[100px] fill-purple-600 text-white stroke-[0.75px]";
   return (
     <>
-      <div className="flex gap-2">
-        <Link to="/" className="text-red-500 underline">
-          Home
-        </Link>
-        <Link to="/filter" className="text-red-500 underline">
-          FilterPage
-        </Link>
-        <Link to="/details" className="text-red-500 underline">
-          DetailsPage
-        </Link>
-        <Link to="/payment" className="text-red-500 underline">
-          PaymentPage
-        </Link>
-      </div>
+      <Link to="/details" className="text-red-500 underline">
+        favorites
+      </Link>
       <div className="my-[30px] font-heading flex flex-col gap-[100px]">
         <div className="main grid grid-cols-[3fr,1fr] gap-x-3 h-[662px] container mx-auto">
           <div className="relative bg-purple-400 rounded-3xl overflow-hidden">
