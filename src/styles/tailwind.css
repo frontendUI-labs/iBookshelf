@@ -45,6 +45,7 @@
 .slider-bullets {
   --swiper-pagination-bullet-inactive-color: theme(colors.purple.600);
   --swiper-pagination-color: theme(colors.purple.600);
+}
 .hero-carousel-pagination {
   /* --swiper-pagination-bottom: -10px; */
   @apply pl-24 text-start;
