@@ -85,7 +85,7 @@ export function CardListLayout({
                 <ShoppingCart />
                 <span>Add to cart</span>
               </Button>
-              <HeartIcon border="border-gray-200" color="purple-600" />
+              <HeartIcon bg="purple-400" />
             </div>
           </div>
         </div>
@@ -108,23 +108,26 @@ function CardComponent({
     <div className="border-[1px] border-gray-200 rounded-lg p-4">
       <div className="bg-[#c4c4c4] rounded-lg relative w-full h-[320px]">
         <img
-          className="object-cover h-full w-full rounded-lg"
+          className="object-cover h-full w-full rounded-lg select-none"
           src={cover}
           alt=""
         />
-        <div className="absolute top-0 right-0">
+        <div className="absolute top-[10px] right-[10px]">
           <HeartIcon
             onClick={() => {
               setFavorite(!favorite);
             }}
-            border="border-transparent"
-            color="purple-600"
             variant={favorite}
+            bg="white"
           />
         </div>
       </div>
-      <h4 className="text-xl text-center font-bold m-2">{author}</h4>
-      <p className="text-sm text-center m-2">ADVANTURE, SCIENCE, COMEDY</p>
+      <h4 className="text-xl text-center font-bold m-2 select-none">
+        {author}
+      </h4>
+      <p className="text-sm text-center m-2 select-none">
+        ADVANTURE, SCIENCE, COMEDY
+      </p>
       <Rating value={value} />
     </div>
   );
