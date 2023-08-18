@@ -14,20 +14,9 @@ function Filter() {
 
   return (
     <>
-      <div className="flex gap-2">
-        <Link to="/" className="text-red-500 underline">
-          Home
-        </Link>
-        <Link to="/filter" className="text-red-500 underline">
-          FilterPage
-        </Link>
-        <Link to="/details" className="text-red-500 underline">
-          DetailsPage
-        </Link>
-        <Link to="/payment" className="text-red-500 underline">
-          PaymentPage
-        </Link>
-      </div>
+      <Link to="/details" className="text-red-500 underline">
+        favorites
+      </Link>
       {isError && <p>Fallo algo</p>}
       <div className="container m-auto ">
         <div className=" grid grid-cols-[400px,1fr] py-10 mb-12 ">

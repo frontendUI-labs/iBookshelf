@@ -15,8 +15,8 @@ const App = (): FunctionComponent => {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/filter" element={<FilterPage />} />
-          <Route path="/details" element={<DetailsPage />} />
-          <Route path="/payment" element={<PaymentPage />} />
+          <Route path="/favorites" element={<DetailsPage />} />
+          <Route path="/checkout" element={<PaymentPage />} />
         </Routes>
         {/* <ReactQueryDevtools initialIsOpen={false} />  */}
       </QueryClientProvider>
