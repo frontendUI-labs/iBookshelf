@@ -538,11 +538,6 @@ const TestimonialCard = () => {
           },
           {
             title:
-              "FIRST Title. Shoping book in Bookoe is very easy. Quick delivery and fast respon.",
-            user: "Steve JAJA",
-          },
-          {
-            title:
               "Shoping book in Bookoe is very easy. Quick delivery and fast respon. They services is awesome!",
             user: "Steve Henry",
           },
@@ -553,12 +548,12 @@ const TestimonialCard = () => {
           },
           {
             title:
-              "Shoping book in Bookoe is very easy. Quick delivery and fast respon. They services is awesome!",
+              "asdasfas.Shoping book in Bookoe is very easy. Quick delivery and fast respon. They services is awesome!",
             user: "Steve Henry",
           },
           {
             title:
-              "Shoping book in Bookoe is very easy. Quick delivery and fast respon. They services is awesome!",
+              "124214123;Shoping book in Bookoe is very easy. Quick delivery and fast respon. They services is awesome!",
             user: "Steve Henry",
           },
           {
