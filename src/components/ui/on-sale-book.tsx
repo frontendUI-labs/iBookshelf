@@ -39,7 +39,7 @@ function SaleBooks() {
 
 function OnSaleBook() {
   return (
-    <div className="mt-9 relative">
+    <div className=" relative">
       <div className="flex justify-between items-center">
         <h3 className="text-4xl font-bold">Books on Sale</h3>
       </div>
@@ -64,7 +64,7 @@ function OnSaleBook() {
           hide: true,
         }}
         pagination={{ clickable: true }}
-        className="mt-4 static slider-bullets"
+        className="mt-2 static slider-bullets"
       >
         {Array.from({ length: 24 }).map((_, id) => (
           <SwiperSlide key={id} className="mb-[50px]">

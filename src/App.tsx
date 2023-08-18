@@ -4,6 +4,8 @@ import type { FunctionComponent } from "./common/types";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import FilterPage from "./pages/FilterPage";
+import PaymentPage from "./pages/PaymentPage";
+import DetailsPage from "./pages/DetailsPage";
 const queryClient = new QueryClient();
 
 const App = (): FunctionComponent => {
@@ -13,8 +15,9 @@ const App = (): FunctionComponent => {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/filter" element={<FilterPage />} />
+          <Route path="/details" element={<DetailsPage />} />
+          <Route path="/payment" element={<PaymentPage />} />
         </Routes>
-
         {/* <ReactQueryDevtools initialIsOpen={false} />  */}
       </QueryClientProvider>
     </BrowserRouter>

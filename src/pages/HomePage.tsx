@@ -31,8 +31,6 @@ import {
 
 import "swiper/css";
 import "swiper/css/bundle";
-import ContactCard from "../components/ui/ContactCard";
-import Footer from "../components/ui/Footer";
 
 const PointsIcon = ({
   color,
@@ -647,10 +645,21 @@ function Home() {
     "w-[100px] h-[100px] fill-purple-600 text-white stroke-[0.75px]";
   return (
     <>
-      <Link to="/filter" className="text-red-500 underline">
-        FilterPage
-      </Link>
-      <div className="py-[50px] font-heading flex flex-col gap-[100px]">
+      <div className="flex gap-2">
+        <Link to="/" className="text-red-500 underline">
+          Home
+        </Link>
+        <Link to="/filter" className="text-red-500 underline">
+          FilterPage
+        </Link>
+        <Link to="/details" className="text-red-500 underline">
+          DetailsPage
+        </Link>
+        <Link to="/payment" className="text-red-500 underline">
+          PaymentPage
+        </Link>
+      </div>
+      <div className="my-[30px] font-heading flex flex-col gap-[100px]">
         <div className="main grid grid-cols-[3fr,1fr] gap-x-3 h-[662px] container mx-auto">
           <div className="relative bg-purple-400 rounded-3xl overflow-hidden">
             <MainCard />
@@ -989,12 +998,6 @@ function Home() {
             />
           </div>
         </div>
-      </div>
-      <div className="container mx-auto my-[100px]">
-        <ContactCard />
-      </div>
-      <div className="flex gap-8 container mx-auto mt-[100px]">
-        <Footer />
       </div>
     </>
   );
