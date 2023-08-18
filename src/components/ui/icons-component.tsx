@@ -1,29 +1,30 @@
-import { Heart, ShoppingCart, Star } from "lucide-react";
+import { Heart, Loader, ShoppingCart, Star } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 
 export function HeartIcon({
-  color,
   border,
   variant,
   onClick,
 }: {
   color: string;
   border: string; // ej. border-purple-600
-  variant?: boolean;
+  variant?: "active" | "inactive" | "loading";
   onClick?: () => void;
 }) {
   return (
-    <div
+    <button
       onClick={onClick}
       className={twMerge(
-        `h-[60px] w-[60px] border-[1px] ${border} rounded-lg flex items-center justify-center cursor-pointer bg-white`,
-        variant === true && "bg-purple-600"
+        `h-[60px] w-[60px] flex items-center justify-center border-[1px] ${border} rounded-lg  cursor-pointer`,
+        variant === "active" && "bg-purple-600 text-white",
+        variant === "inactive" && "bg-white text-purple-600",
+        variant === "loading" && "bg-white text-purple-600"
       )}
     >
-      <Heart
-        className={twMerge(`text-${color}`, variant === true && "text-white")}
-      />
-    </div>
+      {variant === "loading" && <Loader />}
+      {variant === "active" && <Heart />}
+      {variant === "inactive" && <Heart />}
+    </button>
   );
 }
 

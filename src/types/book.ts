@@ -4,7 +4,7 @@ export type Book = {
   created_at: string;
   genreId: null;
   id: number;
-  isFavorite: null;
+  isFavorite: boolean;
   pages: null;
   price: number;
   publisher: null;

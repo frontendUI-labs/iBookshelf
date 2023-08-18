@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Book } from "../types/book.ts";
 
 function useGetBooksWithPagination() {
-  const [pageRange, setPageRange] = useState<[number, number]>([0, 11]);
+  const [pageRange, setPageRange] = useState<[number, number]>([24, 35]);
 
   const {
     isLoading,

@@ -83,9 +83,12 @@ function MainContent() {
             return (
               <CardComponent
                 key={book.id}
+                id={book.id}
                 author={book.author}
                 cover={book.cover}
                 value={book.reviewsStar}
+                isFavorite={book.isFavorite}
+                pageRange={pageRange}
               />
             );
           })}

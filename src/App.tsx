@@ -6,7 +6,14 @@ import type { FunctionComponent } from "./common/types";
 import { router } from "./routes";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retryOnMount: true,
+      refetchOnWindowFocus: true,
+    },
+  },
+});
 
 const App = (): FunctionComponent => {
   return (
