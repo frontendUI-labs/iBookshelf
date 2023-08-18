@@ -1,55 +1,57 @@
+import * as ToggleGroup from "@radix-ui/react-toggle-group";
+
 import {
   ArrowDownWideNarrow,
   ChevronLeft,
   ChevronRight,
   LayoutGrid,
-  LayoutPanelLeft,
   List,
 } from "lucide-react";
 import Button from "../../common/Button";
 import Select from "../../common/Select";
-import CardComponent from "./card-component";
-import { Book } from "../../data/useGetBooks";
+import CardComponent, { CardListLayout } from "./card-component";
+import { twMerge } from "tailwind-merge";
+// import { useMemo } from "react";
+
+type Book = {
+  author: string;
+  cover: string;
+  created_at: string;
+  genreId: null;
+  id: number;
+  isFavorite: null;
+  pages: null;
+  price: number;
+  publisher: null;
+  reviewsCount: number;
+  reviewsStar: number;
+  synopsis: null;
+  title: string;
+  year: null;
+};
 
 const BOOK_PAGINATION_COUNT = 12;
 
 function MainContent({
   books,
   pageRange,
-  setPageRange,
+  setPageRange, // checkInput,
+  layout,
+  setLayout,
 }: {
   books: Book[];
   pageRange: number[];
-  setPageRange: any;
+  setPageRange: () => number[];
+  checkInput: string;
 }) {
   const options = ["Newest", "Popular", "Featured"];
+  const toggleGroupItemClasses =
+    "ToggleGroup.Item  hover:bg-violet3 color-mauve11 data-[state=on]:bg-violet6 data-[state=on]:text-violet12 flex h-[35px] w-[35px] items-center justify-center bg-white text-base leading-4 first:rounded-l last:rounded-r focus:z-10 ";
 
-  // React.useEffect(() => {
-  //   const getAllBooks = async (): Promise<Book[]> => {
-  //     const response = await fetch(
-  //       "https://oytjtiafvlwbvupijhqy.supabase.co/rest/v1/Books?select=*",
-  //       {
-  //         headers: {
-  //           apikey: import.meta.env["VITE_APP_SUPABASE_KEY"] as string,
-  //           Authorization: `Bearer ${import.meta.env["VITE_APP_SUPABASE_KEY"]}`,
-  //           Range: pageRange.join("-"),
-  //         },
-  //       }
-  //     );
-  //     const books = await response.json();
-  //     return books as Book[];
-  //   };
-  //   getAllBooks()
-  //     .then((data) => {
-  //       setBooks(data);
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // }, [pageRange]);
+  console.log(pageRange, "pageRange");
 
   const handlePreviousPage = () => {
-    setPageRange(([startPage, endPage]) => [
+    setPageRange(([startPage, endPage]: [number, number]) => [
       startPage - BOOK_PAGINATION_COUNT,
       endPage - BOOK_PAGINATION_COUNT,
     ]);
@@ -61,7 +63,6 @@ function MainContent({
       endPage + BOOK_PAGINATION_COUNT,
     ]);
   };
-  console.log(pageRange, "PageRange");
 
   return (
     <div className=" p-4">
@@ -73,13 +74,41 @@ function MainContent({
           <Button variant="secondary"> This Month</Button>
         </div>
         <div className="flex items-center justify-center">
-          <Button variant="icon"> {<List />}</Button>
+          <ToggleGroup.Root
+            className="inline-flex bg-mauve6 rounded "
+            type="single"
+            aria-label="Layout"
+            onValueChange={(value) => {
+              if (value) setLayout(value);
+            }}
+          >
+            <ToggleGroup.Item
+              className={toggleGroupItemClasses}
+              value="list"
+              aria-label="list"
+            >
+              <List
+                className={twMerge(layout === "list" && "text-purple-600")}
+              />
+            </ToggleGroup.Item>
+            <ToggleGroup.Item
+              className={toggleGroupItemClasses}
+              value="grid"
+              aria-label="grid"
+            >
+              <LayoutGrid
+                className={twMerge(layout === "grid" && "text-purple-600")}
+              />
+            </ToggleGroup.Item>
+          </ToggleGroup.Root>
+
+          {/* <Button variant="icon"> {<List />}</Button>
           <Button variant="icon" id="grid">
             <LayoutGrid />
           </Button>
           <Button variant="icon" id="masonty">
             <LayoutPanelLeft />
-          </Button>
+          </Button> */}
 
           <Select
             options={options}
@@ -94,18 +123,36 @@ function MainContent({
           />
         </div>
       </div>
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 py-8">
-        {books.map((book) => {
-          return (
-            <CardComponent
-              key={book.id}
-              author={book.author}
-              cover={book.cover}
-              value={book.reviewsStar}
-            />
-          );
-        })}
-      </div>
+      {layout === "grid" && (
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 py-8">
+          {books.map((book) => {
+            return (
+              <CardComponent
+                key={book.id}
+                author={book.author}
+                cover={book.cover}
+                value={book.reviewsStar}
+              />
+            );
+          })}
+        </div>
+      )}
+      {layout === "list" && (
+        <div className="gap-4 py-8 flex flex-col">
+          {books.map((book) => {
+            return (
+              <CardListLayout
+                key={book.id}
+                author={book.author}
+                cover={book.cover}
+                value={book.reviewsStar}
+                title={book.title}
+                price={book.price}
+              />
+            );
+          })}
+        </div>
+      )}
       <div className="flex items-center justify-between">
         <p>Showing {books.length} from 50 data</p>
         <div className="flex">
@@ -116,6 +163,7 @@ function MainContent({
               </div>
             </Button>
           )}
+
           {books.length === 12 && (
             <Button onClick={handleNextPage} variant="secondary">
               <div className="flex items-center justify-between">
