@@ -1,36 +1,48 @@
 import { Heart, ShoppingCart, Star } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 
+export function HeartIconHeader({ onClick }: { onClick?: () => void }) {
+  return (
+    <div
+      tabIndex={0}
+      onClick={onClick}
+      className="h-[60px] w-[60px] border-[1px] border-gray-200 rounded-lg flex items-center justify-center cursor-pointer bg-white outline-purple-600  hover:text-purple-600 focus:text-purple-600 "
+    >
+      <Heart />
+    </div>
+  );
+}
+
 export function HeartIcon({
-  color,
-  border,
   variant,
   onClick,
+  bg,
 }: {
-  color: string;
-  border: string; // ej. border-purple-600
+  bg?: string;
   variant?: boolean;
   onClick?: () => void;
 }) {
   return (
     <div
+      tabIndex={0}
       onClick={onClick}
       className={twMerge(
-        `h-[60px] w-[60px] border-[1px] ${border} rounded-lg flex items-center justify-center cursor-pointer bg-white`,
-        variant === true && "bg-purple-600"
+        `h-[50px] w-[50px] rounded-lg flex items-center justify-center cursor-pointer bg-${bg} text-purple-600 outline-purple-600 hover:text-purple-600 `,
+        variant === true && "bg-purple-600 text-white hover:text-white"
       )}
     >
-      <Heart
-        className={twMerge(`text-${color}`, variant === true && "text-white")}
-      />
+      <Heart />
     </div>
   );
 }
 
-export function CartIcon({ color }: { color: string }) {
+export function CartIcon() {
   return (
-    <div className="h-[60px] w-[60px] border-[1px] border-gray-200 rounded-lg flex items-center justify-center cursor-pointer">
-      <ShoppingCart color={color} />
+    <div
+      tabIndex={0}
+      className="h-[60px] w-[60px] border-[1px] border-gray-200 rounded-lg flex items-center justify-center cursor-pointer bg-white outline-purple-600  hover:text-purple-600 focus:text-purple-600"
+    >
+      <ShoppingCart />
     </div>
   );
 }
