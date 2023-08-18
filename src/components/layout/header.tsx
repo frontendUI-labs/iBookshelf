@@ -8,7 +8,7 @@ function Header() {
   const languages = ["ENG", "ESP"];
 
   return (
-    <div className="flex gap-8 justify-center items-center">
+    <div className="flex gap-8 justify-center items-center ">
       <div className="flex items-center gap-[20px]">
         <div className="bg-purple-600 p-3 rounded-lg ">
           <img src="../../../public/icons/Vector.svg" alt="" />
@@ -18,7 +18,7 @@ function Header() {
           <span className="text-[13px]">Book Store Website</span>
         </div>
       </div>
-      <div className="border-[1px] border-gray-200 flex items-center rounded-lg h-[60px]">
+      <div className="border-[1px] border-gray-200 flex items-center rounded-lg h-[60px] w-[870px]">
         <Select
           variant="primary"
           placeholder={
@@ -30,13 +30,14 @@ function Header() {
           color="var(--primary)"
           options={navigationOptions}
         />
+
         <input
-          className="border-x h-full flex items-center p-6 min-w-3xl w-full flex-1"
+          className="border-x h-full p-6 w-full flex-1 "
           type="text"
           id="search"
           placeholder="Search over 30 million book titles"
         />
-        <div className="">
+        <div>
           <Button
             children={<Search color="var(--primary)" />}
             type="button"

@@ -60,10 +60,10 @@ type SliderDemoProps = {
   value: number;
   minPage: number;
   maxPage: number;
-  onChange: (value: number[]) => void;
+  onChange?: (value: number[]) => void;
 };
 
-const PagesSlider: React.FC<SliderDemoProps> = ({
+export const PagesSlider: React.FC<SliderDemoProps> = ({
   value,
   onChange,
   minPage,
@@ -71,7 +71,6 @@ const PagesSlider: React.FC<SliderDemoProps> = ({
 }) => {
   return (
     <div>
-      <p>Filtrar por páginas</p>
       <div className="flex items-center gap-3 mt-4">
         <Slider.Root
           className="relative flex items-center select-none touch-none w-[300px] h-5"
@@ -84,6 +83,7 @@ const PagesSlider: React.FC<SliderDemoProps> = ({
           <Slider.Track className="relative grow rounded-full h-[8px] bg-[rgb(244_244_245)]">
             <Slider.Range className="absolute bg-[rgb(24_24_27)] rounded-full h-full" />
           </Slider.Track>
+
           <Slider.Thumb
             className="block w-5 h-5 bg-white rounded-[10px] border-2 border-[rgb(24_24_27)]"
             aria-label="Volume"

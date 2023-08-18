@@ -21,7 +21,7 @@ const Button: React.FC<ButtonProps> = ({
       id={id}
       onClick={onClick}
       className={twMerge(
-        "flex items-center justify-center rounded-md p-4 text-base font-medium h-9",
+        "flex items-center justify-center rounded-md p-6 text-base font-medium h-[60px]",
         "ring-white ring-opacity-60 ring-offset-2 ring-offset-neutral-800 focus:outline-none focus:ring-2 w-[inherit] text-center ",
         "hover:scale-105 duration-100 focus:scale-110 m-2",
         variant === "primary" && "text-[rgb(250_250_250)] bg-purple-600",

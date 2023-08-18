@@ -20,6 +20,9 @@ export default {
           400: "var(--primary-soft)",
         },
       },
+      backgroundImage: {
+        "check-box": "url('./public/icons/trash-icon.svg')",
+      },
     },
   },
   plugins: [],

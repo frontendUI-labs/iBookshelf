@@ -1,21 +1,24 @@
 import * as Accordion from "@radix-ui/react-accordion";
 import { Plus } from "lucide-react";
+import { ReactNode } from "react";
 import { twMerge } from "tailwind-merge";
 
 function AcordionComponent({
   id,
   title,
-  options,
+  children,
   variant = "secondary",
 }: {
   id: string;
   title: string;
-  options: string[];
+  children: ReactNode;
   variant?: string;
 }) {
   return (
     <Accordion.Root
-      className="bg-mauve6 w-full rounded-md shadow-[0_2px_10px] shadow-black/5 "
+      className={twMerge(
+        "bg-mauve6 w-full rounded-md shadow-[0_2px_10px] shadow-black/5 relative"
+      )}
       type="single"
       defaultValue="item-1"
       collapsible
@@ -31,16 +34,11 @@ function AcordionComponent({
           <Plus size={16} className="text-purple-600" />
           <span className="text-purple-600 font-bold">{title}</span>
         </Accordion.Trigger>
-        {options.map((option, index) => {
-          return (
-            <Accordion.Content
-              key={index}
-              className={twMerge("my-[5px] pl-[61px] text-lg")}
-            >
-              {option}
-            </Accordion.Content>
-          );
-        })}
+        <Accordion.Content
+          className={twMerge(variant === "checkbox" && "grid grid-cols-2")}
+        >
+          {children}
+        </Accordion.Content>
       </Accordion.Item>
     </Accordion.Root>
   );
