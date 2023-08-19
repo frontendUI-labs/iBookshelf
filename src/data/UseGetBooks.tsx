@@ -17,7 +17,7 @@ export type Book = {
 };
 
 function useGetBooks() {
-  const [pageRange, setPageRange] = useState([0, 11]);
+  const [pageRange, setPageRange] = useState<[number, number]>([0, 11]);
   const [books, setBooks] = useState<Book[]>([]);
   const [status, setStatus] = useState("idle");
   const isLoading = status === "loading";

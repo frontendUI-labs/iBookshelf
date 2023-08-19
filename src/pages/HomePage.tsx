@@ -1,5 +1,4 @@
 // import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 import {
   ChevronLeftCircle,
@@ -18,7 +17,6 @@ import {
   MoveLeft,
 } from "lucide-react";
 import Benefits from "../components/ui/BenefitsCard";
-// eslint-disable-next-line no-duplicate-imports
 import { useState, type ReactNode, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import {
@@ -96,7 +94,7 @@ function MainCard() {
       //   pauseOnMouseEnter: true,
       // }}
       loop
-      className="relative overflow-visible"
+      className="relative z-0 "
       slidesPerView={1}
       pagination={{
         clickable: true,
@@ -120,7 +118,7 @@ function MainCard() {
         <SwiperSlide key={slide.title} className="p-24">
           <div className={twMerge("flex flex-col gap-10 w-[480px] h-full")}>
             <img
-              className="absolute z-10 right-12 bottom-0"
+              className="absolute z-2 right-12 bottom-0"
               src={slide.img}
               alt=""
             />
@@ -420,6 +418,9 @@ const SpecialsBooks = () => {
     </div>
   );
 };
+const formatTime = (time: number) => {
+  return time < 10 ? `0${time}` : time;
+};
 const Timer = ({
   days,
   hours,
@@ -438,16 +439,14 @@ const Timer = ({
   useEffect(() => {
     if (remainingTime > 0) {
       const interval = setInterval(() => {
-        setRemainingTime((prevRemainingTime) => prevRemainingTime - 1);
+        setRemainingTime((previousRemainingTime) => previousRemainingTime - 1);
       }, 900);
 
-      return () => clearInterval(interval);
+      return () => {
+        clearInterval(interval);
+      };
     }
   }, [remainingTime]);
-
-  const formatTime = (time: number) => {
-    return time < 10 ? `0${time}` : time;
-  };
 
   const daysLeft = Math.floor(remainingTime / (24 * 60 * 60));
   const hoursLeft = Math.floor((remainingTime % (24 * 60 * 60)) / (60 * 60));
@@ -645,9 +644,6 @@ function Home() {
     "w-[100px] h-[100px] fill-purple-600 text-white stroke-[0.75px]";
   return (
     <>
-      <Link to="/details" className="text-red-500 underline">
-        favorites
-      </Link>
       <div className="my-[30px] font-heading flex flex-col gap-[100px]">
         <div className="main grid grid-cols-[3fr,1fr] gap-x-3 h-[662px] container mx-auto">
           <div className="relative bg-purple-400 rounded-3xl overflow-hidden">

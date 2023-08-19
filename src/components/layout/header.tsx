@@ -1,3 +1,5 @@
+import * as NavigationMenu from "@radix-ui/react-navigation-menu";
+
 import {
   ChevronDown,
   CreditCard,
@@ -10,7 +12,6 @@ import {
 import Button from "../../common/Button";
 import Select from "../../common/Select";
 import { CartIcon, HeartIconHeader } from "../ui/icons-component";
-import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 import { Link } from "react-router-dom";
 
 function Header() {
@@ -21,11 +22,11 @@ function Header() {
       <div className="flex items-center gap-[20px]">
         <div className="bg-purple-600 p-3 rounded-lg ">
           <a href="/">
-            <img src="../../../public/icons/Vector.svg" alt="" />
+            <img src="../../../icons/Vector.svg" alt="" />
           </a>
         </div>
         <div className="flex flex-col">
-          <img src="../../../public/icons/Bookoe.svg" alt="" />
+          <img src="../../../icons/Bookoe.svg" alt="" />
           <span className="text-[13px]">Book Store Website</span>
         </div>
       </div>
@@ -33,49 +34,74 @@ function Header() {
         <NavigationMenu.Root className="relative z-[1] ">
           <NavigationMenu.List className=" center m-0 rounded-[6px] bg-white">
             <NavigationMenu.Item>
-              <NavigationMenu.Trigger className="w-full text-purple-600 group flex select-none items-center h-[58px] justify-between gap-4 rounded-[4px] px-4 py-2 text-[15px] font-medium outline-purple-600">
-                <LayoutGrid />
-                Menu
-                <ChevronDown
-                  className="transition-transform duration-[250] ease-in group-data-[state=open]:-rotate-180"
-                  aria-hidden
-                />
+              <NavigationMenu.Trigger
+                defaultValue="active"
+                className="w-full text-purple-600 group flex select-none items-center h-[57px] justify-between gap-4 rounded-[4px] px-4 py-2 text-[15px] font-medium outline-purple-600"
+              >
+                <>
+                  <LayoutGrid />
+                  Menu
+                  <ChevronDown
+                    className="transition-transform duration-[250] ease-in group-data-[state=open]:-rotate-180"
+                    aria-hidden
+                  />
+                </>
               </NavigationMenu.Trigger>
-              <NavigationMenu.Content className=" bg-white w-full absolute top-[58px] px-2 py-2 left-0 border border-gray-200 rounded-b-md flex flex-col gap-2">
-                <Link
-                  to="/"
-                  className="w-full m-0 flex  gap-4 p-2 hover:text-purple-600 focus:text-purple-600 outline-purple-600"
-                >
-                  <Library />
-                  Home
-                </Link>
-                <Link
-                  to="/filter"
-                  className=" w-full m-0 flex  gap-4 p-2 hover:text-purple-600 focus:text-purple-600 outline-purple-600"
-                >
-                  <Filter />
-                  Filter
-                </Link>
-                <Link
-                  to="/checkout"
-                  className=" w-full m-0 flex  gap-4 p-2 hover:text-purple-600 focus:text-purple-600 outline-purple-600"
-                >
-                  <CreditCard />
-                  Checkout
-                </Link>
-                <Link
-                  to="/favorites"
-                  className=" w-full one m-0 flex list-none gap-4 p-2 hover:text-purple-600 focus:text-purple-600 outline-purple-600"
-                >
-                  <FolderHeart />
-                  Favorites
-                </Link>
+              <NavigationMenu.Content className=" bg-white w-full z-10 absolute top-[58px] px-2 py-2 left-0 border border-gray-200 rounded-b-md  ">
+                <NavigationMenu.Link asChild>
+                  <Link
+                    className="w-full m-0 flex  gap-4 p-2 hover:text-purple-600 focus:text-purple-600 outline-purple-600"
+                    to="/"
+                  >
+                    {" "}
+                    <>
+                      <Library />
+                      Home
+                    </>
+                  </Link>
+                </NavigationMenu.Link>
+                <NavigationMenu.Link asChild>
+                  <Link
+                    className=" w-full m-0 flex  gap-4 p-2 hover:text-purple-600 focus:text-purple-600 outline-purple-600"
+                    to="/filter"
+                  >
+                    {" "}
+                    <>
+                      <Filter />
+                      Filter
+                    </>
+                  </Link>
+                </NavigationMenu.Link>
+                <NavigationMenu.Link asChild>
+                  <Link
+                    className=" w-full m-0 flex  gap-4 p-2 hover:text-purple-600 focus:text-purple-600 outline-purple-600"
+                    to="/checkout"
+                  >
+                    {" "}
+                    <>
+                      <CreditCard />
+                      Checkout
+                    </>
+                  </Link>
+                </NavigationMenu.Link>
+                <NavigationMenu.Link asChild>
+                  <Link
+                    className=" w-full m-0 flex  gap-4 p-2 hover:text-purple-600 focus:text-purple-600 outline-purple-600"
+                    to="/favorites"
+                  >
+                    {" "}
+                    <>
+                      <FolderHeart />
+                      Favorites
+                    </>
+                  </Link>
+                </NavigationMenu.Link>
               </NavigationMenu.Content>
             </NavigationMenu.Item>
           </NavigationMenu.List>
         </NavigationMenu.Root>
         <input
-          className="border-x h-full p-6 w-full flex-1 outline-purple-600"
+          className="border-x h-full p-6 w-full flex-1 outline-purple-600 text-purple-600"
           type="text"
           id="search"
           placeholder="Search over 30 million book titles"
@@ -88,7 +114,7 @@ function Header() {
           />
         </div>
       </div>
-      <div className="flex gap-8">
+      <div className="flex gap-8 items-center">
         <HeartIconHeader />
         <CartIcon />
         <div className="bg-[#c4c4c4] rounded-lg h-[60px] w-[60px]">

@@ -40,9 +40,10 @@ function MainContent({
   setLayout,
 }: {
   books: Book[];
-  pageRange: number[];
-  setPageRange: () => number[];
-  checkInput: string;
+  pageRange: [number, number];
+  setPageRange: React.Dispatch<React.SetStateAction<[number, number]>>;
+  layout: "grid" | "list";
+  setLayout: React.Dispatch<React.SetStateAction<"grid" | "list">>;
 }) {
   const options = ["Newest", "Popular", "Featured"];
   const toggleGroupItemClasses =
@@ -79,7 +80,7 @@ function MainContent({
             type="single"
             aria-label="Layout"
             onValueChange={(value) => {
-              if (value) setLayout(value);
+              if (value) setLayout(value as "list" | "grid");
             }}
           >
             <ToggleGroup.Item
@@ -148,6 +149,7 @@ function MainContent({
                 value={book.reviewsStar}
                 title={book.title}
                 price={book.price}
+                synopsis={book.synopsis ?? ""}
               />
             );
           })}
@@ -156,7 +158,7 @@ function MainContent({
       <div className="flex items-center justify-between">
         <p>Showing {books.length} from 50 data</p>
         <div className="flex">
-          {(pageRange?.[0] as number) > 0 && (
+          {pageRange[0] > 0 && (
             <Button onClick={handlePreviousPage} variant="secondary">
               <div className="flex items-center justify-between">
                 <ChevronLeft color="var(--gray-01)" /> <span>Previous</span>

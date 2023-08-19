@@ -3,7 +3,6 @@ import MainContent from "../components/ui/MainContent";
 import OnSaleBook from "../components/ui/on-sale-book";
 import useGetBooks from "../data/UseGetBooks";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 
 type LayoutType = "grid" | "list";
 
@@ -14,9 +13,6 @@ function Filter() {
 
   return (
     <>
-      <Link to="/details" className="text-red-500 underline">
-        favorites
-      </Link>
       {isError && <p>Fallo algo</p>}
       <div className="container m-auto ">
         <div className=" grid grid-cols-[400px,1fr] py-10 mb-12 ">
