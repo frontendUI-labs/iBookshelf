@@ -13,8 +13,12 @@ import "swiper/css/bundle";
 function SaleBooks() {
   return (
     <div>
-      <div className="bg-[#c4c4c4] rounded-lg relative w-full h-[230px] py-8 mb-[18px]">
-        <img className="" src="" alt="" />
+      <div className="bg-[#c4c4c4] rounded-lg relative w-full h-[230px] mb-4 ">
+        <img
+          className="object-cover rounded-lg w-full h-full"
+          src="https://marketplace.canva.com/EAE8SCCNlvo/1/0/1003w/canva-verde-y-rosa-ciencia-ficci%C3%B3n-portada-de-libro-SSKxUZUBOJg.jpg"
+          alt=""
+        />
         <div className="absolute top-[24px] left-0 bg-[#FF754C] w-[65px] h-[34px] flex items-center justify-center rounded-e-full">
           <span className="text-white">30%</span>
         </div>

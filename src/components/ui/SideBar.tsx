@@ -1,4 +1,4 @@
-import { useState } from "react";
+// import {  useState } from "react";
 import Button from "../../common/Button";
 import { CheckBoxInput } from "./AddInput";
 import AcordionComponent from "./acordion-component";
@@ -13,29 +13,27 @@ function SideBar() {
     "Dragon Of The King",
   ];
 
-  const [checkboxValue, setCheckboxValue] = useState({
-    action: "",
-    fantasy: "",
-    adventure: "",
-    history: "",
-    animation: "",
-    horror: "",
-    biography: "",
-    mystery: "",
-    comedy: "",
-    romance: "",
-    crime: "",
-    "sci-fi": "",
-    documentary: "",
-    sport: "",
-  });
+  // const [checkboxValue, setCheckboxValue] = useState({
+  //   action: "",
+  //   fantasy: "",
+  //   adventure: "",
+  //   history: "",
+  //   animation: "",
+  //   horror: "",
+  //   biography: "",
+  //   mystery: "",
+  //   comedy: "",
+  //   romance: "",
+  //   crime: "",
+  //   "sci-fi": "",
+  //   documentary: "",
+  //   sport: "",
+  // });
 
   return (
     <form
       onSubmit={(event) => {
         event.preventDefault();
-
-        console.log(checkboxValue.action);
       }}
       className=" p-4"
     >
@@ -60,15 +58,7 @@ function SideBar() {
           id="main-2"
           title="Shop by Category"
         >
-          <CheckBoxInput
-            onChange={(event) => {
-              setCheckboxValue({
-                ...checkboxValue,
-                action: event.target.value,
-              });
-            }}
-            genre="Action"
-          />
+          <CheckBoxInput genre="Action" />
           <CheckBoxInput genre="Fantasy" />
           <CheckBoxInput genre="Advanture" />
           <CheckBoxInput genre="History" />

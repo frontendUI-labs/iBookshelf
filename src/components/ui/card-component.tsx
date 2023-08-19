@@ -9,12 +9,14 @@ export function CardListLayout({
   author,
   title,
   price,
+  synopsis,
 }: {
   value: number;
   cover: string;
   author: string;
   title: string;
   price: number;
+  synopsis: string;
 }) {
   const oldPrice = (price * 0.5 + price).toFixed(2);
 
@@ -44,14 +46,7 @@ export function CardListLayout({
           </div>
         </div>
         <div className="flex flex-col gap-4">
-          <p className="text-justify text-sm mt-4">
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur.{" "}
-          </p>
+          <p className="text-justify text-sm mt-4">{synopsis}</p>
           <div className="flex gap-4 items-center">
             <div className="flex gap-2 items-center">
               <h4 className="text-xl text-left font-bold m-2">$ {price}</h4>
