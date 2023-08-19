@@ -437,15 +437,15 @@ const Timer = ({
   const [remainingTime, setRemainingTime] = useState(initialTimeInSeconds);
 
   useEffect(() => {
-    if (remainingTime > 0) {
-      const interval = setInterval(() => {
-        setRemainingTime((previousRemainingTime) => previousRemainingTime - 1);
-      }, 900);
+    if (remainingTime <= 0) return;
 
-      return () => {
-        clearInterval(interval);
-      };
-    }
+    const interval = setInterval(() => {
+      setRemainingTime((previousRemainingTime) => previousRemainingTime - 1);
+    }, 900);
+
+    return () => {
+      clearInterval(interval);
+    };
   }, [remainingTime]);
 
   const daysLeft = Math.floor(remainingTime / (24 * 60 * 60));
