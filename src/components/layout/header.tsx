@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import Button from "../../common/Button";
 import Select from "../../common/Select";
-import { CartIcon, HeartIconHeader } from "../ui/icons-component";
+import { CartIcon, HeartIconHeader } from "../ui/Icons";
 import { Link } from "react-router-dom";
 
 function Header() {
@@ -47,7 +47,7 @@ function Header() {
                   />
                 </>
               </NavigationMenu.Trigger>
-              <NavigationMenu.Content className=" bg-white w-full z-10 absolute top-[58px] px-2 py-2 left-0 border border-gray-200 rounded-b-md  ">
+              <NavigationMenu.Content className=" bg-white w-full z-3 absolute top-[58px] px-2 py-2 left-0 border border-gray-200 rounded-b-md  ">
                 <NavigationMenu.Link asChild>
                   <Link
                     className="w-full m-0 flex  gap-4 p-2 hover:text-purple-600 focus:text-purple-600 outline-purple-600"

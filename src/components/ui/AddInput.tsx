@@ -52,6 +52,7 @@ export function CheckBoxInput({ genre }: { genre: string }) {
     <div className="flex items-center gap-2 p-2">
       <Checkbox.Root
         value={genre}
+        name={genre}
         className="shadow-blackA7 hover:bg-violet3 flex h-[16px] w-[16px] appearance-none items-center justify-center rounded-[4px] bg-white border-2 boder-gray-100 outline-none focus:shadow-[0_0_0_2px_black]  cursor-pointer "
         id={genre}
       >

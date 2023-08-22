@@ -1,10 +1,11 @@
 // import {  useState } from "react";
 import Button from "../../common/Button";
 import { CheckBoxInput } from "./AddInput";
-import AcordionComponent from "./acordion-component";
-import SliderInputComponent from "./slider-input-component";
+import AcordionComponent from "./Accordion";
+import SliderInputComponent from "./SliderInput";
+import { Genre } from "../../types/type";
 
-function SideBar() {
+function SideBar({ genres }: { genres: Genre[] }) {
   const options = [
     "Alone Here ",
     "Alien Invassion",
@@ -12,23 +13,6 @@ function SideBar() {
     "Cut That Hair!",
     "Dragon Of The King",
   ];
-
-  // const [checkboxValue, setCheckboxValue] = useState({
-  //   action: "",
-  //   fantasy: "",
-  //   adventure: "",
-  //   history: "",
-  //   animation: "",
-  //   horror: "",
-  //   biography: "",
-  //   mystery: "",
-  //   comedy: "",
-  //   romance: "",
-  //   crime: "",
-  //   "sci-fi": "",
-  //   documentary: "",
-  //   sport: "",
-  // });
 
   return (
     <form
@@ -56,22 +40,11 @@ function SideBar() {
         <AcordionComponent
           variant="checkbox"
           id="main-2"
-          title="Shop by Category"
+          title="Filter by Category"
         >
-          <CheckBoxInput genre="Action" />
-          <CheckBoxInput genre="Fantasy" />
-          <CheckBoxInput genre="Advanture" />
-          <CheckBoxInput genre="History" />
-          <CheckBoxInput genre="Animation" />
-          <CheckBoxInput genre="Horror" />
-          <CheckBoxInput genre="Biography" />
-          <CheckBoxInput genre="Mystery" />
-          <CheckBoxInput genre="Comedy" />
-          <CheckBoxInput genre="Romance" />
-          <CheckBoxInput genre="Crime" />
-          <CheckBoxInput genre="Sci-fi" />
-          <CheckBoxInput genre="Documentary" />
-          <CheckBoxInput genre="Sport" />
+          {genres.map((genre) => {
+            return <CheckBoxInput key={genre.id} genre={genre.name} />;
+          })}
         </AcordionComponent>
       </div>
       <div>

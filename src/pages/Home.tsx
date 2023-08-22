@@ -9,26 +9,7 @@ import GenreSelect from "../components/ui/GenreSelect.tsx";
 import { AddBookButton } from "../components/ui/AddBookButton.tsx";
 import { EditBookButton } from "../components/ui/EditBookButton.tsx";
 import DeleteBookButton from "../components/ui/DeleteBookButton.tsx";
-
-type Author = {
-  name: string;
-  otherBooks: string[];
-};
-
-type Book = {
-  title: string;
-  pages: number;
-  genre: string;
-  cover: string;
-  synopsis: string;
-  year: number;
-  ISBN: string;
-  author: Author;
-};
-
-export type Library = {
-  book: Book;
-};
+import { Library } from "../types/type.ts";
 
 const getGenres = (books: Library[]): string[] => {
   const genres: string[] = [];

@@ -1,4 +1,4 @@
-import { StarIcon } from "./icons-component";
+import { StarIcon } from "./Icons";
 import { Swiper, SwiperSlide } from "swiper/react";
 import {
   Navigation,

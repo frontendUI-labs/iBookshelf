@@ -9,61 +9,73 @@ import {
 } from "lucide-react";
 import Button from "../../common/Button";
 import Select from "../../common/Select";
-import CardComponent, { CardListLayout } from "./card-component";
+import CardComponent, { CardListLayout } from "./Card";
 import { twMerge } from "tailwind-merge";
+import { Book } from "../../types/type";
+import {
+  BOOK_PAGINATION_COUNT,
+  BOOK_PAGINATION_LIST,
+} from "../../constants/books";
 // import { useMemo } from "react";
-
-type Book = {
-  author: string;
-  cover: string;
-  created_at: string;
-  genreId: null;
-  id: number;
-  isFavorite: null;
-  pages: null;
-  price: number;
-  publisher: null;
-  reviewsCount: number;
-  reviewsStar: number;
-  synopsis: null;
-  title: string;
-  year: null;
-};
-
-const BOOK_PAGINATION_COUNT = 12;
 
 function MainContent({
   books,
   pageRange,
-  setPageRange, // checkInput,
   layout,
   setLayout,
-}: {
+  bookList,
+  pageRangeList,
+  handleNextPage,
+  handlePreviousPage,
+  handlePreviousPageList,
+  handleNextPageList, // pageRangeList,
+} // setPageRangeList,
+: {
   books: Book[];
   pageRange: [number, number];
-  setPageRange: React.Dispatch<React.SetStateAction<[number, number]>>;
   layout: "grid" | "list";
   setLayout: React.Dispatch<React.SetStateAction<"grid" | "list">>;
+  bookList: Book[];
+  pageRangeList: [number, number];
+  handleNextPage: () => void;
+  handlePreviousPage: () => void;
+  handlePreviousPageList: () => void;
+  handleNextPageList: () => void;
 }) {
   const options = ["Newest", "Popular", "Featured"];
   const toggleGroupItemClasses =
     "ToggleGroup.Item  hover:bg-violet3 color-mauve11 data-[state=on]:bg-violet6 data-[state=on]:text-violet12 flex h-[35px] w-[35px] items-center justify-center bg-white text-base leading-4 first:rounded-l last:rounded-r focus:z-10 ";
 
-  console.log(pageRange, "pageRange");
+  // const handlePreviousPage = () => {
+  //   window.scrollTo(0, 0);
+  //   setPageRange(([startPage, endPage]: [number, number]) => [
+  //     startPage - BOOK_PAGINATION_COUNT,
+  //     endPage - BOOK_PAGINATION_COUNT,
+  //   ]);
+  // };
 
-  const handlePreviousPage = () => {
-    setPageRange(([startPage, endPage]: [number, number]) => [
-      startPage - BOOK_PAGINATION_COUNT,
-      endPage - BOOK_PAGINATION_COUNT,
-    ]);
-  };
+  // const handleNextPage = () => {
+  //   window.scrollTo(0, 0);
+  //   setPageRange(([startPage = 0, endPage = BOOK_PAGINATION_COUNT]) => [
+  //     startPage + BOOK_PAGINATION_COUNT,
+  //     endPage + BOOK_PAGINATION_COUNT,
+  //   ]);
+  // };
 
-  const handleNextPage = () => {
-    setPageRange(([startPage = 0, endPage = BOOK_PAGINATION_COUNT]) => [
-      startPage + BOOK_PAGINATION_COUNT,
-      endPage + BOOK_PAGINATION_COUNT,
-    ]);
-  };
+  // const handlePreviousPageListLayout = () => {
+  //   window.scrollTo(0, 0);
+  //   setPageRangeList(([startPage, endPage]: [number, number]) => [
+  //     startPage - BOOK_PAGINATION_LIST,
+  //     endPage - BOOK_PAGINATION_LIST,
+  //   ]);
+  // };
+  // const handleNextPageListLayout = () => {
+  //   window.scrollTo(0, 0);
+  //   setPageRangeList(([startPage = 0, endPage = BOOK_PAGINATION_LIST]) => [
+  //     startPage + BOOK_PAGINATION_LIST,
+  //     endPage + BOOK_PAGINATION_LIST,
+  //   ]);
+  // };
 
   return (
     <div className=" p-4">
@@ -102,15 +114,6 @@ function MainContent({
               />
             </ToggleGroup.Item>
           </ToggleGroup.Root>
-
-          {/* <Button variant="icon"> {<List />}</Button>
-          <Button variant="icon" id="grid">
-            <LayoutGrid />
-          </Button>
-          <Button variant="icon" id="masonty">
-            <LayoutPanelLeft />
-          </Button> */}
-
           <Select
             options={options}
             placeholder={
@@ -124,32 +127,36 @@ function MainContent({
           />
         </div>
       </div>
-      {layout === "grid" && (
+      {layout === "grid" ? (
         <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 py-8">
           {books.map((book) => {
             return (
               <CardComponent
-                key={book.author}
-                author={book.author}
+                key={book.id}
+                title={book.title}
                 cover={book.cover}
-                value={book.reviewsStar}
+                value={book.rating}
+                slug={book.slug}
               />
             );
           })}
         </div>
-      )}
-      {layout === "list" && (
+      ) : (
         <div className="gap-4 py-8 flex flex-col">
-          {books.map((book) => {
+          {bookList.map((book) => {
             return (
               <CardListLayout
                 key={book.id}
                 author={book.author}
                 cover={book.cover}
-                value={book.reviewsStar}
+                value={book.rating}
                 title={book.title}
                 price={book.price}
                 synopsis={book.synopsis ?? ""}
+                pages={book.pages ?? 321}
+                publisher={book.publisher ?? "Santillana"}
+                totalReviews={book.totalReviews}
+                slug={book.slug}
               />
             );
           })}
@@ -157,23 +164,44 @@ function MainContent({
       )}
       <div className="flex items-center justify-between">
         <p>Showing {books.length} from 50 data</p>
-        <div className="flex">
-          {pageRange[0] > 0 && (
-            <Button onClick={handlePreviousPage} variant="secondary">
-              <div className="flex items-center justify-between">
-                <ChevronLeft color="var(--gray-01)" /> <span>Previous</span>
-              </div>
-            </Button>
-          )}
+        {layout === "grid" && (
+          <div className="flex">
+            {pageRange[0] > 0 && (
+              <Button onClick={handlePreviousPage} variant="secondary">
+                <div className="flex items-center justify-between">
+                  <ChevronLeft color="var(--gray-01)" /> <span>Previous</span>
+                </div>
+              </Button>
+            )}
 
-          {books.length === 12 && (
-            <Button onClick={handleNextPage} variant="secondary">
-              <div className="flex items-center justify-between">
-                <ChevronRight color="var(--gray-01)" /> <span>Next</span>
-              </div>
-            </Button>
-          )}
-        </div>
+            {books.length === BOOK_PAGINATION_COUNT && (
+              <Button onClick={handleNextPage} variant="secondary">
+                <div className="flex items-center justify-between">
+                  <ChevronRight color="var(--gray-01)" /> <span>Next</span>
+                </div>
+              </Button>
+            )}
+          </div>
+        )}
+        {layout === "list" && (
+          <div className="flex">
+            {pageRangeList[0] > 0 && (
+              <Button onClick={handlePreviousPageList} variant="secondary">
+                <div className="flex items-center justify-between">
+                  <ChevronLeft color="var(--gray-01)" /> <span>Previous</span>
+                </div>
+              </Button>
+            )}
+
+            {bookList.length === BOOK_PAGINATION_LIST && (
+              <Button onClick={handleNextPageList} variant="secondary">
+                <div className="flex items-center justify-between">
+                  <ChevronRight color="var(--gray-01)" /> <span>Next</span>
+                </div>
+              </Button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
