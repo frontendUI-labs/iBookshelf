@@ -202,20 +202,12 @@ function BestBook() {
                     <h1 className="text-5xl font-semibold">{book.section}</h1>
                     <p className="text-base">Based sales this week</p>
                     <img
-                      src={
-                        book.bg ===
-                        "https://m.media-amazon.com/images/I/41zqVJPSAQL.jpg"
-                          ? "https://m.media-amazon.com/images/I/41zqVJPSAQL.jpg"
-                          : "https://m.media-amazon.com/images/I/41pbe4-oNpL.jpg" &&
-                            book.bg ===
-                              "https://m.media-amazon.com/images/I/41pbe4-oNpL.jpg"
-                          ? "https://m.media-amazon.com/images/I/41pbe4-oNpL.jpg"
-                          : "https://m.media-amazon.com/images/I/51Q3d7HwOmL.jpg"
-                      }
+                      src={book.bg}
                       className={twMerge(
                         "overflow-hidden w-[200px] h-[290px] rounded-xl border-2 border-white boxShadow"
                       )}
-                    ></img>
+                      alt=""
+                    />
                     <p className="text-xl font-semibold flex flex-col text-center">
                       {book.title}
                       <span className="text-xs font-thin font-basic opacity-60">
@@ -442,7 +434,7 @@ const SpecialsBooks = () => {
           },
           {
             title: "Meditations: A New Translation (Modern Library)",
-            tags: ["POLITIC"],
+            tags: ["POLITIC", "TECH"],
             author: "Marcus Aurelius",
             actualPrice: "8.78",
             prevPrice: "15",
@@ -456,16 +448,17 @@ const SpecialsBooks = () => {
                 src={card.bg}
                 alt=""
               />
+
               <div className="text-start p-7 h-[430px] flex flex-col justify-between">
                 <h3 className="text-2xl font-semibold mb-5">{card.title}</h3>
                 <div className="mb-4 flex gap-3">
-                  {Array.from({ length: 3 }).map((_, id) => (
+                  {card.tags.map((tag) => (
                     <button
-                      key={id}
+                      key={tag}
                       className="bg-purple-400 text-purple-600 text-xs
                       font-basic font-normal py-2 px-3 rounded-xl"
                     >
-                      {card.tags}
+                      {tag}
                     </button>
                   ))}
                 </div>

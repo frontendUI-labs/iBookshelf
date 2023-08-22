@@ -38,14 +38,7 @@ function Select({
           position="popper"
           className="w-[--radix-select-trigger-width] overflow-hidden bg-white rounded-md shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]"
         >
-          <RuiSelect.Viewport className="p-[5px] bg-red-400 w-full">
-            {/* <Select.SelectItem
-              className="text-sm leading-none text-violet11 rounded-[3px] flex items-center h-[25px] pr-[35px] pl-[25px] relative select-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1 hover:bg-slate-300 focus:bg-slate-300"
-              value="pineapple"
-            >
-              Pineapple
-            </Select.SelectItem> */}
-
+          <RuiSelect.Viewport className="p-[5px] w-full">
             {options.map((option) => (
               <RuiSelect.Item
                 key={option}
