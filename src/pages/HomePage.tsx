@@ -7,7 +7,6 @@ import {
   ThumbsUp,
   ShieldCheck,
   Star,
-  ShoppingCart,
   Bookmark,
   MoveRight,
   Users,
@@ -29,6 +28,7 @@ import {
 
 import "swiper/css";
 import "swiper/css/bundle";
+import CartButton from "../components/ui/CartButton";
 
 const PointsIcon = ({
   color,
@@ -88,11 +88,11 @@ function MainCard() {
   return (
     <Swiper
       modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
-      // autoplay={{
-      //   delay: 2000,
-      //   disableOnInteraction: true,
-      //   pauseOnMouseEnter: true,
-      // }}
+      autoplay={{
+        delay: 3000,
+        disableOnInteraction: true,
+        pauseOnMouseEnter: true,
+      }}
       loop
       className="relative z-0 "
       slidesPerView={1}
@@ -141,20 +141,19 @@ function MainCard() {
 }
 function BestBook() {
   return (
-    <div className="overflow-hidden font-heading bg-blue-100 rounded-3xl">
+    <div className="overflow-hidden font-heading rounded-3xl">
       <div className="h-full">
         <Swiper
           id="bestBook"
           className="h-full relative"
           modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
-          // autoplay={{
-          //   delay: 2000,
-          //   disableOnInteraction: true,
-          //   pauseOnMouseEnter: true,
-          // }}
+          autoplay={{
+            delay: 2000,
+            disableOnInteraction: true,
+            pauseOnMouseEnter: true,
+          }}
           loop
           slidesPerView={1}
-          slidesPerGroup={1}
           navigation={{
             nextEl: ".bestBook-nextEl",
             prevEl: ".bestBook-prevEl",
@@ -164,51 +163,81 @@ function BestBook() {
           {[
             {
               section: "Best Seller",
-              title: "Pushing Clouds",
+              title: "Don't Forget to Write: A Novel",
               tags: ["ADVENTURE", "SCIENCE", "COMEDY"],
               fixedPrice: "58.25",
               actualPrice: "60.00",
-              bg: "bg-purple-600",
+              bg: "https://m.media-amazon.com/images/I/41zqVJPSAQL.jpg",
             },
             {
               section: "Best Reader",
-              title: "cats",
+              title: "Watching You: A Novel",
               tags: ["ADVENTURE", "DRAMA", "COMEDY"],
               fixedPrice: "38.25",
               actualPrice: "40.00",
-              bg: "bg-orange-400",
+              bg: "https://m.media-amazon.com/images/I/41pbe4-oNpL.jpg",
             },
-          ].map((book) => (
-            <SwiperSlide key={book.title}>
-              <div
-                className={twMerge(
-                  "bg-gray-400 h-full rounded-xl border-4 border-white flex flex-col justify-center items-center gap-4",
-                  book.bg
-                )}
-              >
-                <h1 className="text-5xl font-semibold">{book.section}</h1>
-                <p className="text-base">Based sales this week</p>
-                <div className="bg-gray-400 w-[200px] h-[290px] rounded-xl border-2 border-white shadow-lg shadow-cyan-500/50"></div>
-                <p className="text-xl font-semibold flex flex-col items-center">
-                  {book.title}
-                  <span className="text-xs font-thin font-basic opacity-60">
-                    {book.tags.join(", ")}
-                  </span>
-                </p>
-                <div className="bg-white px-6 py-3 text-lg font-semibold flex  gap-4 rounded-xl">
-                  <p className="text-gray-100 line-through">
-                    {book.actualPrice}
-                  </p>
-                  <p className="text-black">USD {book.fixedPrice}</p>
+            {
+              section: "Most Popular",
+              title: "Divine Rivals: A Novel (Letters of Enchantment Book 1)",
+              tags: ["ADVENTURE", "DRAMA", "COMEDY"],
+              fixedPrice: "38.25",
+              actualPrice: "40.00",
+              bg: "https://m.media-amazon.com/images/I/51Q3d7HwOmL.jpg",
+            },
+          ].map((book) => {
+            return (
+              <SwiperSlide key={book.title}>
+                <div
+                  className={twMerge(
+                    " text-white h-full rounded-xl border-4 border-white flex flex-col justify-center items-center gap-4"
+                  )}
+                >
+                  <img
+                    className="absolute left-0 top-0 h-full w-100vh blur-md"
+                    src={book.bg}
+                    alt=""
+                  />
+                  <div className="relative z-10 flex flex-col justify-center items-center gap-4">
+                    <h1 className="text-5xl font-semibold">{book.section}</h1>
+                    <p className="text-base">Based sales this week</p>
+                    <img
+                      src={
+                        book.bg ===
+                        "https://m.media-amazon.com/images/I/41zqVJPSAQL.jpg"
+                          ? "https://m.media-amazon.com/images/I/41zqVJPSAQL.jpg"
+                          : "https://m.media-amazon.com/images/I/41pbe4-oNpL.jpg" &&
+                            book.bg ===
+                              "https://m.media-amazon.com/images/I/41pbe4-oNpL.jpg"
+                          ? "https://m.media-amazon.com/images/I/41pbe4-oNpL.jpg"
+                          : "https://m.media-amazon.com/images/I/51Q3d7HwOmL.jpg"
+                      }
+                      className={twMerge(
+                        "overflow-hidden w-[200px] h-[290px] rounded-xl border-2 border-white boxShadow"
+                      )}
+                    ></img>
+                    <p className="text-xl font-semibold flex flex-col text-center">
+                      {book.title}
+                      <span className="text-xs font-thin font-basic opacity-60">
+                        {book.tags.join(", ")}
+                      </span>
+                    </p>
+                    <div className="bg-white px-6 py-3 text-lg font-semibold flex  gap-4 rounded-xl">
+                      <p className="text-gray-100 line-through">
+                        {book.actualPrice}
+                      </p>
+                      <p className="text-black">USD {book.fixedPrice}</p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </SwiperSlide>
-          ))}
+              </SwiperSlide>
+            );
+          })}
           <button className="bestBook-prevEl absolute z-10 left-5 top-1/2 -translate-y-1/2">
-            <ChevronLeftCircle className="fill-gray-500 text-white  w-9 h-9 " />
+            <ChevronLeftCircle className="fill-gray-500 text-white  w-9 h-9 hover:text-purple-700" />
           </button>
           <button className="bestBook-nextEl absolute z-10 right-5 top-1/2 -translate-y-1/2 ">
-            <ChevronRightCircle className="fill-gray-500 text-white w-9 h-9" />
+            <ChevronRightCircle className="fill-gray-500 text-white w-9 h-9 hover:text-purple-700" />
           </button>
         </Swiper>
       </div>
@@ -243,33 +272,33 @@ function BooksRecomended({
       <div>
         <Swiper
           modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
-          spaceBetween={50}
-          // autoplay={{
-          //   delay: 2000,
-          //   disableOnInteraction: true,
-          //   pauseOnMouseEnter: true,
-          // }}
-          loop
-          breakpoints={{
-            320: {
-              slidesPerView: 1,
-              slidesPerGroup: 1,
-              spaceBetween: 10,
-            },
-            640: {
-              slidesPerView: 2,
-              slidesPerGroup: 2,
-            },
-            768: {
-              slidesPerView: 3,
-              slidesPerGroup: 3,
-              spaceBetween: 10,
-            },
-            1024: {
-              slidesPerView: 4,
-              slidesPerGroup: 4,
-            },
+          spaceBetween={40}
+          autoplay={{
+            delay: 2500,
+            disableOnInteraction: true,
+            pauseOnMouseEnter: true,
           }}
+          loop
+          // breakpoints={{
+          //   320: {
+          //     slidesPerView: 1,
+          //     slidesPerGroup: 1,
+          //     spaceBetween: 10,
+          //   },
+          //   640: {
+          //     slidesPerView: 2,
+          //     slidesPerGroup: 2,
+          //   },
+          //   768: {
+          //     slidesPerView: 3,
+          //     slidesPerGroup: 3,
+          //     spaceBetween: 10,
+          //   },
+          //   1024: {
+          //     slidesPerView: 4,
+          //     slidesPerGroup: 4,
+          //   },
+          // }}
           className="relative overflow-visible"
           slidesPerView={4}
           slidesPerGroup={4}
@@ -279,7 +308,56 @@ function BooksRecomended({
             disabledClass: "hidden",
           }}
         >
-          {Array.from({ length: 12 }).map((_, id) => (
+          {[
+            {
+              bg: "https://m.media-amazon.com/images/I/41FJG4ahE6L.jpg",
+            },
+            {
+              bg: "https://m.media-amazon.com/images/I/416toFaYhUL.jpg",
+            },
+            {
+              bg: "https://m.media-amazon.com/images/I/41Ds5rRv+2L.jpg",
+            },
+            {
+              bg: "https://m.media-amazon.com/images/I/41rWzmdpuiL.jpg",
+            },
+            {
+              bg: "https://m.media-amazon.com/images/I/41shZGS-G+L.jpg",
+            },
+            {
+              bg: "https://m.media-amazon.com/images/I/41EhEN9nsmL.jpg",
+            },
+            {
+              bg: "https://m.media-amazon.com/images/I/41HTb6Rv+7L.jpg",
+            },
+            {
+              bg: "https://m.media-amazon.com/images/I/412kxZO5s7L.jpg",
+            },
+            {
+              bg: "https://m.media-amazon.com/images/I/51F2Qy-MQXL.jpg",
+            },
+            {
+              bg: "https://m.media-amazon.com/images/I/51M+z-t6QFL.jpg",
+            },
+            {
+              bg: "https://m.media-amazon.com/images/I/41SlmRbDStL.jpg",
+            },
+            {
+              bg: "https://m.media-amazon.com/images/I/41P2OAEeKsL.jpg",
+            },
+          ].map((book) => {
+            return (
+              <SwiperSlide key={book.bg}>
+                <img
+                  className="h-[195px] rounded-xl border-4 border-white"
+                  src={book.bg}
+                  alt=""
+                />
+              </SwiperSlide>
+            );
+          })}
+
+          {/* {Array.from({ length: 12 }).map((_, id) => (
             <SwiperSlide key={id}>
               <div
                 className={twMerge(
@@ -288,12 +366,12 @@ function BooksRecomended({
                 )}
               />
             </SwiperSlide>
-          ))}
+          ))} */}
           <button className="booksRecomended-prevEl absolute z-10 -left-3 top-1/2 -translate-y-1/2">
-            <ChevronLeftCircle className="fill-white w-12 h-12 " />
+            <ChevronLeftCircle className="fill-white w-12 h-12 hover:text-orange-600" />
           </button>
           <button className="booksRecomended-nextEl absolute z-10 -right-3 top-1/2 -translate-y-1/2 ">
-            <ChevronRightCircle className=" fill-white w-12 h-12" />
+            <ChevronRightCircle className=" fill-white w-12 h-12 hover:text-orange-600" />
           </button>
         </Swiper>
       </div>
@@ -307,11 +385,11 @@ const SpecialsBooks = () => {
         id="specialsBook"
         className="grid grid-cols-3 h-full overflow-y-visible"
         modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
-        // autoplay={{
-        //   delay: 2000,
-        //   disableOnInteraction: true,
-        //   pauseOnMouseEnter: true,
-        // }}
+        autoplay={{
+          delay: 2000,
+          disableOnInteraction: true,
+          pauseOnMouseEnter: true,
+        }}
         loop
         spaceBetween={40}
         slidesPerView={3}
@@ -323,52 +401,62 @@ const SpecialsBooks = () => {
       >
         {[
           {
-            title: "PRIMERO",
+            title: "Self Heal By Design",
             tags: ["BIOGRAPHY"],
-            author: "Margaretha Helew",
+            author: "Barbara O'Neill",
             actualPrice: "8.78",
             prevPrice: "15",
+            bg: "https://m.media-amazon.com/images/I/51dyPjyi8aL.jpg",
           },
           {
-            title: "SECONDS [Part I]",
+            title: "Stop Overthinking",
             tags: ["HORROR"],
-            author: "Kevin Smiley",
+            author: "Nick Trenton",
             actualPrice: "18.78",
             prevPrice: "25",
+            bg: "https://m.media-amazon.com/images/I/51SPsmOpFDL.jpg",
           },
           {
-            title: "Terrible Madness",
+            title: "Dirty Truths (Boston Billionaires Book 4)",
             tags: ["THRILLER"],
-            author: "David Here",
+            author: "Brittanee Nicole",
             actualPrice: "28.78",
             prevPrice: "35",
+            bg: "https://m.media-amazon.com/images/I/51X14q2cr8L.jpg",
           },
           {
-            title: "REWORK",
+            title: "The Beginner's Guide to Stoicism",
             tags: ["BIOGRAPHY"],
-            author: "Margaretha Helew",
-            actualPrice: "8.78",
-            prevPrice: "15",
+            author: "Matthew Van Natta",
+            actualPrice: "18.78",
+            prevPrice: "22",
+            bg: "https://m.media-amazon.com/images/I/51CY98UlqqL.jpg",
           },
           {
-            title: "NOTEBOOK",
-            tags: ["BIOGRAPHY"],
-            author: "Margaretha Helew",
-            actualPrice: "8.78",
-            prevPrice: "15",
+            title: "Whiskey Lies (Boston Billionaires Book 1)",
+            tags: ["DRAMA"],
+            author: "Brittanee Nicole",
+            actualPrice: "9.78",
+            prevPrice: "12",
+            bg: "https://m.media-amazon.com/images/I/41CCCfSaZ7L.jpg",
           },
           {
-            title: "ULTIMO",
-            tags: ["BIOGRAPHY"],
-            author: "Margaretha Helew",
+            title: "Meditations: A New Translation (Modern Library)",
+            tags: ["POLITIC"],
+            author: "Marcus Aurelius",
             actualPrice: "8.78",
             prevPrice: "15",
+            bg: "https://m.media-amazon.com/images/I/41zY8V+5QEL.jpg",
           },
         ].map((card) => (
-          <SwiperSlide key={card.title} className="">
+          <SwiperSlide key={card.title}>
             <div className="rounded-2xl border-2 border-gray-300 overflow-y-hidden boxShadow">
-              <div className="h-[300px] w-full bg-gray-100 rounded-b-2xl"></div>
-              <div className="text-start p-7">
+              <img
+                className="h-[300px] w-full object-cover rounded-b-2xl "
+                src={card.bg}
+                alt=""
+              />
+              <div className="text-start p-7 h-[430px] flex flex-col justify-between">
                 <h3 className="text-2xl font-semibold mb-5">{card.title}</h3>
                 <div className="mb-4 flex gap-3">
                   {Array.from({ length: 3 }).map((_, id) => (
@@ -391,10 +479,7 @@ const SpecialsBooks = () => {
                   {card.author}
                 </p>
                 <div className="flex justify-between">
-                  <button className="bg-purple-600 py-3 px-12 rounded-xl flex gap-4 text-white">
-                    <ShoppingCart />
-                    <span className="text-lg font-semibold">Add to cart</span>
-                  </button>
+                  <CartButton text="Add to cart" />
                   <p className="flex items-center gap-4">
                     <span className="text-3xl font-semibold">
                       $ {card.actualPrice}
@@ -408,10 +493,10 @@ const SpecialsBooks = () => {
             </div>
           </SwiperSlide>
         ))}
-        <button className="specialBook-prevEl mr-2  absolute z-10 right-1/2 -bottom-20 w-[50px] h-[50px] rounded-full bg-purple-400 flex justify-center items-center">
+        <button className="specialBook-prevEl mr-2  absolute z-10 right-1/2 -bottom-20 w-[50px] h-[50px] rounded-full bg-purple-400 flex justify-center items-center hover:bg-purple-200">
           <MoveLeft className="text-purple-600 stroke-[3px]" />
         </button>
-        <button className="specialBook-nextEl ml-2 absolute z-10 left-1/2 -bottom-20 w-[50px] h-[50px] rounded-full bg-purple-400 flex justify-center items-center">
+        <button className="specialBook-nextEl ml-2 absolute z-10 left-1/2 -bottom-20 w-[50px] h-[50px] rounded-full bg-purple-400 flex justify-center items-center hover:bg-purple-200">
           <MoveRight className="text-purple-600 stroke-[3px]" />
         </button>
       </Swiper>
@@ -487,15 +572,17 @@ const FlashBooks = ({
   gnre,
   priceActual,
   prevPrice,
+  img,
 }: {
   title: string;
   gnre: string;
   priceActual: string;
   prevPrice: string;
+  img: string;
 }) => {
   return (
-    <div className="p-5 ">
-      <div className="bg-gray-400 rounded-2xl w-[230px] h-[320px]"></div>
+    <div className="p-5 h-[500px] flex flex-col items-center">
+      <img className="rounded-2xl h-[330px]" src={img} alt="cover" />
       <div className="flex flex-col gap-2 mt-3">
         <h3 className="text-xl font-semibold">{title}</h3>
         <span className="text-sm font-normal text-purple-600">{gnre}</span>
@@ -531,40 +618,55 @@ const TestimonialCard = () => {
           {
             title:
               "FIRST Title. Shoping book in Bookoe is very easy. Quick delivery and fast respon.",
-            user: "Steve JAJA",
+            user: "Steve Aoki",
+            profile:
+              "https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA4L2pvYjEwMzQtZWxlbWVudC0wNi0zOTcucG5n.png",
           },
           {
             title:
               "Shoping book in Bookoe is very easy. Quick delivery and fast respon. They services is awesome!",
-            user: "Steve Henry",
+            user: "Henry Spencer",
+            profile:
+              "https://www.pngitem.com/pimgs/m/627-6275754_chad-profile-pic-profile-photo-circle-png-transparent.png",
           },
           {
             title:
               "I never know this shop before, until my grandma tell me how excelent this book store",
             user: "Miranda Lee",
+            profile:
+              "https://a.storyblok.com/f/191576/1200x800/215e59568f/round_profil_picture_after_.webp",
           },
           {
             title:
               "asdasfas.Shoping book in Bookoe is very easy. Quick delivery and fast respon. They services is awesome!",
-            user: "Steve Henry",
+            user: "Alan Brito",
+            profile:
+              "https://www.eclipsegroup.co.uk/wp-content/uploads/2020/03/Round-Profile-Picture-768x768-1.png",
           },
           {
             title:
               "124214123;Shoping book in Bookoe is very easy. Quick delivery and fast respon. They services is awesome!",
-            user: "Steve Henry",
+            user: "Xina Lee",
+            profile: "https://image.pngaaa.com/877/4877877-middle.png",
           },
           {
             title:
               "LAST Title. Shoping book in Bookoe is very easy. Quick delivery and fast respon.",
-            user: "Steve JOJO",
+            user: "Ronda Rousey",
+            profile:
+              "https://www.kindpng.com/picc/m/442-4426528_round-picture-profile-blond-hd-png-download.png",
           },
         ].map((card) => (
           <SwiperSlide key={card.title}>
-            <div className="text-center px-10 py-8 rounded-xl font-basic border-2 border-gray-300 boxShadow">
+            <div className="text-center px-10 py-8 flex flex-col justify-between rounded-xl font-basic border-2 border-gray-300 h-[235px] boxShadow">
               <h3 className="text-xl font-medium mb-8">{card.title}</h3>
               <div className="flex items-center justify-between">
                 <div className="flex gap-5">
-                  <div className="w-[50px] h-[50px] rounded-full bg-gray-100 flex justify-center items-center"></div>
+                  <img
+                    className="w-[60px] h-[60px] rounded-full object-cover"
+                    src={card.profile}
+                    alt="user"
+                  />
                   <div className="text-start">
                     <h4 className="text-base font-semibold">{card.user}</h4>
                     <span className="text-xs font-normal">Book Lovers</span>
@@ -586,32 +688,53 @@ const TestimonialCard = () => {
     </>
   );
 };
-const NewsBook = ({
+const NewsBlogs = ({
   title,
   user,
   date,
+  img,
+  link,
+  profile,
 }: {
   title: string;
   user: string;
   date: string;
+  img: string;
+  link: string;
+  profile: string;
 }) => {
   return (
-    <div className="rounded-2xl border-2 border-gray-300 overflow-hidden">
-      <div className="h-[250px] bg-gray-100 rounded-b-2xl"></div>
+    <div className="rounded-2xl  overflow-hidden">
+      <a href={link} target="_blank">
+        <img
+          className="h-[250px] bg-gray-100 rounded-b-2xl w-full object-cover hover:scale-105 duration-300"
+          src={img}
+          alt="cover"
+        />
+      </a>
+
       <div className="text-start py-7 flex flex-col gap-4">
-        <h3 className="text-lg font-medium">{title}</h3>
+        <a href={link} target="_blank">
+          <h3 className="text-lg font-medium flex hover:text-purple-600">
+            {title}
+          </h3>
+        </a>
         <div className="text-sm font-light font-basic mb-5">
           <p className="mb-2">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore...
           </p>
-          <a className="text-purple-600" href="">
+          <a className="text-purple-600" href={link} target="_blank">
             Continue reading
           </a>
         </div>
-        <div className="flex gap-5">
-          <div className="w-[50px] h-[50px] rounded-full bg-gray-100 flex justify-center items-center"></div>
-          <div className="text-start text-sm flex flex-col justify-between">
+        <div className="flex items-center gap-5">
+          <img
+            className="w-[60px] h-[60px] rounded-full bg-gray-100 object-cover"
+            src={profile}
+            alt="user"
+          />
+          <div className="text-start text-sm flex flex-col gap-1">
             <h4 className="font-semibold">{user}</h4>
             <span className="font-norma text-gray-100">{date}</span>
           </div>
@@ -769,34 +892,39 @@ function Home() {
           <Timer days={2} hours={5} minutes={42} seconds={19} />
           <div className="flex gap-8 mb-[100px]">
             <FlashBooks
-              title="SECONDS"
-              gnre="THRILLER"
+              title="King: A Life"
+              gnre="BIOGRAPHY"
               priceActual="54.78"
               prevPrice="70.00"
+              img="https://m.media-amazon.com/images/I/41NYMGH6BML.jpg"
             />
             <FlashBooks
-              title="REWORK"
+              title="The Art of War"
               gnre="DRAMA , BIOGRAPHY"
               priceActual="34.56"
               prevPrice="50.00"
+              img="https://m.media-amazon.com/images/I/41UmGUKpWeL.jpg"
             />
             <FlashBooks
-              title="Such a Fun Age"
+              title="Uncuffed Voices: Her Story Is My Story"
               gnre="THRILLER"
               priceActual="14.56"
               prevPrice="20.00"
+              img="https://m.media-amazon.com/images/I/41b6bz1DacL.jpg"
             />
             <FlashBooks
-              title="Emily and The Back.."
+              title="Nobody Needs to Know: A Memoir"
               gnre="DRAMA , BIOGRAPHY"
               priceActual="76.12"
               prevPrice="90.00"
+              img="https://m.media-amazon.com/images/I/41oauiSSkkL.jpg"
             />
             <FlashBooks
-              title="Battle Drive"
+              title="Girls Found (Rainey Paxton Series Book 4)"
               gnre="DRAMA , BIOGRAPHY"
               priceActual="76.12"
               prevPrice="90.00"
+              img="https://m.media-amazon.com/images/I/51kRaBYEnTL.jpg"
             />
           </div>
         </div>
@@ -834,7 +962,11 @@ function Home() {
                 </p>
               </div>
               <div className="h-[480px] bg-white p-8 rounded-xl grid grid-cols-[0.9fr,1.1fr] gap-10 boxShadow">
-                <div className="bg-gray-100 rounded-2xl"></div>
+                <img
+                  className="bg-gray-100 rounded-2xl"
+                  src="https://m.media-amazon.com/images/I/41OEBfsc2dL.jpg"
+                  alt="cover"
+                />
                 <div className="text-start flex flex-col justify-between">
                   <div className="flex gap-4">
                     <div className="relative">
@@ -842,19 +974,19 @@ function Home() {
                       <Star className="fill-orange-400 text-white absolute -top-3 -right-[6px] w-[42px] h-[42px]" />
                     </div>
                     <div>
-                      <h3 className="text-3xl font-semibold">Battle Drive</h3>
+                      <h3 className="text-3xl font-semibold">Kabul</h3>
                       <span className="text-base font-medium text-purple-600">
-                        SPORTS, DRAMA
+                        POLITICS, DRAMA
                       </span>
                     </div>
                   </div>
                   <div>
                     <h4 className="text-lg font-medium mb-3">Synopsis</h4>
                     <p className="text-sm font-basic font-light">
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                      ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                      This hardhitting book is the definitive account of the
+                      Biden administrations most disgraceful hourand the chaos
+                      it unleashed in the world Americas chaotic retreat from
+                      Afghanistan in 2021 ...
                     </p>
                   </div>
                   <div className="flex gap-12">
@@ -862,13 +994,15 @@ function Home() {
                       <span className="text-sm font-normal text-gray-100">
                         Writen by
                       </span>
-                      <span className="text-lg font-medium">Kevin Smiley</span>
+                      <span className="text-lg font-medium">
+                        Jerry Dunleavy"
+                      </span>
                     </div>
                     <div className="flex flex-col gap-2">
                       <span className="text-sm font-normal text-gray-100">
                         Year
                       </span>
-                      <span className="text-lg font-medium">2019</span>
+                      <span className="text-lg font-medium">2021</span>
                     </div>
                   </div>
                   <div className="flex justify-between">
@@ -878,18 +1012,28 @@ function Home() {
                         $90.00
                       </span>
                     </div>
-                    <button className="flex items-center gap-3 px-4 py-3 rounded-xl bg-purple-600 text-white text-lg font-semibold">
-                      <ShoppingCart />
-                      <span>ADD</span>
-                    </button>
+                    <CartButton text="ADD" />
                   </div>
                 </div>
               </div>
             </div>
             <div className="w-1/2 grid grid-cols-3 gap-9">
-              {Array.from({ length: 6 }).map((_, id) => (
-                <div key={id} className="bg-gray-100 rounded-xl" />
-              ))}
+              {[
+                { bg: "https://m.media-amazon.com/images/I/51L4qKzRemL.jpg" },
+                { bg: "https://m.media-amazon.com/images/I/41yv3GD0f9L.jpg" },
+                { bg: "https://m.media-amazon.com/images/I/41XG4Tq5VPL.jpg" },
+                { bg: "https://m.media-amazon.com/images/I/41cnk8xkzhL.jpg" },
+                { bg: "https://m.media-amazon.com/images/I/416MEFX9RBL.jpg" },
+                { bg: "https://m.media-amazon.com/images/I/5109wtVUAvL.jpg" },
+              ].map((card) => {
+                return (
+                  <img
+                    className="h-full rounded-xl object-cover"
+                    src={card.bg}
+                    alt="cover"
+                  />
+                );
+              })}
             </div>
           </div>
         </div>
@@ -903,10 +1047,12 @@ function Home() {
           </div>
           <div className="flex mb-16">
             {Array.from({ length: 4 }).map((_, id) => (
-              <div
+              <img
                 key={id}
+                src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+                alt="user"
                 className={twMerge(
-                  "w-[58px] h-[58px] rounded-full bg-gray-100 border-4 border-white",
+                  "w-[58px] h-[58px] rounded-full bg-red-100 border-4 border-white object-cover",
                   id > 0 && `-ml-4`
                 )}
               />
@@ -937,25 +1083,37 @@ function Home() {
             </button>
           </div>
           <div className="flex gap-10">
-            <NewsBook
+            <NewsBlogs
               title="Why reading is important for our children?"
               user="Lidya Humble"
               date="2 days ago"
+              profile="https://www.dell.org/wp-content/uploads/2022/01/KatieW.png"
+              link="https://www.highspeedtraining.co.uk/hub/why-is-reading-important-for-children/"
+              img="https://www.highspeedtraining.co.uk/hub/wp-content/uploads/2019/05/importance-of-reading-for-children-twit-1.jpg"
             />
-            <NewsBook
+            <NewsBlogs
               title="Benefits of reading: Smart, Diligent, Happy"
               user="Steffanny William"
               date="5 August 2020"
+              profile="https://www.pngfind.com/pngs/m/443-4433119_circle-crop-profile-profile-picture-woman-circle-hd.png"
+              link="https://www.meaningfulliving.ca/new-blog/2021/7/7/11-senior-reading-benefits"
+              img="https://images.squarespace-cdn.com/content/v1/561d43ece4b001f1ad42dda6/1629229674926-TYJU5X5B4OV02H880G2W/Illustration+of+Reading+Benefits"
             />
-            <NewsBook
-              title="What books you should read in 2020?"
+            <NewsBlogs
+              title="What Books you should read in 2020?"
               user="James Wong"
               date="3 August 2020"
+              profile="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhGJPxvhV4u_WpRUlvawm9YpDkbtL0d8D2FlZ6HgC5JcoeHfqR-FmG0eWyeLfbATOv2EU&usqp=CAU"
+              link="https://towardsdatascience.com/startup-books-you-should-read-in-2020-ba8684000128"
+              img="https://miro.medium.com/v2/resize:fit:1400/1*Jg1oYMG_dN2MxbBzlgo0Xg.jpeg"
             />
-            <NewsBook
+            <NewsBlogs
               title="10 Things you must know to improve your reading skills"
               user="Franklin Junior"
               date="1 August 2020"
+              profile="https://www.vhv.rs/dpng/d/551-5511364_circle-profile-man-hd-png-download.png"
+              link="https://blog.madeeasy.in/how-to-improve-reading-skills"
+              img="https://blog.madeeasy.in/wp-content/uploads/2022/02/how-to-improve-reading-skills-11-feb-2022.jpg"
             />
           </div>
         </div>
