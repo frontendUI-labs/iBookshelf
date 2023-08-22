@@ -1,19 +1,12 @@
-// import React, { useState } from "react";
-// import { Book } from "../types/type";
 import { useQuery } from "@tanstack/react-query";
-import {
-  PageRange,
-  getBooks,
-  getBooksCategories,
-  getBooksListLayout,
-} from "../api/books";
+import { PageRange, getBooks, getBooksListLayout } from "../api/books.ts";
 import { useState } from "react";
 import {
   BOOK_PAGINATION_COUNT,
   BOOK_PAGINATION_LIST,
-} from "../constants/books";
+} from "../constants/books.ts";
 
-function useGetBooks() {
+export function useGetBooks({ categories }: { categories: string[] }) {
   const [pageRange, setPageRange] = useState<PageRange>([
     0,
     BOOK_PAGINATION_COUNT - 1,
@@ -35,8 +28,8 @@ function useGetBooks() {
   };
 
   const { isLoading, isError, data, error, isSuccess } = useQuery({
-    queryKey: ["book", pageRange],
-    queryFn: () => getBooks(pageRange),
+    queryKey: ["book", pageRange, categories],
+    queryFn: () => getBooks(pageRange, categories),
   });
 
   return {
@@ -83,13 +76,3 @@ export function useGetBooksListLayout() {
     handleNextPageList,
   };
 }
-
-export function useGetBooksCategories() {
-  const { data } = useQuery({
-    queryKey: ["bookListLayout"],
-    queryFn: () => getBooksCategories(),
-  });
-  return { genres: data?.data ?? [] };
-}
-
-export default useGetBooks;

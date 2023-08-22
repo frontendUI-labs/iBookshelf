@@ -3,9 +3,18 @@ import Button from "../../common/Button";
 import { CheckBoxInput } from "./AddInput";
 import AcordionComponent from "./Accordion";
 import SliderInputComponent from "./SliderInput";
-import { Genre } from "../../types/type";
+import { useGetBooksCategories } from "../../hooks/categories.ts";
+import React from "react";
 
-function SideBar({ genres }: { genres: Genre[] }) {
+function SideBar({
+  categoriesFilter,
+  updateCategoriesFilter,
+}: {
+  categoriesFilter: string[];
+  updateCategoriesFilter: React.Dispatch<React.SetStateAction<string[]>>;
+}) {
+  const { isSuccess, categories, isError, isLoading } = useGetBooksCategories();
+
   const options = [
     "Alone Here ",
     "Alien Invassion",
@@ -34,17 +43,36 @@ function SideBar({ genres }: { genres: Genre[] }) {
             </a>
           ))}
         </AcordionComponent>
-        ,
       </div>
       <div>
+        {isError && <p>Something went wrong</p>}
+        {isLoading && <p>Loading...</p>}
         <AcordionComponent
           variant="checkbox"
           id="main-2"
           title="Filter by Category"
         >
-          {genres.map((genre) => {
-            return <CheckBoxInput key={genre.id} genre={genre.name} />;
-          })}
+          {isSuccess &&
+            categories.map((category) => {
+              return (
+                <CheckBoxInput
+                  key={category.id}
+                  category={category.name}
+                  onChange={(checked) => {
+                    const newCategoriesFilter = [...categoriesFilter];
+                    if (checked) {
+                      newCategoriesFilter.push(category.slug);
+                    } else {
+                      const index = newCategoriesFilter.indexOf(category.slug);
+                      if (index > -1) {
+                        newCategoriesFilter.splice(index, 1);
+                      }
+                    }
+                    updateCategoriesFilter(newCategoriesFilter);
+                  }}
+                />
+              );
+            })}
         </AcordionComponent>
       </div>
       <div>

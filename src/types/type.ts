@@ -1,20 +1,25 @@
 export type Book = {
   author: string;
+  categorySlug: string;
   cover: string;
-  created_at: string;
-  genreId: null;
-  id: number;
-  isFavorite: null;
-  pages: null;
-  price: number;
-  publisher: null;
-  rating: number;
-  synopsis: null;
-  title: string;
-  year: null;
-  totalReviews: number;
+  discountPercentage: number;
+  id: string;
   isbn: string;
+  isFavorite: boolean;
+  isFeatured: boolean;
+  isPopular: boolean;
+  isReaderChoice: boolean;
+  isRecommended: boolean;
+  language: string;
+  pages: number;
+  price: number;
+  publishDate: string;
+  publisher: string;
+  rating: number;
   slug: string;
+  synopsis: string;
+  title: string;
+  totalReviews: number;
 };
 
 export type Genre = {

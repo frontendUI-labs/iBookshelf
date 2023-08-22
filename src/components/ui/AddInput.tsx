@@ -1,6 +1,7 @@
 import React from "react";
 import * as Checkbox from "@radix-ui/react-checkbox";
 import { CheckIcon } from "lucide-react";
+import { CheckboxProps } from "@radix-ui/react-checkbox";
 
 const AddInput = ({
   label,
@@ -47,14 +48,21 @@ const AddInput = ({
   );
 };
 
-export function CheckBoxInput({ genre }: { genre: string }) {
+export function CheckBoxInput({
+  category,
+  onChange,
+}: {
+  category: string;
+  onChange: CheckboxProps["onCheckedChange"];
+}) {
   return (
     <div className="flex items-center gap-2 p-2">
       <Checkbox.Root
-        value={genre}
-        name={genre}
+        value={category}
+        name={category}
         className="shadow-blackA7 hover:bg-violet3 flex h-[16px] w-[16px] appearance-none items-center justify-center rounded-[4px] bg-white border-2 boder-gray-100 outline-none focus:shadow-[0_0_0_2px_black]  cursor-pointer "
-        id={genre}
+        id={category}
+        onCheckedChange={onChange}
       >
         <Checkbox.Indicator className="text-violet11 bg-purple-600 w-full h-full flex items-center justify-center rounded-[4px]">
           <CheckIcon className=" text-white " size={8} strokeWidth={4} />
@@ -62,9 +70,9 @@ export function CheckBoxInput({ genre }: { genre: string }) {
       </Checkbox.Root>
       <label
         className="pl-[15px] text-[13px] leading-none text-black font-bold cursor-pointer "
-        htmlFor={genre}
+        htmlFor={category}
       >
-        {genre}
+        {category}
       </label>
     </div>
   );

@@ -16,6 +16,9 @@ import {
   BOOK_PAGINATION_COUNT,
   BOOK_PAGINATION_LIST,
 } from "../../constants/books";
+import React from "react";
+import { LayoutType } from "../../pages/FilterPage.tsx";
+
 // import { useMemo } from "react";
 
 function MainContent({
@@ -29,12 +32,12 @@ function MainContent({
   handlePreviousPage,
   handlePreviousPageList,
   handleNextPageList, // pageRangeList,
-} // setPageRangeList,
-: {
+  // setPageRangeList,
+}: {
   books: Book[];
   pageRange: [number, number];
-  layout: "grid" | "list";
-  setLayout: React.Dispatch<React.SetStateAction<"grid" | "list">>;
+  layout: LayoutType;
+  setLayout: React.Dispatch<React.SetStateAction<LayoutType>>;
   bookList: Book[];
   pageRangeList: [number, number];
   handleNextPage: () => void;
@@ -92,7 +95,7 @@ function MainContent({
             type="single"
             aria-label="Layout"
             onValueChange={(value) => {
-              if (value) setLayout(value as "list" | "grid");
+              if (value) setLayout(value as LayoutType);
             }}
           >
             <ToggleGroup.Item
@@ -101,7 +104,9 @@ function MainContent({
               aria-label="list"
             >
               <List
-                className={twMerge(layout === "list" && "text-purple-600")}
+                className={twMerge(
+                  layout === LayoutType.LIST && "text-purple-600"
+                )}
               />
             </ToggleGroup.Item>
             <ToggleGroup.Item
@@ -110,7 +115,9 @@ function MainContent({
               aria-label="grid"
             >
               <LayoutGrid
-                className={twMerge(layout === "grid" && "text-purple-600")}
+                className={twMerge(
+                  layout === LayoutType.GRID && "text-purple-600"
+                )}
               />
             </ToggleGroup.Item>
           </ToggleGroup.Root>
@@ -127,7 +134,7 @@ function MainContent({
           />
         </div>
       </div>
-      {layout === "grid" ? (
+      {layout === LayoutType.GRID ? (
         <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 py-8">
           {books.map((book) => {
             return (
@@ -164,7 +171,7 @@ function MainContent({
       )}
       <div className="flex items-center justify-between">
         <p>Showing {books.length} from 50 data</p>
-        {layout === "grid" && (
+        {layout === LayoutType.GRID && (
           <div className="flex">
             {pageRange[0] > 0 && (
               <Button onClick={handlePreviousPage} variant="secondary">
@@ -183,7 +190,7 @@ function MainContent({
             )}
           </div>
         )}
-        {layout === "list" && (
+        {layout === LayoutType.LIST && (
           <div className="flex">
             {pageRangeList[0] > 0 && (
               <Button onClick={handlePreviousPageList} variant="secondary">
