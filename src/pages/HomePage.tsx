@@ -202,20 +202,12 @@ function BestBook() {
                     <h1 className="text-5xl font-semibold">{book.section}</h1>
                     <p className="text-base">Based sales this week</p>
                     <img
-                      src={
-                        book.bg ===
-                        "https://m.media-amazon.com/images/I/41zqVJPSAQL.jpg"
-                          ? "https://m.media-amazon.com/images/I/41zqVJPSAQL.jpg"
-                          : "https://m.media-amazon.com/images/I/41pbe4-oNpL.jpg" &&
-                            book.bg ===
-                              "https://m.media-amazon.com/images/I/41pbe4-oNpL.jpg"
-                          ? "https://m.media-amazon.com/images/I/41pbe4-oNpL.jpg"
-                          : "https://m.media-amazon.com/images/I/51Q3d7HwOmL.jpg"
-                      }
+                      src={book.bg}
                       className={twMerge(
                         "overflow-hidden w-[200px] h-[290px] rounded-xl border-2 border-white boxShadow"
                       )}
-                    ></img>
+                      alt=""
+                    />
                     <p className="text-xl font-semibold flex flex-col text-center">
                       {book.title}
                       <span className="text-xs font-thin font-basic opacity-60">
