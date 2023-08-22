@@ -129,7 +129,7 @@ function MainContent({
           {books.map((book) => {
             return (
               <CardComponent
-                key={book.author}
+                key={book.id}
                 author={book.author}
                 cover={book.cover}
                 value={book.reviewsStar}

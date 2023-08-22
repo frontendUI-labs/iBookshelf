@@ -18,7 +18,7 @@ function Header() {
   const languages = ["ENG", "ESP"];
 
   return (
-    <div className="flex gap-8 justify-center items-center my-8 border-b-2 border-gray-300">
+    <div className="flex gap-8 justify-center items-center py-5 border-b-2 border-gray-300">
       <div className="flex items-center gap-[20px]">
         <div className="bg-purple-600 p-3 rounded-lg ">
           <a href="/">
