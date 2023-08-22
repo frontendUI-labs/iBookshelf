@@ -42,7 +42,7 @@ export default {
         },
       },
       backgroundImage: {
-        "check-box": "url('./public/icons/trash-icon.svg')",
+        "check-box": "url('/icons/trash-icon.svg')",
       },
     },
   },

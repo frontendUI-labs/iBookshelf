@@ -108,10 +108,10 @@ const Footer = () => {
           <div className="flex flex-col gap-6 w-[420px]">
             <div className="flex items-center gap-[20px]">
               <div className="bg-purple-600 p-3 rounded-lg ">
-                <img src="../../../public/icons/Vector.svg" alt="" />
+                <img src="/icons/Vector.svg" alt="" />
               </div>
               <div className="flex flex-col">
-                <img src="../../../public/icons/Bookoe.svg" alt="" />
+                <img src="/icons/Bookoe.svg" alt="" />
                 <span className="text-[13px]">Book Store Website</span>
               </div>
             </div>
