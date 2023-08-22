@@ -434,7 +434,7 @@ const SpecialsBooks = () => {
           },
           {
             title: "Meditations: A New Translation (Modern Library)",
-            tags: ["POLITIC"],
+            tags: ["POLITIC", "TECH"],
             author: "Marcus Aurelius",
             actualPrice: "8.78",
             prevPrice: "15",
@@ -448,16 +448,17 @@ const SpecialsBooks = () => {
                 src={card.bg}
                 alt=""
               />
+
               <div className="text-start p-7 h-[430px] flex flex-col justify-between">
                 <h3 className="text-2xl font-semibold mb-5">{card.title}</h3>
                 <div className="mb-4 flex gap-3">
-                  {Array.from({ length: 3 }).map((_, id) => (
+                  {card.tags.map((tag) => (
                     <button
-                      key={id}
+                      key={tag}
                       className="bg-purple-400 text-purple-600 text-xs
                       font-basic font-normal py-2 px-3 rounded-xl"
                     >
-                      {card.tags}
+                      {tag}
                     </button>
                   ))}
                 </div>
