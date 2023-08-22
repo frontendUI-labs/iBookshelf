@@ -33,6 +33,7 @@ export default {
           300: "var(--secondary-circle)",
           400: "var(--primary-soft)",
           600: "var(--primary)",
+          700: "var(--darkpurple)",
         },
         blue: {
           100: "var(--blue-01)",

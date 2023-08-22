@@ -13,6 +13,7 @@ import {
   Play,
 } from "lucide-react";
 import { ReactNode } from "react";
+import { twMerge } from "tailwind-merge";
 
 const ContactCard = () => {
   return (
@@ -37,11 +38,11 @@ const ContactCard = () => {
       </h2>
       <div className="flex">
         <input
-          className="w-[450px] rounded-l-xl py-4 px-6 text-base font-normal bg-[#7C6DE3] text-gray-200"
+          className="w-[450px] rounded-l-xl border-2 border-transparent  py-4 px-6 text-base font-normal bg-[#7C6DE3] text-gray-200 focus:text-white"
           type="text"
           placeholder="Type your email here"
         />
-        <button className="bg-white text-lg font-semibold text-black py-4 px-8 rounded-r-xl">
+        <button className="bg-white text-lg font-semibold text-black py-4 px-8 rounded-r-xl hover:scale-105 duration-300">
           SUBSCRIBE
         </button>
       </div>
@@ -49,23 +50,35 @@ const ContactCard = () => {
   );
 };
 
-const SocialsIcons = ({ children }: { children: ReactNode }) => {
+const SocialsIcons = ({
+  hover,
+  children,
+}: {
+  hover: string;
+  children: ReactNode;
+}) => {
   return (
     <a href="">
-      <div className="relative w-[58px] h-[58px] rounded-xl border-2 border-gray-300 flex justify-center items-center hover:scale-110">
+      <div
+        className={twMerge(
+          "relative w-[58px] h-[58px] rounded-xl border-2 border-gray-300 flex justify-center items-center hover:scale-110",
+          hover
+        )}
+      >
         {children}
       </div>
     </a>
   );
 };
+
 const IconYt = () => {
   return (
-    <div className="relative bg-red-300 w-[58px] h-[58px] rounded-xl border-2 border-red-300 flex justify-center items-center hover:scale-110">
+    <>
       <Youtube className=" fill-[#FF000D] stroke-none" />
       <div className="absolute">
-        <Play className="h-[8px] fill-red-300 text-red-300 stroke-[2px]" />
+        <Play className="h-[8px] fill-white text-white stroke-[2px]" />
       </div>
-    </div>
+    </>
   );
 };
 const Information = ({ icon, info }: { icon: ReactNode; info: string }) => {
@@ -112,22 +125,26 @@ const Footer = () => {
               <h4 className="text-xl font-semibold mb-7">Follow Us</h4>
               <div className="flex gap-4">
                 <SocialsIcons
+                  hover="hover:bg-[#232aed3c]"
                   children={
                     <Facebook className="fill-[#2329EE] text-[#2329EE]" />
                   }
                 />
-                <IconYt />
+                <SocialsIcons hover="hover:bg-red-300" children={<IconYt />} />
                 <SocialsIcons
+                  hover="hover:bg-[#00b6df3e]"
                   children={
                     <Twitter className="fill-[#00B7DF] text-[#00B7DF]" />
                   }
                 />
                 <SocialsIcons
+                  hover="hover:bg-[#006fa748]"
                   children={
                     <Linkedin className="fill-[#0070A7] text-[#0070A7] " />
                   }
                 />
                 <SocialsIcons
+                  hover="hover:bg-[#fe16773a]"
                   children={<Instagram className="text-[#FF1576] " />}
                 />
               </div>
@@ -170,7 +187,15 @@ const Footer = () => {
           </div>
           <div className="flex flex-col gap-5">
             <h4 className="text-xl font-semibold ">Our Store</h4>
-            <div className="bg-gray-400 h-[120px] w-[380px] rounded-xl"></div>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d975.5063418319506!2d-75.23073076847245!3d-12.04177453244419!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x910e961dd48c148f%3A0x47dd04a6231d4ff3!2sJr.%20Turmalina%2C%20Huancayo%2012006!5e0!3m2!1ses-419!2spe!4v1692639151151!5m2!1ses-419!2spe"
+              width="600"
+              height="450"
+              className="border-none h-[120px] w-[380px] rounded-xl hover:scale-105 duration-200"
+              // allowfullscreen=""
+              loading="lazy"
+              // referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
             <Information
               icon={<MapPin className={iconClassName} />}
               info="832  Thompson Drive, San Fransisco CA 94107, United States"

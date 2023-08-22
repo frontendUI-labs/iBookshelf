@@ -13,7 +13,7 @@ import HomePage from "./pages/HomePage";
 import FilterPage from "./pages/FilterPage";
 import PaymentPage from "./pages/PaymentPage";
 import DetailsPage from "./pages/DetailsPage";
-import Footer from "./components/ui/Footer";
+import Footer from "./components/layout/Footer";
 import Header from "./components/layout/header";
 
 const queryClient = new QueryClient();
