@@ -1,24 +1,13 @@
 import supabaseClient from "./base";
-import { getCategories } from "./categories.ts";
 
 export type PageRange = [number, number];
 
-export const getBooks = async (
-  pageRange: PageRange,
-  categoriesFilter: string[]
-) => {
-  const data = await getCategories();
+export const getBooks = async (pageRange: PageRange) => {
   const [startRange, endRange] = pageRange;
   const response = await supabaseClient
     .from("books")
     .select("*")
-    .range(startRange, endRange)
-    .in(
-      "categorySlug",
-      categoriesFilter.length > 0
-        ? categoriesFilter
-        : data.map((category) => category.slug)
-    );
+    .range(startRange, endRange);
 
   return response;
 };

@@ -1,7 +1,7 @@
 import SideBar from "../components/ui/SideBar";
 import MainContent from "../components/ui/MainContent";
 import OnSaleBook from "../components/ui/OnSaleBook";
-import { useGetBooks, useGetBooksListLayout } from "../hooks/books.ts";
+import { useGetBooks } from "../hooks/books.ts";
 import { useState } from "react";
 
 export enum LayoutType {
@@ -10,8 +10,8 @@ export enum LayoutType {
 }
 
 function Filter() {
-  const [categoriesFilter] = useState<string[]>([]);
   const [range, setRange] = useState<[number, number]>([6, 16]);
+  const [layout, setLayout] = useState<LayoutType>(LayoutType.GRID);
 
   const {
     books,
@@ -19,21 +19,12 @@ function Filter() {
     isError,
     isSuccess,
     pageRange,
-
     handleNextPage,
     handlePreviousPage,
   } = useGetBooks({
-    categories: categoriesFilter,
+    pageLimit: layout === LayoutType.GRID ? 12 : 5,
   });
 
-  const {
-    bookList,
-    pageRangeList,
-    handlePreviousPageList,
-    handleNextPageList,
-  } = useGetBooksListLayout();
-
-  const [layout, setLayout] = useState<LayoutType>(LayoutType.GRID);
   const booksOnDiscount = books.filter((book) => {
     return book.discountPercentage > 0;
   });
@@ -63,14 +54,9 @@ function Filter() {
               priceRangeBooks={priceRangeBooks}
               layout={layout}
               setLayout={setLayout}
-              books={books}
               pageRange={pageRange}
-              bookList={bookList}
-              pageRangeList={pageRangeList}
               handleNextPage={handleNextPage}
               handlePreviousPage={handlePreviousPage}
-              handlePreviousPageList={handlePreviousPageList}
-              handleNextPageList={handleNextPageList}
             />
           )}
         </div>

@@ -5,36 +5,34 @@ import {
   getBooksListLayout,
   getRecommendedBooks,
 } from "../api/books.ts";
-import { useState } from "react";
-import {
-  BOOK_PAGINATION_COUNT,
-  BOOK_PAGINATION_LIST,
-} from "../constants/books.ts";
+import { useEffect, useState } from "react";
+import { BOOK_PAGINATION_LIST } from "../constants/books.ts";
 
-export function useGetBooks({ categories }: { categories: string[] }) {
-  const [pageRange, setPageRange] = useState<PageRange>([
-    0,
-    BOOK_PAGINATION_COUNT - 1,
-  ]);
+export function useGetBooks({ pageLimit }: { pageLimit: number }) {
+  const [pageRange, setPageRange] = useState<PageRange>([0, pageLimit - 1]);
+
+  useEffect(() => {
+    setPageRange([0, pageLimit - 1]);
+  }, [pageLimit]);
 
   const handlePreviousPage = () => {
     window.scrollTo(0, 0);
     setPageRange(([startPage, endPage]: [number, number]) => [
-      startPage - BOOK_PAGINATION_COUNT,
-      endPage - BOOK_PAGINATION_COUNT,
+      startPage - pageLimit,
+      endPage - pageLimit,
     ]);
   };
   const handleNextPage = () => {
     window.scrollTo(0, 0);
-    setPageRange(([startPage = 0, endPage = BOOK_PAGINATION_COUNT]) => [
-      startPage + BOOK_PAGINATION_COUNT,
-      endPage + BOOK_PAGINATION_COUNT,
+    setPageRange(([startPage = 0, endPage = pageLimit]) => [
+      startPage + pageLimit,
+      endPage + pageLimit,
     ]);
   };
 
   const { isLoading, isError, data, error, isSuccess } = useQuery({
-    queryKey: ["book", pageRange, categories],
-    queryFn: () => getBooks(pageRange, categories),
+    queryKey: ["book", pageRange],
+    queryFn: () => getBooks(pageRange),
   });
 
   return {
