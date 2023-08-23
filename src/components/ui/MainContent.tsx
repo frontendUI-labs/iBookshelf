@@ -31,7 +31,8 @@ function MainContent({
   handleNextPage,
   handlePreviousPage,
   handlePreviousPageList,
-  handleNextPageList, // pageRangeList,
+  handleNextPageList,
+  priceRangeBooks, // pageRangeList,
   // setPageRangeList,
 }: {
   books: Book[];
@@ -44,8 +45,10 @@ function MainContent({
   handlePreviousPage: () => void;
   handlePreviousPageList: () => void;
   handleNextPageList: () => void;
+  priceRangeBooks: Book[];
 }) {
   const options = ["Newest", "Popular", "Featured"];
+
   const toggleGroupItemClasses =
     "ToggleGroup.Item  hover:bg-violet3 color-mauve11 data-[state=on]:bg-violet6 data-[state=on]:text-violet12 flex h-[35px] w-[35px] items-center justify-center bg-white text-base leading-4 first:rounded-l last:rounded-r focus:z-10 ";
 
@@ -136,7 +139,7 @@ function MainContent({
       </div>
       {layout === LayoutType.GRID ? (
         <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 py-8">
-          {books.map((book) => {
+          {priceRangeBooks.map((book) => {
             return (
               <CardComponent
                 key={book.id}
@@ -144,6 +147,7 @@ function MainContent({
                 cover={book.cover}
                 value={book.rating}
                 slug={book.slug}
+                categories={book.categorySlug}
               />
             );
           })}
@@ -164,6 +168,7 @@ function MainContent({
                 publisher={book.publisher ?? "Santillana"}
                 totalReviews={book.totalReviews}
                 slug={book.slug}
+                categories={book.categorySlug}
               />
             );
           })}

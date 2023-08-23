@@ -15,6 +15,7 @@ export function CardListLayout({
   publisher,
   totalReviews,
   slug,
+  categories,
 }: {
   value: number;
   cover: string;
@@ -26,12 +27,13 @@ export function CardListLayout({
   publisher: string;
   totalReviews: number;
   slug: string;
+  categories: string;
 }) {
   const oldPrice = (price * 0.5 + price).toFixed(2);
   const [favorite, setFavorite] = useState(false); //active | inactive
 
   return (
-    <div className="flex rounded-sm p-[20px] gap-[40px] border border-gray-300 hover:scale-[1.01] duration-100 hover:shadow-2xl hover:shadow-purple-400">
+    <div className="flex rounded-sm p-[20px] gap-[40px] border border-gray-300 hover:scale-[1.01] duration-100 hover:shadow-2xl hover:shadow-purple-300">
       <div className="bg-[#c4c4c4] rounded-lg w-[250px] h-[300px] ">
         <img
           className=" object-contains h-full w-full select-none"
@@ -45,8 +47,8 @@ export function CardListLayout({
             <h3 className="text-xl  text-left font-bold hover:text-purple-600 line-clamp-3">
               <Link to={`/details/${slug}`}>{title}</Link>
             </h3>
-            <p className="text-sm text-left mt-2 text-purple-600">
-              ADVANTURE, SCIENCE, COMEDY
+            <p className="text-sm text-left mt-2 text-purple-600 font-medium">
+              {categories.toUpperCase()}
             </p>
           </div>
           <div>
@@ -119,11 +121,13 @@ function CardComponent({
   title,
   value,
   slug,
+  categories,
 }: {
   cover: string;
   title: string;
   value: number;
   slug: string;
+  categories: string;
 }) {
   const [favorite, setFavorite] = useState(false); //active | inactive
   return (
@@ -147,8 +151,8 @@ function CardComponent({
       <h3 className="text-xl text-center font-bold m-2 line-clamp-1 hover:text-purple-600">
         <Link to={`/details/${slug}`}>{title}</Link>
       </h3>
-      <p className="text-sm text-center m-2 select-none text-purple-600">
-        ADVANTURE, SCIENCE, COMEDY
+      <p className="text-sm text-center m-2 select-none text-purple-600 font-medium">
+        {categories.toUpperCase()}
       </p>
       <Rating value={value} />
     </div>

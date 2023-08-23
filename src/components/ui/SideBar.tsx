@@ -1,83 +1,68 @@
 // import {  useState } from "react";
 import Button from "../../common/Button";
-import { CheckBoxInput } from "./AddInput";
 import AcordionComponent from "./Accordion";
 import SliderInputComponent from "./SliderInput";
 import { useGetBooksCategories } from "../../hooks/categories.ts";
 import React from "react";
+import { Book } from "../../types/type.ts";
+import { Link } from "react-router-dom";
 
 function SideBar({
-  categoriesFilter,
-  updateCategoriesFilter,
-}: {
+  books,
+  priceRange,
+  range,
+  setRange, // categoriesFilter,
+} // updateCategoriesFilter,
+: {
+  books: Book[];
+  range: [number, number];
   categoriesFilter: string[];
+  priceRange: [number, number];
+  setRange: React.Dispatch<React.SetStateAction<[number, number]>>;
   updateCategoriesFilter: React.Dispatch<React.SetStateAction<string[]>>;
 }) {
   const { isSuccess, categories, isError, isLoading } = useGetBooksCategories();
-
-  const options = [
-    "Alone Here ",
-    "Alien Invassion",
-    "Bullo The Cat",
-    "Cut That Hair!",
-    "Dragon Of The King",
-  ];
+  const recomendedBooks = books.filter((book) => book.isRecommended);
 
   return (
-    <form
-      onSubmit={(event) => {
-        event.preventDefault();
-      }}
-      className=" p-4"
-    >
+    <div className=" p-4">
       <h3 className="text-4xl font-bold">Filter Option</h3>
-      <div>
-        <AcordionComponent
-          title="Best Sales (105)"
-          variant="primary"
-          id="item-1"
-        >
-          {options.map((option, id) => (
-            <a className="block" href="" target="_blank" key={id}>
-              {option}
-            </a>
+      <div className=" flex flex-col gap-6">
+        <AcordionComponent title="Best Sales (6)" id="item-1">
+          {recomendedBooks.map((book, id) => (
+            <Link
+              className="block truncate hover:text-purple-600 hover:bg-purple-400 p-1 focus:bg-purple-400 outline-purple-600"
+              to={`/details/${book.slug}`}
+              key={id}
+            >
+              {book.title}
+            </Link>
           ))}
         </AcordionComponent>
-      </div>
-      <div>
+
         {isError && <p>Something went wrong</p>}
         {isLoading && <p>Loading...</p>}
-        <AcordionComponent
-          variant="checkbox"
-          id="main-2"
-          title="Filter by Category"
-        >
+        <AcordionComponent id="main-2" title="Filter by Category">
           {isSuccess &&
             categories.map((category) => {
               return (
-                <CheckBoxInput
+                <Link
+                  className="block truncate hover:text-purple-600  capitalize hover:bg-purple-400 p-1 focus:bg-purple-400 outline-purple-600"
+                  to={`/${category.slug}`}
                   key={category.id}
-                  category={category.name}
-                  onChange={(checked) => {
-                    const newCategoriesFilter = [...categoriesFilter];
-                    if (checked) {
-                      newCategoriesFilter.push(category.slug);
-                    } else {
-                      const index = newCategoriesFilter.indexOf(category.slug);
-                      if (index > -1) {
-                        newCategoriesFilter.splice(index, 1);
-                      }
-                    }
-                    updateCategoriesFilter(newCategoriesFilter);
-                  }}
-                />
+                >
+                  {category.name}
+                </Link>
               );
             })}
         </AcordionComponent>
-      </div>
-      <div>
+
         <AcordionComponent title="Price Range" id="main-3">
-          <SliderInputComponent initialValue={30} finalvalue={80} />
+          <SliderInputComponent
+            range={range}
+            setRange={setRange}
+            priceRange={priceRange}
+          />
         </AcordionComponent>
       </div>
       <div className="w-full">
@@ -86,7 +71,7 @@ function SideBar({
         </Button>
         <Button variant="secondary">Reset Filter</Button>
       </div>
-    </form>
+    </div>
   );
 }
 
