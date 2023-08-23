@@ -10,8 +10,8 @@ export enum LayoutType {
 }
 
 function Filter() {
-  const [categoriesFilter, setCategoriesFilter] = useState<string[]>([]);
-  const [range, setRange] = useState([6, 16]);
+  const [categoriesFilter] = useState<string[]>([]);
+  const [range, setRange] = useState<[number, number]>([6, 16]);
 
   const {
     books,
@@ -40,11 +40,13 @@ function Filter() {
   const allPrices = books.map((book) => book.price);
   const minPrice = Math.min(...allPrices);
   const maxPrice = Math.max(...allPrices);
-  const priceRange = [Math.floor(minPrice), Math.floor(maxPrice) + 1];
+  const priceRange: [number, number] = [
+    Math.floor(minPrice),
+    Math.floor(maxPrice) + 1,
+  ];
 
   const priceRangeBooks = books.filter((book) => {
-    const initialValue = range[0];
-    const finalValue = range[1];
+    const [initialValue, finalValue] = range;
 
     return book.price >= initialValue && book.price <= finalValue;
   });
@@ -54,14 +56,7 @@ function Filter() {
       {isError && <p>Fallo algo</p>}
       <div className="container m-auto ">
         <div className=" grid grid-cols-[400px,1fr] py-10 mb-12 ">
-          <SideBar
-            range={range}
-            setRange={setRange}
-            priceRange={priceRange}
-            books={books}
-            categoriesFilter={categoriesFilter}
-            updateCategoriesFilter={setCategoriesFilter}
-          />
+          <SideBar range={range} setRange={setRange} priceRange={priceRange} />
           {isLoading && <p>Cargando...</p>}
           {isSuccess && (
             <MainContent

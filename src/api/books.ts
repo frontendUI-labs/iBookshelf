@@ -1,5 +1,5 @@
 import supabaseClient from "./base";
-import { getBooksCategories } from "./categories.ts";
+import { getCategories } from "./categories.ts";
 
 export type PageRange = [number, number];
 
@@ -7,7 +7,7 @@ export const getBooks = async (
   pageRange: PageRange,
   categoriesFilter: string[]
 ) => {
-  const data = await getBooksCategories();
+  const data = await getCategories();
   const [startRange, endRange] = pageRange;
   const response = await supabaseClient
     .from("books")
@@ -31,4 +31,17 @@ export const getBooksListLayout = async (pageRangeList: PageRange) => {
     .range(startRange, endRange);
 
   return response;
+};
+
+export const getRecommendedBooks = async () => {
+  const { data, error } = await supabaseClient
+    .from("books")
+    .select("*")
+    .eq("isRecommended", true);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
 };

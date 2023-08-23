@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { getBooksCategories } from "../api/categories.ts";
+import { getCategories } from "../api/categories.ts";
 
-export function useGetBooksCategories() {
+export function useGetCategories() {
   const response = useQuery({
     queryKey: ["categories"],
-    queryFn: getBooksCategories,
+    queryFn: getCategories,
   });
   return {
     ...response,
