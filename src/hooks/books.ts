@@ -1,5 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { PageRange, getBooks, getBooksListLayout } from "../api/books.ts";
+import {
+  PageRange,
+  getBooks,
+  getBooksListLayout,
+  getRecommendedBooks,
+} from "../api/books.ts";
 import { useState } from "react";
 import {
   BOOK_PAGINATION_COUNT,
@@ -74,5 +79,17 @@ export function useGetBooksListLayout() {
     pageRangeList,
     handlePreviousPageList,
     handleNextPageList,
+  };
+}
+
+export function useGetRecommendedBooks() {
+  const response = useQuery({
+    queryKey: ["recommendedBooks"],
+    queryFn: getRecommendedBooks,
+  });
+
+  return {
+    ...response,
+    recommendedBooks: response?.data ?? [],
   };
 }

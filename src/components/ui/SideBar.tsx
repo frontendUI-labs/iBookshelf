@@ -2,42 +2,39 @@
 import Button from "../../common/Button";
 import AcordionComponent from "./Accordion";
 import SliderInputComponent from "./SliderInput";
-import { useGetBooksCategories } from "../../hooks/categories.ts";
+import { useGetCategories } from "../../hooks/categories.ts";
 import React from "react";
-import { Book } from "../../types/type.ts";
 import { Link } from "react-router-dom";
+import { useGetRecommendedBooks } from "../../hooks/books.ts";
 
 function SideBar({
-  books,
   priceRange,
   range,
-  setRange, // categoriesFilter,
-} // updateCategoriesFilter,
-: {
-  books: Book[];
+  setRange,
+}: {
   range: [number, number];
-  categoriesFilter: string[];
   priceRange: [number, number];
   setRange: React.Dispatch<React.SetStateAction<[number, number]>>;
-  updateCategoriesFilter: React.Dispatch<React.SetStateAction<string[]>>;
 }) {
-  const { isSuccess, categories, isError, isLoading } = useGetBooksCategories();
-  const recomendedBooks = books.filter((book) => book.isRecommended);
+  const { isSuccess, categories, isError, isLoading } = useGetCategories();
+  const { isSuccess: isRecommendedSuccess, recommendedBooks } =
+    useGetRecommendedBooks();
 
   return (
     <div className=" p-4">
       <h3 className="text-4xl font-bold">Filter Option</h3>
       <div className=" flex flex-col gap-6">
         <AcordionComponent title="Best Sales (6)" id="item-1">
-          {recomendedBooks.map((book, id) => (
-            <Link
-              className="block truncate hover:text-purple-600 hover:bg-purple-400 p-1 focus:bg-purple-400 outline-purple-600"
-              to={`/details/${book.slug}`}
-              key={id}
-            >
-              {book.title}
-            </Link>
-          ))}
+          {isRecommendedSuccess &&
+            recommendedBooks.map((book) => (
+              <Link
+                key={book.id}
+                className="block truncate hover:text-purple-600 hover:bg-purple-400 p-1 focus:bg-purple-400 outline-purple-600"
+                to={`/details/${book.slug}`}
+              >
+                {book.title}
+              </Link>
+            ))}
         </AcordionComponent>
 
         {isError && <p>Something went wrong</p>}
