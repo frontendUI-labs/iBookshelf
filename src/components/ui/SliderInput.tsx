@@ -1,20 +1,23 @@
 import * as Slider from "@radix-ui/react-slider";
 
 function SliderInputComponent({
-  initialValue,
-  finalvalue,
+  setRange,
+  priceRange,
+  range,
 }: {
-  initialValue: number;
-  finalvalue: number;
+  setRange: React.Dispatch<React.SetStateAction<[number, number]>>;
+  priceRange: [number, number];
+  range: [number, number];
 }) {
   return (
     <div>
       <Slider.Root
-        defaultValue={[initialValue, finalvalue]}
+        onValueChange={(event) => setRange(event)}
+        defaultValue={range}
         className="relative flex items-center select-none touch-none w-full h-5 pb-[60px] pt-4"
-        max={100}
-        step={1}
-        minStepsBetweenThumbs={10}
+        max={priceRange[1]}
+        step={0.5}
+        minStepsBetweenThumbs={8}
       >
         <Slider.Track className="bg-purple-400 relative grow rounded-full h-[.5rem]">
           <Slider.Range className="absolute bg-purple-600 rounded-full h-[.5rem]" />
@@ -26,7 +29,7 @@ function SliderInputComponent({
         >
           {
             <div className="text-purple-600 font-bold rounded-lg bg-purple-400 px-4 flex items-center justify-center absolute translate-y-8 -translate-x-4 cursor-pointer">
-              ${initialValue}
+              ${range[0]}
             </div>
           }
         </Slider.Thumb>
@@ -36,7 +39,7 @@ function SliderInputComponent({
         >
           {
             <div className="text-purple-600 rounded-lg font-bold bg-purple-400 px-4 flex items-center justify-center absolute translate-y-8 -translate-x-4 cursor-pointer">
-              ${finalvalue}
+              ${range[1]}
             </div>
           }
         </Slider.Thumb>

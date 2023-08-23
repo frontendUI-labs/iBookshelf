@@ -35,7 +35,7 @@ function Details() {
     <div className="flex container m-auto">
       <img
         className=" object-contain"
-        src="../../public/images/thirdImage.png"
+        src="../../images/thirdImage.png"
         alt=""
       />
       <div className="flex flex-col gap-6 flex-1">
