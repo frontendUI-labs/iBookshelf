@@ -19,19 +19,21 @@ import { LayoutType } from "../../pages/FilterPage.tsx";
 // import { useMemo } from "react";
 
 function MainContent({
+  totalBooks,
   pageRange,
   layout,
   setLayout,
   handleNextPage,
   handlePreviousPage,
-  priceRangeBooks,
 }: {
+  books: Book[];
+  totalBooks: Book[];
   pageRange: [number, number];
   layout: LayoutType;
   setLayout: React.Dispatch<React.SetStateAction<LayoutType>>;
   handleNextPage: () => void;
   handlePreviousPage: () => void;
-  priceRangeBooks: Book[];
+  // ratingBooks: Book[];
 }) {
   const options = ["Newest", "Popular", "Featured"];
 
@@ -93,8 +95,8 @@ function MainContent({
         </div>
       </div>
       {layout === LayoutType.GRID ? (
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 py-8">
-          {priceRangeBooks.map((book) => {
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 py-8">
+          {totalBooks.map((book) => {
             return (
               <CardComponent
                 key={book.id}
@@ -109,7 +111,7 @@ function MainContent({
         </div>
       ) : (
         <div className="gap-4 py-8 flex flex-col">
-          {priceRangeBooks.map((book) => {
+          {totalBooks.map((book) => {
             return (
               <CardListLayout
                 key={book.id}
@@ -130,7 +132,7 @@ function MainContent({
         </div>
       )}
       <div className="flex items-center justify-between">
-        <p>Showing {priceRangeBooks.length} from 50 data</p>
+        <p>Showing {totalBooks.length} from 50 data</p>
         <div className="flex">
           {pageRange[0] > 0 && (
             <Button onClick={handlePreviousPage} variant="secondary">
@@ -140,7 +142,7 @@ function MainContent({
             </Button>
           )}
 
-          {priceRangeBooks.length === BOOK_PAGINATION_COUNT && (
+          {totalBooks.length === BOOK_PAGINATION_COUNT && (
             <Button onClick={handleNextPage} variant="secondary">
               <div className="flex items-center justify-between">
                 <ChevronRight color="var(--gray-01)" /> <span>Next</span>

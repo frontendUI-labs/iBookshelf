@@ -12,16 +12,6 @@ export const getBooks = async (pageRange: PageRange) => {
   return response;
 };
 
-export const getBooksListLayout = async (pageRangeList: PageRange) => {
-  const [startRange, endRange] = pageRangeList;
-  const response = await supabaseClient
-    .from("books")
-    .select("*")
-    .range(startRange, endRange);
-
-  return response;
-};
-
 export const getRecommendedBooks = async () => {
   const { data, error } = await supabaseClient
     .from("books")
@@ -33,4 +23,31 @@ export const getRecommendedBooks = async () => {
   }
 
   return data;
+};
+
+export const getBooksOnDiscount = async () => {
+  const response = await supabaseClient
+    .from("books")
+    .select("*")
+    .gt("discountPercentage", 0);
+  if (response.error) {
+    throw new Error(response.error.message);
+  }
+
+  return response;
+};
+
+export const getBooksRating = async (rating: number) => {
+  // const [startRange, endRange] = pageRange;
+  const response = await supabaseClient
+    .from("books")
+    .select("*")
+    .gte("rating", rating)
+    .range(0, 30);
+
+  if (response.error) {
+    throw new Error(response.error.message);
+  }
+
+  return response;
 };

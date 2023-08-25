@@ -1018,9 +1018,10 @@ function Home() {
                 { bg: "https://m.media-amazon.com/images/I/41cnk8xkzhL.jpg" },
                 { bg: "https://m.media-amazon.com/images/I/416MEFX9RBL.jpg" },
                 { bg: "https://m.media-amazon.com/images/I/5109wtVUAvL.jpg" },
-              ].map((card) => {
+              ].map((card, id) => {
                 return (
                   <img
+                    key={id}
                     className="h-full rounded-xl object-cover"
                     src={card.bg}
                     alt="cover"

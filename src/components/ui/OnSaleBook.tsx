@@ -9,8 +9,8 @@ import {
 } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/bundle";
-import { Book } from "../../types/type";
 import { Link } from "react-router-dom";
+import { useGetBooksOnDiscount } from "../../hooks/books";
 
 function SaleBooks({
   title,
@@ -32,9 +32,9 @@ function SaleBooks({
   const oldPrice = (price - price * discount).toFixed(1);
   return (
     <div>
-      <div className="bg-[#c4c4c4] rounded-lg relative w-full h-[350px] mb-4 ">
+      <div className="bg-[#c4c4c4] rounded-lg relative mb-4 ">
         <img
-          className="object-contains rounded-lg w-full h-full"
+          className="object-cover rounded-lg aspect-[2/3]"
           src={cover}
           alt=""
         />
@@ -51,19 +51,23 @@ function SaleBooks({
       <div className="flex items-center justify-between mt-5">
         <div className="flex items-center gap-2">
           <StarIcon variant="active" />
-          <span className="text-orange font-bold text-base">{rating}</span>
+          <span className="text-orange font-bold text-base">
+            {rating.toFixed(1)}
+          </span>
         </div>
         <p className="text-base font-bold flex items-center gap-2">
-          {oldPrice}
-          <span className="text-xs text-gray-100 line-through">{price}</span>
+          ${oldPrice}
+          <span className="text-xs text-gray-100 line-through">
+            ${price.toFixed(1)}
+          </span>
         </p>
       </div>
     </div>
   );
 }
 
-function OnSaleBook({ booksOnDiscount }: { booksOnDiscount: Book[] }) {
-  const concatBooks = booksOnDiscount.concat(booksOnDiscount);
+function OnSaleBook() {
+  const { booksDiscount } = useGetBooksOnDiscount();
 
   return (
     <div className=" relative">
@@ -73,19 +77,13 @@ function OnSaleBook({ booksOnDiscount }: { booksOnDiscount: Book[] }) {
       <Swiper
         modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
         spaceBetween={30}
-        // navigation={{
-        //   nextEl: ".feature-nextEl",
-        //   prevEl: ".feature-prevEl",
-        //   disabledClass: "hidden",
-        // }}
         autoplay={{
-          delay: 500,
+          delay: 2000,
           disableOnInteraction: true,
           pauseOnMouseEnter: true,
         }}
-        loop
         slidesPerView={5}
-        slidesPerGroup={5}
+        slidesPerGroup={4}
         scrollbar={{
           draggable: true,
           hide: true,
@@ -93,7 +91,7 @@ function OnSaleBook({ booksOnDiscount }: { booksOnDiscount: Book[] }) {
         pagination={{ clickable: true }}
         className="mt-2 static slider-bullets"
       >
-        {concatBooks.map((book, id) => (
+        {booksDiscount.map((book, id) => (
           <SwiperSlide key={id} className="mb-[50px]">
             <SaleBooks
               cover={book.cover}
