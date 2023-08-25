@@ -7,32 +7,19 @@ import {
 } from "../api/books.ts";
 import usePagination from "./pagination.ts";
 
-export function useGetBooks({ pageLimit }: { pageLimit: number }) {
+export function useGetBooks({
+  pageLimit,
+  rating,
+}: {
+  pageLimit: number;
+  rating: number;
+}) {
   const { handlePreviousPage, handleNextPage, pageRange } =
     usePagination(pageLimit);
 
-  // useEffect(() => {
-  //   setPageRange([0, pageLimit - 1]);
-  // }, [pageLimit]);
-
-  // const handlePreviousPage = () => {
-  //   window.scrollTo(0, 0);
-  //   setPageRange(([startPage, endPage]: [number, number]) => [
-  //     startPage - pageLimit,
-  //     endPage - pageLimit,
-  //   ]);
-  // };
-  // const handleNextPage = () => {
-  //   window.scrollTo(0, 0);
-  //   setPageRange(([startPage = 0, endPage = pageLimit]) => [
-  //     startPage + pageLimit,
-  //     endPage + pageLimit,
-  //   ]);
-  // };
-
   const { isLoading, isError, data, error, isSuccess } = useQuery({
-    queryKey: ["book", pageRange],
-    queryFn: () => getBooks(pageRange),
+    queryKey: ["book", pageRange, rating],
+    queryFn: () => getBooks(pageRange, { rating }),
   });
 
   return {

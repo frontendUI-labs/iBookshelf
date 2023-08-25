@@ -2,11 +2,23 @@ import supabaseClient from "./base";
 
 export type PageRange = [number, number];
 
-export const getBooks = async (pageRange: PageRange) => {
+export const getBooks = async (
+  pageRange: PageRange,
+  filter: {
+    rating: number;
+  }
+) => {
   const [startRange, endRange] = pageRange;
   const response = await supabaseClient
     .from("books")
-    .select("*")
+    .select(
+      `
+      *,
+      categories (name, slug) 
+      `
+    )
+    // .select("*")
+    .filter("rating", "gte", filter.rating)
     .range(startRange, endRange);
 
   return response;

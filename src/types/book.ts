@@ -27,3 +27,7 @@ export type Genre = {
   name: string;
   slug: string;
 };
+export enum LayoutType {
+  GRID = "grid",
+  LIST = "list",
+}

@@ -2,17 +2,22 @@ import SideBar from "../components/ui/SideBar";
 import MainContent from "../components/ui/MainContent";
 import OnSaleBook from "../components/ui/OnSaleBook";
 import { useGetBooks } from "../hooks/books.ts";
-import { useEffect, useState } from "react";
-
-export enum LayoutType {
-  GRID = "grid",
-  LIST = "list",
-}
+import { useState } from "react";
+import {
+  BOOK_PAGINATION_GRID_COUNT,
+  BOOK_PAGINATION_LIST_COUNT,
+} from "../constants/books.ts";
+import { LayoutType } from "../types/book.ts";
 
 function Filter() {
   const [range, setRange] = useState<[number, number]>([6, 16]);
   const [layout, setLayout] = useState<LayoutType>(LayoutType.GRID);
   const [rating, setRating] = useState(0);
+
+  const pageLimit =
+    layout === LayoutType.GRID
+      ? BOOK_PAGINATION_GRID_COUNT
+      : BOOK_PAGINATION_LIST_COUNT;
 
   const {
     books,
@@ -23,15 +28,9 @@ function Filter() {
     handleNextPage,
     handlePreviousPage,
   } = useGetBooks({
-    pageLimit: layout === LayoutType.GRID ? 20 : 5,
+    pageLimit,
+    rating,
   });
-
-  const [totalBooks, setTotalBooks] = useState(books);
-  useEffect(() => {
-    setTotalBooks(books);
-  }, []);
-
-  console.log(totalBooks, books, "aca");
 
   const allPrices = books.map((book) => book.price);
   const minPrice = Math.min(...allPrices);
@@ -53,7 +52,6 @@ function Filter() {
         <div className=" grid grid-cols-[400px,1fr] py-10 mb-12 ">
           <SideBar
             rating={rating}
-            setTotalBooks={setTotalBooks}
             setRating={setRating}
             range={range}
             setRange={setRange}
@@ -63,8 +61,8 @@ function Filter() {
           {isSuccess && (
             <MainContent
               books={books}
-              totalBooks={totalBooks}
               // ratingBooks={ratingBooks}
+              pageLimit={pageLimit}
               layout={layout}
               setLayout={setLayout}
               pageRange={pageRange}

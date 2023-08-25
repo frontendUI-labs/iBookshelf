@@ -4,28 +4,29 @@ import AcordionComponent from "./Accordion";
 import SliderInputComponent from "./SliderInput";
 import { useGetCategories } from "../../hooks/categories.ts";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useGetRecommendedBooks } from "../../hooks/books.ts";
 import { Rating } from "./Icons.tsx";
-import { Book } from "../../types/type.ts";
+import { twMerge } from "tailwind-merge";
 
 function SideBar({
   priceRange,
   range,
   setRange,
   setRating,
-  setTotalBooks,
+  rating,
 }: {
   range: [number, number];
   priceRange: [number, number];
   setRange: React.Dispatch<React.SetStateAction<[number, number]>>;
   setRating: React.Dispatch<React.SetStateAction<number>>;
   rating: number;
-  setTotalBooks: React.Dispatch<React.SetStateAction<Book[]>>;
 }) {
   const { isSuccess, categories, isError, isLoading } = useGetCategories();
   const { isSuccess: isRecommendedSuccess, recommendedBooks } =
     useGetRecommendedBooks();
+
+  const { category: selectedCategory } = useParams();
 
   return (
     <div className=" p-4">
@@ -54,8 +55,11 @@ function SideBar({
             categories.map((category) => {
               return (
                 <Link
-                  className="block truncate hover:text-purple-600  capitalize hover:bg-purple-400 p-1 focus:bg-purple-400 outline-purple-600"
-                  to={`/${category.slug}`}
+                  className={twMerge(
+                    "block truncate hover:text-purple-600  capitalize hover:bg-purple-400 p-1 focus:bg-purple-400 outline-purple-600",
+                    selectedCategory === category.slug && "bg-purple-400"
+                  )}
+                  to={`/filter/${category.slug}`}
                   key={category.id}
                 >
                   {category.name}
@@ -72,31 +76,14 @@ function SideBar({
           />
         </AcordionComponent>
         <AcordionComponent title="Filter by Language" id="main-4">
-          <Rating
-            setTotalBooks={setTotalBooks}
-            setRating={setRating}
-            value={5}
-          />
-          <Rating
-            setTotalBooks={setTotalBooks}
-            setRating={setRating}
-            value={4}
-          />
-          <Rating
-            setTotalBooks={setTotalBooks}
-            setRating={setRating}
-            value={3}
-          />
-          <Rating
-            setTotalBooks={setTotalBooks}
-            setRating={setRating}
-            value={2}
-          />
-          <Rating
-            setTotalBooks={setTotalBooks}
-            setRating={setRating}
-            value={1}
-          />
+          {[5, 4, 3, 2, 1].map((value) => (
+            <Rating
+              key={value}
+              setRating={setRating}
+              value={value}
+              isActive={value === rating}
+            />
+          ))}
         </AcordionComponent>
       </div>
       <div className="w-full">

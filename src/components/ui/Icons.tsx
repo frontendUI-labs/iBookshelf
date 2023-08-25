@@ -1,7 +1,6 @@
 import { Heart, ShoppingCart, Star } from "lucide-react";
 import { twMerge } from "tailwind-merge";
-import { useGetBooksRating } from "../../hooks/books";
-import { Book } from "../../types/type";
+import React from "react";
 
 export function HeartIconHeader({ onClick }: { onClick?: () => void }) {
   return (
@@ -63,35 +62,33 @@ export function StarIcon({ variant }: { variant?: string }) {
   );
 }
 
+const TOTAL_RATING_VALUE = 5;
 export function Rating({
   value,
   setRating,
-  setTotalBooks,
+  isActive,
 }: {
   value: number;
   setRating: React.Dispatch<React.SetStateAction<number>>;
-  setTotalBooks: React.Dispatch<React.SetStateAction<Book[]>>;
+  isActive: boolean;
 }) {
   const realValue = Math.round(value);
-  const { ratingBooks } = useGetBooksRating(realValue);
-
-  const totalValueRating = 5;
 
   return (
     <div
       className={twMerge(
         "flex gap-2 items-center p-1 rounded-lg cursor-pointer",
-        "hover:bg-purple-400"
+        "hover:bg-purple-400",
+        isActive && "bg-purple-400"
       )}
       onClick={() => {
-        setTotalBooks(ratingBooks);
         setRating(realValue);
       }}
     >
       {Array.from({ length: realValue }).map((_, id) => {
         return <StarIcon variant="active" key={id} />;
       })}
-      {Array.from({ length: totalValueRating - realValue }).map((_, id) => {
+      {Array.from({ length: TOTAL_RATING_VALUE - realValue }).map((_, id) => {
         return <StarIcon key={id} />;
       })}
     </div>

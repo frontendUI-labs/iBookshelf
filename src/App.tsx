@@ -38,6 +38,7 @@ const App = (): FunctionComponent => {
           <Route path="/" element={<MainLayout />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/filter" element={<FilterPage />} />
+            <Route path="/filter/:category" element={<FilterPage />} />
             <Route path="/details/:bookSlug" element={<DetailsPage />} />
             <Route path="/checkout" element={<PaymentPage />} />
           </Route>
