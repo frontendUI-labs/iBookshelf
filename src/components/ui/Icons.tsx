@@ -29,7 +29,7 @@ export function HeartIcon({
       onClick={onClick}
       className={twMerge(
         `h-[50px] w-[50px] rounded-lg flex items-center justify-center cursor-pointer bg-${bg} text-purple-600 outline-purple-600 hover:text-purple-600 `,
-        variant === true && "bg-purple-600 text-white hover:text-white"
+        variant && "bg-purple-600 text-white hover:text-white"
       )}
     >
       <Heart />
