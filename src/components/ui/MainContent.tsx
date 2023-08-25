@@ -11,29 +11,26 @@ import Button from "../../common/Button";
 import Select from "../../common/Select";
 import CardComponent, { CardListLayout } from "./Card";
 import { twMerge } from "tailwind-merge";
-import { Book } from "../../types/type";
-import { BOOK_PAGINATION_COUNT } from "../../constants/books";
-import React from "react";
-import { LayoutType } from "../../pages/FilterPage.tsx";
+import { Book, LayoutType } from "../../types/book.ts";
 
-// import { useMemo } from "react";
+import React from "react";
 
 function MainContent({
-  totalBooks,
+  books,
   pageRange,
   layout,
   setLayout,
   handleNextPage,
   handlePreviousPage,
+  pageLimit,
 }: {
   books: Book[];
-  totalBooks: Book[];
   pageRange: [number, number];
   layout: LayoutType;
   setLayout: React.Dispatch<React.SetStateAction<LayoutType>>;
   handleNextPage: () => void;
   handlePreviousPage: () => void;
-  // ratingBooks: Book[];
+  pageLimit: number;
 }) {
   const options = ["Newest", "Popular", "Featured"];
 
@@ -96,7 +93,7 @@ function MainContent({
       </div>
       {layout === LayoutType.GRID ? (
         <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 py-8">
-          {totalBooks.map((book) => {
+          {books.map((book) => {
             return (
               <CardComponent
                 key={book.id}
@@ -111,7 +108,7 @@ function MainContent({
         </div>
       ) : (
         <div className="gap-4 py-8 flex flex-col">
-          {totalBooks.map((book) => {
+          {books.map((book) => {
             return (
               <CardListLayout
                 key={book.id}
@@ -132,7 +129,7 @@ function MainContent({
         </div>
       )}
       <div className="flex items-center justify-between">
-        <p>Showing {totalBooks.length} from 50 data</p>
+        <p>Showing {books.length} from 50 data</p>
         <div className="flex">
           {pageRange[0] > 0 && (
             <Button onClick={handlePreviousPage} variant="secondary">
@@ -142,7 +139,7 @@ function MainContent({
             </Button>
           )}
 
-          {totalBooks.length === BOOK_PAGINATION_COUNT && (
+          {books.length === pageLimit && (
             <Button onClick={handleNextPage} variant="secondary">
               <div className="flex items-center justify-between">
                 <ChevronRight color="var(--gray-01)" /> <span>Next</span>
