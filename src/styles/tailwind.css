@@ -47,9 +47,13 @@
   --swiper-pagination-color: theme(colors.purple.600);
 }
 .hero-carousel-pagination {
-  /* --swiper-pagination-bottom: -10px; */
-  @apply pl-24 text-start;
+  text-align: start;
+  padding-left: 40px;
+  --swiper-pagination-bottom: -30px;
+  left: -100px;
+  @apply absolute -top-full;
   --swiper-pagination-color: theme(colors.orange.400);
+  opacity: 50%;
 }
 .poppins {
   font-family: "Poppins", sans-serif;

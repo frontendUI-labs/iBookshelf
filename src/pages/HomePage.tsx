@@ -29,6 +29,8 @@ import {
 import "swiper/css";
 import "swiper/css/bundle";
 import CartButton from "../components/ui/CartButton";
+import Button from "../common/Button";
+import { Link } from "react-router-dom";
 
 const PointsIcon = ({
   color,
@@ -88,13 +90,13 @@ function MainCard() {
   return (
     <Swiper
       modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
-      autoplay={{
-        delay: 3000,
-        disableOnInteraction: true,
-        pauseOnMouseEnter: true,
-      }}
+      // autoplay={{
+      //   delay: 3000,
+      //   disableOnInteraction: true,
+      //   pauseOnMouseEnter: true,
+      // }}
       loop
-      className="relative z-0 "
+      className="relative z-10 overflow-y-visible"
       slidesPerView={1}
       pagination={{
         clickable: true,
@@ -105,35 +107,51 @@ function MainCard() {
         {
           title: "Special 50% Off",
           img: "/images/firstImage.png",
+          description: `"Unlock Knowledge and Adventure with 50% OFF Books! Limited time offer to expand your horizons for less."`,
         },
         {
           title: "Best Books",
           img: "/images/secondImage.png",
+          description: `"Discover the Best Books: A curated collection of must-reads that captivate, educate, and inspire."`,
         },
         {
-          title: "SEE ALL",
+          title: "Read our all Books",
           img: "/images/thirdImage.png",
+          description: `"Explore a World of Books: Our diverse collection caters to every taste and interest, promising captivating reads for all."`,
         },
       ].map((slide) => (
-        <SwiperSlide key={slide.title} className="p-24">
-          <div className={twMerge("flex flex-col gap-10 w-[480px] h-full")}>
-            <img
-              className="absolute z-2 right-12 bottom-0"
-              src={slide.img}
-              alt=""
-            />
-            <p className="text-purple-600 font-bold text-lg tracking-[4px]">
+        <SwiperSlide key={slide.title} className="px-10 lg:p-24">
+          <div className="relative z-20 flex flex-col gap-8 justify-around lg:gap-10 lg:w-[480px] h-full">
+            <p className="text-purple-600 text-base font-bold lg:text-lg tracking-[4px]">
               BACK TO SCHOOL
             </p>
-            <h1 className="text-[60px] font-bold text-6xl">{slide.title}</h1>
-            <p className="text-4xl">for our student community</p>
-            <p className="font-base text-[14px] font-basic">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+            <h1 className="text-[35px] lg:text-[60px] font-bold text-6xl">
+              {slide.title}
+            </h1>
+            <p className="text-2xl italic lg:text-4xl">for our community</p>
+            <p className="font-basic text-base font-base w-2/3 lg:text-base ">
+              {slide.description}
             </p>
-            <div className="bg-purple-600 rounded-md">ESPACIO DE BOTONES</div>
+            <div>
+              <Button className="w-1/2 flex justify-between">
+                <span>Get the deal</span>
+                <MoveRight />
+              </Button>
+              <Button variant="secondary" className="w-1/2">
+                See other promos
+              </Button>
+            </div>
           </div>
+          <img
+            className={twMerge(
+              "absolute bottom-10 right-0 lg:left-1/2 first-letter:object-contains",
+              slide.img === "/images/firstImage.png"
+                ? "w-[350px] h-[350px] -right-14"
+                : "w-[200px] h-[300px]"
+            )}
+            src={slide.img}
+            alt=""
+          />
         </SwiperSlide>
       ))}
     </Swiper>
@@ -142,97 +160,99 @@ function MainCard() {
 function BestBook() {
   return (
     <div className="overflow-hidden font-heading rounded-3xl">
-      <div className="h-full">
-        <Swiper
-          id="bestBook"
-          className="h-full relative"
-          modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
-          autoplay={{
-            delay: 2000,
-            disableOnInteraction: true,
-            pauseOnMouseEnter: true,
-          }}
-          loop
-          slidesPerView={1}
-          navigation={{
-            nextEl: ".bestBook-nextEl",
-            prevEl: ".bestBook-prevEl",
-            disabledClass: "hidden",
-          }}
-        >
-          {[
-            {
-              section: "Best Seller",
-              title: "Don't Forget to Write: A Novel",
-              tags: ["ADVENTURE", "SCIENCE", "COMEDY"],
-              fixedPrice: "58.25",
-              actualPrice: "60.00",
-              bg: "https://m.media-amazon.com/images/I/41zqVJPSAQL.jpg",
-            },
-            {
-              section: "Best Reader",
-              title: "Watching You: A Novel",
-              tags: ["ADVENTURE", "DRAMA", "COMEDY"],
-              fixedPrice: "38.25",
-              actualPrice: "40.00",
-              bg: "https://m.media-amazon.com/images/I/41pbe4-oNpL.jpg",
-            },
-            {
-              section: "Most Popular",
-              title: "Divine Rivals: A Novel (Letters of Enchantment Book 1)",
-              tags: ["ADVENTURE", "DRAMA", "COMEDY"],
-              fixedPrice: "38.25",
-              actualPrice: "40.00",
-              bg: "https://m.media-amazon.com/images/I/51Q3d7HwOmL.jpg",
-            },
-          ].map((book) => {
-            return (
-              <SwiperSlide key={book.title}>
-                <div
-                  className={twMerge(
-                    " text-white h-full rounded-xl border-4 border-white flex flex-col justify-center items-center gap-4"
-                  )}
-                >
+      <Swiper
+        id="bestBook"
+        className=" relative"
+        modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
+        // autoplay={{
+        //   delay: 2000,
+        //   disableOnInteraction: true,
+        //   pauseOnMouseEnter: true,
+        // }}
+        loop
+        slidesPerView={1}
+        navigation={{
+          nextEl: ".bestBook-nextEl",
+          prevEl: ".bestBook-prevEl",
+          // disabledClass: "hidden",
+        }}
+      >
+        {[
+          {
+            section: "Best Seller",
+            title: "Don't Forget to Write: A Novel",
+            gnre: "SCIENCE",
+            fixedPrice: "58.25",
+            actualPrice: "60.00",
+            bg: "https://m.media-amazon.com/images/I/41zqVJPSAQL.jpg",
+          },
+          {
+            section: "Best Reader",
+            title: "Watching You: A Novel",
+            gnre: "DRAMA",
+            fixedPrice: "38.25",
+            actualPrice: "40.00",
+            bg: "https://m.media-amazon.com/images/I/41pbe4-oNpL.jpg",
+          },
+          {
+            section: "Most Popular",
+            title: "Divine Rivals: A Novel (Letters of Enchantment Book 1)",
+            gnre: "COMEDY",
+            fixedPrice: "38.25",
+            actualPrice: "40.00",
+            bg: "https://m.media-amazon.com/images/I/51Q3d7HwOmL.jpg",
+          },
+        ].map((book) => {
+          return (
+            <SwiperSlide key={book.title}>
+              <div
+                className={twMerge(
+                  " text-white h-full rounded-xl border-4 border-white flex flex-col justify-center items-center gap-4"
+                )}
+              >
+                <img
+                  className="blur-md absolute left-0 top-0 w-full lg:h-full lg:w-100vh "
+                  src={book.bg}
+                  alt="cover"
+                />
+                <div className="relative z-10 pt-4 flex flex-col justify-center items-center gap-1 lg:gap-4">
+                  <h1 className="text-3xl font-semibold lg:text-5xl">
+                    {book.section}
+                  </h1>
+                  <p className="text-base">Based sales this week</p>
                   <img
-                    className="absolute left-0 top-0 h-full w-100vh blur-md"
                     src={book.bg}
+                    className={twMerge(
+                      "overflow-hidden w-[200px] h-[290px] rounded-xl border-2 border-white boxShadow"
+                    )}
                     alt=""
                   />
-                  <div className="relative z-10 flex flex-col justify-center items-center gap-4">
-                    <h1 className="text-5xl font-semibold">{book.section}</h1>
-                    <p className="text-base">Based sales this week</p>
-                    <img
-                      src={book.bg}
-                      className={twMerge(
-                        "overflow-hidden w-[200px] h-[290px] rounded-xl border-2 border-white boxShadow"
-                      )}
-                      alt=""
-                    />
-                    <p className="text-xl font-semibold flex flex-col text-center">
-                      {book.title}
+                  <p className="flex flex-col text-center font-semibold text-xl">
+                    {book.title}
+                    <Link to={`${book.gnre.toLowerCase()}`}>
                       <span className="text-xs font-thin font-basic opacity-60">
-                        {book.tags.join(", ")}
+                        {book.gnre}
                       </span>
+                    </Link>
+                  </p>
+                  <div className="bg-white px-6 py-3 text-lg font-semibold flex  gap-4 rounded-xl">
+                    <p className="text-gray-100 line-through">
+                      {book.actualPrice}
                     </p>
-                    <div className="bg-white px-6 py-3 text-lg font-semibold flex  gap-4 rounded-xl">
-                      <p className="text-gray-100 line-through">
-                        {book.actualPrice}
-                      </p>
-                      <p className="text-black">USD {book.fixedPrice}</p>
-                    </div>
+                    <p className="text-black">USD {book.fixedPrice}</p>
                   </div>
                 </div>
-              </SwiperSlide>
-            );
-          })}
-          <button className="bestBook-prevEl absolute z-10 left-5 top-1/2 -translate-y-1/2">
-            <ChevronLeftCircle className="fill-gray-500 text-white  w-9 h-9 hover:text-purple-700" />
-          </button>
-          <button className="bestBook-nextEl absolute z-10 right-5 top-1/2 -translate-y-1/2 ">
-            <ChevronRightCircle className="fill-gray-500 text-white w-9 h-9 hover:text-purple-700" />
-          </button>
-        </Swiper>
-      </div>
+              </div>
+            </SwiperSlide>
+          );
+        })}
+        <button className="bestBook-prevEl absolute z-10 left-5 top-1/2 -translate-y-1/2">
+          <ChevronLeftCircle className="fill-gray-500 text-white  w-9 h-9 hover:text-purple-700" />
+        </button>
+        <button className="bestBook-nextEl absolute z-10 right-5 top-1/2 -translate-y-1/2 ">
+          <ChevronRightCircle className="fill-gray-500 text-white w-9 h-9 hover:text-purple-700" />
+        </button>
+      </Swiper>
     </div>
   );
 }
@@ -250,14 +270,16 @@ function BooksRecomended({
   return (
     <div
       className={twMerge(
-        "relative overflow-hidden font-heading h-[445px] bg-blue-100 rounded-3xl px-[70px] py-[40px] flex flex-col justify-between",
+        "relative overflow-hidden py-6 px-10 font-heading h-[445px] bg-blue-100 rounded-3xl lg:px-[70px] lg:py-[40px] flex flex-col justify-between gap-3",
         color
       )}
     >
       {children}
       <div>
-        <h3 className="text-4xl font-semibold mb-8 relative">{title}</h3>
-        <p className="text-sm w-9/12 font-basic font-light relative">
+        <h3 className="text-2xl mb-2 lg:text-4xl font-semibold lg:mb-8 relative">
+          {title}
+        </h3>
+        <p className="text-sm lg:w-9/12 font-basic font-light relative">
           {description}
         </p>
       </div>
@@ -271,33 +293,33 @@ function BooksRecomended({
             pauseOnMouseEnter: true,
           }}
           loop
-          // breakpoints={{
-          //   320: {
-          //     slidesPerView: 1,
-          //     slidesPerGroup: 1,
-          //     spaceBetween: 10,
-          //   },
-          //   640: {
-          //     slidesPerView: 2,
-          //     slidesPerGroup: 2,
-          //   },
-          //   768: {
-          //     slidesPerView: 3,
-          //     slidesPerGroup: 3,
-          //     spaceBetween: 10,
-          //   },
-          //   1024: {
-          //     slidesPerView: 4,
-          //     slidesPerGroup: 4,
-          //   },
-          // }}
+          breakpoints={{
+            320: {
+              slidesPerView: 1,
+              slidesPerGroup: 1,
+              spaceBetween: 10,
+            },
+            640: {
+              slidesPerView: 2,
+              slidesPerGroup: 2,
+            },
+            768: {
+              slidesPerView: 3,
+              slidesPerGroup: 3,
+              spaceBetween: 10,
+            },
+            1024: {
+              slidesPerView: 4,
+              slidesPerGroup: 4,
+            },
+          }}
           className="relative overflow-visible"
           slidesPerView={4}
           slidesPerGroup={4}
           navigation={{
             nextEl: ".booksRecomended-nextEl",
             prevEl: ".booksRecomended-prevEl",
-            disabledClass: "hidden",
+            // disabledClass: "hidden",
           }}
         >
           {[
@@ -341,7 +363,7 @@ function BooksRecomended({
             return (
               <SwiperSlide key={book.bg}>
                 <img
-                  className="h-[195px] rounded-xl border-4 border-white"
+                  className="w-[200px] aspect-[4/5] object-cover rounded-xl border-4 border-white"
                   src={book.bg}
                   alt=""
                 />
@@ -349,20 +371,10 @@ function BooksRecomended({
             );
           })}
 
-          {/* {Array.from({ length: 12 }).map((_, id) => (
-            <SwiperSlide key={id}>
-              <div
-                className={twMerge(
-                  "bg-gray-400 h-[195px] rounded-xl border-4 border-white",
-                  id > 6 ? "bg-purple-600" : "bg-orange-400"
-                )}
-              />
-            </SwiperSlide>
-          ))} */}
-          <button className="booksRecomended-prevEl absolute z-10 -left-3 top-1/2 -translate-y-1/2">
+          <button className="booksRecomended-prevEl hidden lg:first-letter:absolute z-10 -left-3 top-1/2 -translate-y-1/2">
             <ChevronLeftCircle className="fill-white w-12 h-12 hover:text-orange-600" />
           </button>
-          <button className="booksRecomended-nextEl absolute z-10 -right-3 top-1/2 -translate-y-1/2 ">
+          <button className="booksRecomended-nextEl hidden lg:absolute z-10 -right-3 top-1/2 -translate-y-1/2 ">
             <ChevronRightCircle className=" fill-white w-12 h-12 hover:text-orange-600" />
           </button>
         </Swiper>
@@ -370,6 +382,31 @@ function BooksRecomended({
     </div>
   );
 }
+const DescriptionOfEachSection = ({
+  title,
+  description,
+  position,
+}: {
+  title: string;
+  description: string;
+  position?: string;
+}) => {
+  return (
+    <div
+      className={twMerge(
+        "flex flex-col text-center gap-4 mb-8 lg:mb-14 mt-3",
+        position
+      )}
+    >
+      <h2 className="text-3xl md:text-4xl lg:text-[50px] font-semibold">
+        {title}
+      </h2>
+      <p className="text-sm font-basic font-light lg:text-base">
+        {description}
+      </p>
+    </div>
+  );
+};
 const SpecialsBooks = () => {
   return (
     <div>
@@ -377,24 +414,43 @@ const SpecialsBooks = () => {
         id="specialsBook"
         className="grid grid-cols-3 h-full overflow-y-visible"
         modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
-        autoplay={{
-          delay: 2000,
-          disableOnInteraction: true,
-          pauseOnMouseEnter: true,
-        }}
+        // autoplay={{
+        //   delay: 2000,
+        //   disableOnInteraction: true,
+        //   pauseOnMouseEnter: true,
+        // }}
         loop
+        breakpoints={{
+          320: {
+            slidesPerView: 1,
+            slidesPerGroup: 1,
+          },
+          640: {
+            slidesPerView: 2,
+            slidesPerGroup: 2,
+          },
+          768: {
+            slidesPerView: 2,
+            slidesPerGroup: 2,
+            spaceBetween: 10,
+          },
+          1024: {
+            slidesPerView: 3,
+            slidesPerGroup: 3,
+          },
+        }}
         spaceBetween={40}
         slidesPerView={3}
         navigation={{
           prevEl: ".specialBook-prevEl",
           nextEl: ".specialBook-nextEl",
-          disabledClass: "hidden",
+          // disabledClass: "hidden",
         }}
       >
         {[
           {
             title: "Self Heal By Design",
-            tags: ["BIOGRAPHY"],
+            gnre: "BIOGRAPHY",
             author: "Barbara O'Neill",
             actualPrice: "8.78",
             prevPrice: "15",
@@ -402,7 +458,7 @@ const SpecialsBooks = () => {
           },
           {
             title: "Stop Overthinking",
-            tags: ["HORROR"],
+            gnre: "HORROR",
             author: "Nick Trenton",
             actualPrice: "18.78",
             prevPrice: "25",
@@ -410,7 +466,7 @@ const SpecialsBooks = () => {
           },
           {
             title: "Dirty Truths (Boston Billionaires Book 4)",
-            tags: ["THRILLER"],
+            gnre: "THRILLER",
             author: "Brittanee Nicole",
             actualPrice: "28.78",
             prevPrice: "35",
@@ -418,7 +474,7 @@ const SpecialsBooks = () => {
           },
           {
             title: "The Beginner's Guide to Stoicism",
-            tags: ["BIOGRAPHY"],
+            gnre: "BIOGRAPHY",
             author: "Matthew Van Natta",
             actualPrice: "18.78",
             prevPrice: "22",
@@ -426,7 +482,7 @@ const SpecialsBooks = () => {
           },
           {
             title: "Whiskey Lies (Boston Billionaires Book 1)",
-            tags: ["DRAMA"],
+            gnre: "DRAMA",
             author: "Brittanee Nicole",
             actualPrice: "9.78",
             prevPrice: "12",
@@ -434,7 +490,7 @@ const SpecialsBooks = () => {
           },
           {
             title: "Meditations: A New Translation (Modern Library)",
-            tags: ["POLITIC", "TECH"],
+            gnre: "POLITIC",
             author: "Marcus Aurelius",
             actualPrice: "8.78",
             prevPrice: "15",
@@ -444,40 +500,37 @@ const SpecialsBooks = () => {
           <SwiperSlide key={card.title}>
             <div className="rounded-2xl border-2 border-gray-300 overflow-y-hidden boxShadow">
               <img
-                className="h-[300px] w-full object-cover rounded-b-2xl "
+                className="h-[200px] w-full object-cover rounded-b-2xl lg:h-[300px]"
                 src={card.bg}
                 alt=""
               />
-
-              <div className="text-start p-7 h-[430px] flex flex-col justify-between">
-                <h3 className="text-2xl font-semibold mb-5">{card.title}</h3>
-                <div className="mb-4 flex gap-3">
-                  {card.tags.map((tag) => (
-                    <button
-                      key={tag}
-                      className="bg-purple-400 text-purple-600 text-xs
-                      font-basic font-normal py-2 px-3 rounded-xl"
-                    >
-                      {tag}
-                    </button>
-                  ))}
+              <div className="text-start p-3 lg:p-7 lg:h-[430px] flex flex-col justify-between">
+                <h3 className="font-semibold mb-3 lg:text-2xl lg:mb-5">
+                  {card.title}
+                </h3>
+                <div>
+                  <button className="bg-purple-400 inline-block text-purple-600 text-xs font-basic font-normal py-2 px-3 rounded-xl">
+                    {card.gnre}
+                  </button>
                 </div>
-                <p className="text-base font-light font-basic">
+                <p className="text-xs mt-4 font-light font-basic lg:text-base">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
                   do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                   Ut enim ad minim veniam, quis nostrud exercitation ullamco
                   laboris
                 </p>
-                <p className="text-base font-normal font-basic my-8">
+                <p className="my-3 text-sm font-normal font-basic lg:my-8 lg:text-base">
                   {card.author}
                 </p>
-                <div className="flex justify-between">
-                  <CartButton text="Add to cart" />
+                <div className="flex flex-col-reverse gap-2 lg:flex justify-between">
+                  <div>
+                    <CartButton text="Add to cart" />
+                  </div>
                   <p className="flex items-center gap-4">
-                    <span className="text-3xl font-semibold">
+                    <span className="text-xl font-semibold lg:text-3xl">
                       $ {card.actualPrice}
                     </span>
-                    <span className="text-xl font-normal text-gray-100 line-through">
+                    <span className="text-base font-normal text-gray-100 line-through lg:text-xl">
                       $ {card.prevPrice}
                     </span>
                   </p>
@@ -532,7 +585,7 @@ const Timer = ({
   const secondsLeft = remainingTime % 60;
 
   return (
-    <div className="border-2 border-gray-300 rounded-2xl px-10 py-3 flex gap-14 mb-16">
+    <div className="border-2 border-gray-300 rounded-2xl flex justify-around items-center lg:gap-14 lg:px-10 py-3 mb-16">
       <div className="flex flex-col gap-1">
         <span className="text-[50px] font-semibold text-orange-400">
           {formatTime(daysLeft)}
@@ -574,16 +627,24 @@ const FlashBooks = ({
   img: string;
 }) => {
   return (
-    <div className="p-5 h-[500px] flex flex-col items-center">
-      <img className="rounded-2xl h-[330px]" src={img} alt="cover" />
-      <div className="flex flex-col gap-2 mt-3">
-        <h3 className="text-xl font-semibold">{title}</h3>
-        <span className="text-sm font-normal text-purple-600">{gnre}</span>
+    <div className="p-5 flex flex-col items-center lg:h-[500px]">
+      <img
+        className="rounded-2xl h-[330px] aspect-[3/4]"
+        src={img}
+        alt="cover"
+      />
+      <div className="flex flex-col items-center lg:gap-2 lg:mt-3">
+        <Link to={"/details"} className="hover:text-purple-600">
+          <h3 className="text-xl font-semibold">{title}</h3>
+        </Link>
+        <Link to={`/${gnre.toLowerCase()}`}>
+          <span className="text-sm font-normal text-purple-600">{gnre}</span>
+        </Link>
         <div className="flex items-center justify-center gap-4">
           <span className="text-2xl text-purple-600 font-semibold">
             $ {priceActual}
           </span>
-          <span className="text-xl font-normal text-gray-500 line-through">
+          <span className="text-base font-normal text-gray-500 line-through lg:text-xl">
             $ {prevPrice}
           </span>
         </div>
@@ -598,14 +659,29 @@ const TestimonialCard = () => {
         id="user"
         className="grid grid-cols-3 h-full overflow-y-visible"
         modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
-        autoplay={{
-          delay: 1500,
-          disableOnInteraction: true,
-          pauseOnMouseEnter: true,
-        }}
-        loop
+        // autoplay={{
+        //   delay: 1500,
+        //   disableOnInteraction: true,
+        //   pauseOnMouseEnter: true,
+        // }}
+        // loop
         spaceBetween={30}
         slidesPerView={3}
+        breakpoints={{
+          320: {
+            slidesPerView: 1,
+            slidesPerGroup: 1,
+          },
+          768: {
+            slidesPerView: 2,
+            slidesPerGroup: 2,
+            spaceBetween: 10,
+          },
+          1024: {
+            slidesPerView: 3,
+            slidesPerGroup: 3,
+          },
+        }}
       >
         {[
           {
@@ -651,17 +727,21 @@ const TestimonialCard = () => {
           },
         ].map((card) => (
           <SwiperSlide key={card.title}>
-            <div className="text-center px-10 py-8 flex flex-col justify-between rounded-xl font-basic border-2 border-gray-300 h-[235px] boxShadow">
-              <h3 className="text-xl font-medium mb-8">{card.title}</h3>
-              <div className="flex items-center justify-between">
-                <div className="flex gap-5">
+            <div className="text-center p-6 flex flex-col justify-between rounded-xl font-basic border-2 border-gray-300 h-[235px] boxShadow lgpx-10 lg:py-8">
+              <h3 className="text-base font-medium mb-8 lg:text-xl">
+                {card.title}
+              </h3>
+              <div className="flex flex-col gap-3 items-center justify-between lg:flex-row">
+                <div className="flex items-center gap-5">
                   <img
                     className="w-[60px] h-[60px] rounded-full object-cover"
                     src={card.profile}
                     alt="user"
                   />
                   <div className="text-start">
-                    <h4 className="text-base font-semibold">{card.user}</h4>
+                    <h4 className="text-sm font-semibold lg:text-base">
+                      {card.user}
+                    </h4>
                     <span className="text-xs font-normal">Book Lovers</span>
                   </div>
                 </div>
@@ -669,7 +749,7 @@ const TestimonialCard = () => {
                   {Array.from({ length: 5 }).map((_, id) => (
                     <Star
                       key={id}
-                      className="fill-orange-600 text-orange-600"
+                      className="fill-orange-600 text-orange-600 w-3 h-3 lg:w-6 lg:h-6"
                     />
                   ))}
                 </div>
@@ -697,7 +777,7 @@ const NewsBlogs = ({
   profile: string;
 }) => {
   return (
-    <div className="rounded-2xl  overflow-hidden">
+    <div className="border-b-2 bprder-gray-100 rounded-2xl overflow-hidden lg:border-none">
       <a href={link} target="_blank">
         <img
           className="h-[250px] bg-gray-100 rounded-b-2xl w-full object-cover hover:scale-105 duration-300"
@@ -706,19 +786,19 @@ const NewsBlogs = ({
         />
       </a>
 
-      <div className="text-start py-7 flex flex-col gap-4">
+      <div className="text-start py-3 flex flex-col gap-4 lg:py-7">
         <a href={link} target="_blank">
           <h3 className="text-lg font-medium flex hover:text-purple-600">
             {title}
           </h3>
         </a>
-        <div className="text-sm font-light font-basic mb-5">
+        <div className="text-sm font-light font-basic lg:mb-5">
           <p className="mb-2">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore...
           </p>
           <a className="text-purple-600" href={link} target="_blank">
-            Continue reading
+            Continue reading...
           </a>
         </div>
         <div className="flex items-center gap-5">
@@ -746,10 +826,14 @@ const SectionsBooks = ({
   icon: ReactNode;
 }) => {
   return (
-    <div className="flex flex-col items-center">
-      <div>{icon}</div>
-      <h2 className="text-[48px] font-bold mb-[10px] mt-10">{quantity}</h2>
-      <span className="text-xl font-medium text-gray-100">{section}</span>
+    <div className="text-center flex flex-col items-center">
+      <div className="">{icon}</div>
+      <h2 className="text-3xl font-bold lg:mb-[10px] lg:mt-10 lg:text-5xl">
+        {quantity}
+      </h2>
+      <span className="text-base font-medium text-gray-100 lg:text-xl">
+        {section}
+      </span>
     </div>
   );
 };
@@ -757,12 +841,12 @@ const SectionsBooks = ({
 function Home() {
   const iconClassName = "text-purple-600 fill-purple-600 w-[25px] h-[25px]";
   const iconSectionClass =
-    "w-[100px] h-[100px] fill-purple-600 text-white stroke-[0.75px]";
+    "w-[70px] h-[70px] lg:w-[100px] lg:h-[100px] fill-purple-600 text-white stroke-[0.75px]";
   return (
     <>
-      <div className="my-[30px] font-heading flex flex-col gap-[100px]">
-        <div className="main grid grid-cols-[3fr,1fr] gap-x-3 h-[662px] container mx-auto">
-          <div className="relative bg-purple-400 rounded-3xl overflow-hidden">
+      <div className="my-[30px] px-4 mx-auto font-heading flex flex-col gap-[100px] lg:px-0">
+        <div className="main flex flex-col gap-4 lg:grid grid-cols-[3fr,1fr] gap-x-3 lg:h-[662px] container mx-auto">
+          <div className="relative flex items-center justify-center h-[600px] bg-purple-400 rounded-3xl overflow-hidden">
             <MainCard />
             <PointsIcon
               className="top-10 left-10"
@@ -773,7 +857,7 @@ function Home() {
               width="600px"
               height="600px"
               className="-top-64 -right-1/4"
-              color="bg-orange-400"
+              color="bg-orange-400 opacity-60"
             />
             <CircleDecoration
               width="340px"
@@ -789,33 +873,33 @@ function Home() {
           </div>
           <BestBook />
         </div>
-        <div className="benefits flex flex-wrap justify-between container mx-auto">
+        <div className="benefits flex flex-wrap justify-between lg:container mx-auto">
           <Benefits
             benefit="Quick Delivery"
-            description="Delivery dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
+            description="Experience the joy of rapid book delivery with our efficient and quick service."
             icon={<Zap className={iconClassName} />}
           />
           <Benefits
             benefit="Secure Payment"
-            description="Payment dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
-            icon={<ThumbsUp className={iconClassName} />}
-          />
-          <Benefits
-            benefit="Best Quality"
-            description="Quality dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
+            description="Your payment is secure with us. Enjoy worry-free book shopping knowing your transactions are safe."
             icon={<ShieldCheck className={iconClassName} />}
           />
           <Benefits
+            benefit="Best Quality"
+            description="Immerse yourself in a world of captivating stories with our handpicked selection of the finest books."
+            icon={<ThumbsUp className={iconClassName} />}
+          />
+          <Benefits
             benefit="Return Guarantee"
-            description="Guarantee dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
+            description="Enjoy your reading journey without worry. Our reliable return guarantee ensures your satisfaction."
             icon={<Star className={iconClassName} />}
           />
         </div>
-        <div className="recomended flex gap-8 container mx-auto">
+        <div className="recomended lg:flex gap-8 container mx-auto">
           <BooksRecomended
             title="Recomended For You"
             color="bg-orange-100"
-            description="Recomended dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+            description="Discover and Explore your next favorite read, here you will find personalized book suggestions that match your interests and preferences."
           >
             <CircleDecoration
               width="340px"
@@ -832,7 +916,7 @@ function Home() {
             <PointsIcon
               className="top-10 right-10"
               orientation="horizontal"
-              color="bg-orange-400"
+              color="bg-orange-400 opacity-40"
             />
           </BooksRecomended>
           <BooksRecomended
@@ -859,31 +943,29 @@ function Home() {
             />
           </BooksRecomended>
         </div>
-        <div className="special container mx-auto">
-          <div className="mb-16 text-center">
-            <h2 className="text-[50px] font-semibold mb-4">Special Offers</h2>
-            <p className="text-base font-light">
-              Lorem ipsumz dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor <br /> incididunt ut labore et dolore magna aliqua.
-            </p>
-          </div>
+        <div className="special lg:container mx-auto">
+          <DescriptionOfEachSection
+            title="Special Offers"
+            description="Unlock a world of unbeatable book deals. Grab limited-time
+              discounts and promotions on a diverse range of titles."
+          />
           <SpecialsBooks />
         </div>
-        <div className="flashSale text-center flex flex-col items-center container mx-auto py-[70px]">
+        <div className="flashSale text-center lg:flex flex-col items-center lg:container mx-auto py-[70px]">
           <div className="relative mb-16">
             <PointsIcon
               color="bg-purple-400"
               orientation="vertical"
               className="-top-1/4 left-1/2 translate-x-20 -z-10"
             />
-            <h2 className=" text-[50px] font-semibold mb-4 z-10">Flash Sale</h2>
-            <p className="text-base font-light">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor <br /> incididunt ut labore et dolore magna aliqua.
-            </p>
+            <DescriptionOfEachSection
+              title="Flash Sale"
+              description="Discover our incredible limited time offers on books, don't miss
+              this opportunity to buy your favorite books at incredible prices!"
+            />
           </div>
           <Timer days={2} hours={5} minutes={42} seconds={19} />
-          <div className="flex gap-8 mb-[100px]">
+          <div className="flex flex-col gap-1 lg:flex-row lg:gap-8 lg:mb-[100px]">
             <FlashBooks
               title="King: A Life"
               gnre="BIOGRAPHY"
@@ -907,21 +989,21 @@ function Home() {
             />
             <FlashBooks
               title="Nobody Needs to Know: A Memoir"
-              gnre="DRAMA , BIOGRAPHY"
+              gnre="DRAMA"
               priceActual="76.12"
               prevPrice="90.00"
               img="https://m.media-amazon.com/images/I/41oauiSSkkL.jpg"
             />
             <FlashBooks
               title="Girls Found (Rainey Paxton Series Book 4)"
-              gnre="DRAMA , BIOGRAPHY"
+              gnre="BIOGRAPHY"
               priceActual="76.12"
               prevPrice="90.00"
               img="https://m.media-amazon.com/images/I/51kRaBYEnTL.jpg"
             />
           </div>
         </div>
-        <div className="feature w-full h-[800px] bg-purple-400 relative overflow-hidden px-[130px] py-[70px]">
+        <div className="feature w-full lg:h-[800px] bg-purple-400 relative overflow-hidden py-[70px]">
           <CircleDecoration
             color="bg-purple-100"
             width="450px"
@@ -944,64 +1026,69 @@ function Home() {
             orientation="horizontal"
             className="bottom-10 right-16"
           />
-          <div className="relative flex justify-between gap-16">
-            <div className="w-1/2">
-              <div className="mb-14 mt-3">
-                <h2 className="text-[50px] font-semibold">Featured Books</h2>
-                <p className="text-base font-basic font-light">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed{" "}
-                  <br />
-                  do eiusmod tempor incididunt ut labore et dolore
-                </p>
-              </div>
-              <div className="h-[480px] bg-white p-8 rounded-xl grid grid-cols-[0.9fr,1.1fr] gap-10 boxShadow">
+          <div className="relative flex flex-col lg:flex-row justify-between gap-16 container mx-auto">
+            <div className="lg:w-1/2">
+              <DescriptionOfEachSection
+                position="text-start"
+                title=" Featured Books"
+                description="Explore our collection of carefully selected featured books.
+                  Immerse yourself in compelling stories and discover why these
+                  books are worthy of the spotlight."
+              />
+              <div className="p-2 bg-white rounded-xl lg:grid grid-cols-[0.9fr,1.1fr] lg:h-[480px] lg:p-8 gap-10 boxShadow">
                 <img
-                  className="bg-gray-100 rounded-2xl"
+                  className="w-full h-[200px] bg-gray-100 rounded-2xl object-cover lg:h-full"
                   src="https://m.media-amazon.com/images/I/41OEBfsc2dL.jpg"
                   alt="cover"
                 />
-                <div className="text-start flex flex-col justify-between">
+                <div className="pt-3 px-2 text-start flex flex-col gap-1 justify-between">
                   <div className="flex gap-4">
                     <div className="relative">
                       <Bookmark className="text-purple-600 w-[70px] h-[70px]" />
                       <Star className="fill-orange-400 text-white absolute -top-3 -right-[6px] w-[42px] h-[42px]" />
                     </div>
                     <div>
-                      <h3 className="text-3xl font-semibold">Kabul</h3>
-                      <span className="text-base font-medium text-purple-600">
-                        POLITICS, DRAMA
+                      <h3 className="text-2xl font-semibold lg:text-3xl ">
+                        Kabul
+                      </h3>
+                      <span className="text-sm font-medium text-purple-600 lg:text-base">
+                        POLITICS
                       </span>
                     </div>
                   </div>
-                  <div>
+                  <div className="mb-2 lg:mb-0">
                     <h4 className="text-lg font-medium mb-3">Synopsis</h4>
-                    <p className="text-sm font-basic font-light">
+                    <p className="text-xs font-basic font-light lg:text-sm">
                       This hardhitting book is the definitive account of the
                       Biden administrations most disgraceful hourand the chaos
                       it unleashed in the world Americas chaotic retreat from
-                      Afghanistan in 2021 ...
+                      Afghanistan in 2021...
                     </p>
                   </div>
                   <div className="flex gap-12">
-                    <div className="flex flex-col gap-2">
-                      <span className="text-sm font-normal text-gray-100">
+                    <div className="flex flex-col lg:gap-2">
+                      <span className="text-xs font-normal text-gray-100 lg:text-sm">
                         Writen by
                       </span>
-                      <span className="text-lg font-medium">
+                      <span className="text-sm font-medium lg:text-lg ">
                         Jerry Dunleavy"
                       </span>
                     </div>
-                    <div className="flex flex-col gap-2">
-                      <span className="text-sm font-normal text-gray-100">
+                    <div className="flex flex-col lg:gap-2">
+                      <span className="text-xs font-normal text-gray-100 lg:text-sm">
                         Year
                       </span>
-                      <span className="text-lg font-medium">2021</span>
+                      <span className="text-sm font-medium lg:text-lg ">
+                        2021
+                      </span>
                     </div>
                   </div>
                   <div className="flex justify-between">
                     <div className="flex items-center gap-4">
-                      <span className="text-3xl font-semibold">$ 84.78</span>
-                      <span className="text-xl font-normal text-gray-400 line-through">
+                      <span className="text-xl font-semibold lg:text-3xl">
+                        $ 84.78
+                      </span>
+                      <span className="text-sm font-normal text-gray-400 line-through lg:text-xl">
                         $90.00
                       </span>
                     </div>
@@ -1010,7 +1097,7 @@ function Home() {
                 </div>
               </div>
             </div>
-            <div className="w-1/2 grid grid-cols-3 gap-9">
+            <div className="grid grid-cols-2 lg:w-1/2 lg:grid-cols-3 gap-9">
               {[
                 { bg: "https://m.media-amazon.com/images/I/51L4qKzRemL.jpg" },
                 { bg: "https://m.media-amazon.com/images/I/41yv3GD0f9L.jpg" },
@@ -1031,14 +1118,12 @@ function Home() {
             </div>
           </div>
         </div>
-        <div className="testimonials text-center flex flex-col items-center py-[50px]">
-          <div className="mb-8">
-            <h2 className="text-[50px] font-semibold mb-4">Testimonials</h2>
-            <p className="text-base font-light">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor <br /> incididunt ut labore et dolore magna aliqua.
-            </p>
-          </div>
+        <div className="testimonials text-center flex flex-col items-center lg:py-[50px] lg:p-0">
+          <DescriptionOfEachSection
+            title="Testimonials"
+            description="Join the community of satisfied book enthusiasts and share your
+              own story with us."
+          />
           <div className="flex mb-16">
             {Array.from({ length: 4 }).map((_, id) => (
               <img
@@ -1046,13 +1131,13 @@ function Home() {
                 src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
                 alt="user"
                 className={twMerge(
-                  "w-[58px] h-[58px] rounded-full bg-red-100 border-4 border-white object-cover",
+                  " w-[38px] h-[38px] rounded-full bg-red-100 border-4 border-white object-cover lg:w-[58px] lg:h-[58px]",
                   id > 0 && `-ml-4`
                 )}
               />
             ))}
-            <div className="w-[58px] h-[58px] rounded-full bg-purple-600 border-4 border-white -ml-4 flex justify-center items-center">
-              <span className="poppins text-base font-semibold text-white">
+            <div className="w-[38px] h-[38px] rounded-full bg-purple-600 border-4 border-white -ml-4 flex justify-center items-center lg:w-[58px] lg:h-[58px]">
+              <span className="poppins text-xs font-semibold text-white lg:text-base">
                 21k+
               </span>
             </div>
@@ -1061,22 +1146,19 @@ function Home() {
             <TestimonialCard />
           </div>
         </div>
-        <div className="latest flex flex-col text-start container mx-auto py-[50px]">
-          <div className="flex justify-between items-end mb-20">
-            <div className="flex flex-col justify-between">
-              <h2 className="text-[50px] font-semibold mb-5">Letest News</h2>
-              <p className="text-base font-normal">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod <br /> tempor incididunt ut labore et dolore magna
-                aliqua
-              </p>
-            </div>
-            <button className="boxShadow bg-purple-600 px-6 py-3 rounded-xl text-white text-lg font-medium flex items-center gap-10">
+        <div className="latest flex flex-col text-start lg:container mx-auto lg:py-[50px]">
+          <div className="flex justify-between items-end mb-10 lg:mb-20">
+            <DescriptionOfEachSection
+              title="Letest News"
+              position="text-start"
+              description="Stay updated with the literary world through our curated blogs section.Dive into the stories behind the stories and immerse yourself in the dynamic world of books."
+            />
+            {/* <button className="boxShadow bg-purple-600 px-6 py-3 rounded-xl text-white text-lg font-medium flex items-center gap-10">
               <span>View more</span>
               <MoveRight />
-            </button>
+            </button> */}
           </div>
-          <div className="flex gap-10">
+          <div className="flex flex-wrap gap-10">
             <NewsBlogs
               title="Why reading is important for our children?"
               user="Lidya Humble"
@@ -1111,8 +1193,8 @@ function Home() {
             />
           </div>
         </div>
-        <div className="section container mx-auto py-[20px]">
-          <div className="flex justify-between px-[150px] ">
+        <div className="counter lg:container lg:mx-auto lg:py-[20px]">
+          <div className="flex flex-col gap-6 lg:flex-row justify-between px-[150px] ">
             <SectionsBooks
               section="Happy Customers"
               quantity="125,663"
