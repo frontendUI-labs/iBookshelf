@@ -17,7 +17,7 @@ function SliderInputComponent({
         className="relative flex items-center select-none touch-none w-full h-5 pb-[60px] pt-4"
         max={priceRange[1]}
         step={0.5}
-        minStepsBetweenThumbs={8}
+        minStepsBetweenThumbs={3}
       >
         <Slider.Track className="bg-purple-400 relative grow rounded-full h-[.5rem]">
           <Slider.Range className="absolute bg-purple-600 rounded-full h-[.5rem]" />

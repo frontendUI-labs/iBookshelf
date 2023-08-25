@@ -1,34 +1,34 @@
 import { useQuery } from "@tanstack/react-query";
 import {
-  PageRange,
   getBooks,
-  getBooksListLayout,
+  getBooksOnDiscount,
+  getBooksRating,
   getRecommendedBooks,
 } from "../api/books.ts";
-import { useEffect, useState } from "react";
-import { BOOK_PAGINATION_LIST } from "../constants/books.ts";
+import usePagination from "./pagination.ts";
 
 export function useGetBooks({ pageLimit }: { pageLimit: number }) {
-  const [pageRange, setPageRange] = useState<PageRange>([0, pageLimit - 1]);
+  const { handlePreviousPage, handleNextPage, pageRange } =
+    usePagination(pageLimit);
 
-  useEffect(() => {
-    setPageRange([0, pageLimit - 1]);
-  }, [pageLimit]);
+  // useEffect(() => {
+  //   setPageRange([0, pageLimit - 1]);
+  // }, [pageLimit]);
 
-  const handlePreviousPage = () => {
-    window.scrollTo(0, 0);
-    setPageRange(([startPage, endPage]: [number, number]) => [
-      startPage - pageLimit,
-      endPage - pageLimit,
-    ]);
-  };
-  const handleNextPage = () => {
-    window.scrollTo(0, 0);
-    setPageRange(([startPage = 0, endPage = pageLimit]) => [
-      startPage + pageLimit,
-      endPage + pageLimit,
-    ]);
-  };
+  // const handlePreviousPage = () => {
+  //   window.scrollTo(0, 0);
+  //   setPageRange(([startPage, endPage]: [number, number]) => [
+  //     startPage - pageLimit,
+  //     endPage - pageLimit,
+  //   ]);
+  // };
+  // const handleNextPage = () => {
+  //   window.scrollTo(0, 0);
+  //   setPageRange(([startPage = 0, endPage = pageLimit]) => [
+  //     startPage + pageLimit,
+  //     endPage + pageLimit,
+  //   ]);
+  // };
 
   const { isLoading, isError, data, error, isSuccess } = useQuery({
     queryKey: ["book", pageRange],
@@ -47,39 +47,6 @@ export function useGetBooks({ pageLimit }: { pageLimit: number }) {
   };
 }
 
-export function useGetBooksListLayout() {
-  const [pageRangeList, setPageRangeList] = useState<PageRange>([
-    0,
-    BOOK_PAGINATION_LIST - 1,
-  ]);
-  const handlePreviousPageList = () => {
-    window.scrollTo(0, 0);
-    setPageRangeList(([startPage, endPage]: [number, number]) => [
-      startPage - BOOK_PAGINATION_LIST,
-      endPage - BOOK_PAGINATION_LIST,
-    ]);
-  };
-  const handleNextPageList = () => {
-    window.scrollTo(0, 0);
-    setPageRangeList(([startPage = 0, endPage = BOOK_PAGINATION_LIST]) => [
-      startPage + BOOK_PAGINATION_LIST,
-      endPage + BOOK_PAGINATION_LIST,
-    ]);
-  };
-
-  const { data } = useQuery({
-    queryKey: ["bookListLayout", pageRangeList],
-    queryFn: () => getBooksListLayout(pageRangeList),
-  });
-
-  return {
-    bookList: data?.data ?? [],
-    pageRangeList,
-    handlePreviousPageList,
-    handleNextPageList,
-  };
-}
-
 export function useGetRecommendedBooks() {
   const response = useQuery({
     queryKey: ["recommendedBooks"],
@@ -89,5 +56,31 @@ export function useGetRecommendedBooks() {
   return {
     ...response,
     recommendedBooks: response?.data ?? [],
+  };
+}
+
+export function useGetBooksOnDiscount() {
+  const response = useQuery({
+    queryKey: ["priceBooks"],
+    queryFn: getBooksOnDiscount,
+  });
+  return {
+    ...response,
+    booksDiscount: response?.data?.data ?? [],
+  };
+}
+
+export function useGetBooksRating(rating: number) {
+  // const { pageLimit } = pageRange;
+  // console.log(pageLimit, "pageRange");
+
+  const response = useQuery({
+    queryKey: ["ratingBooks", rating],
+    queryFn: () => getBooksRating(rating),
+  });
+  return {
+    ...response,
+
+    ratingBooks: response?.data?.data ?? [],
   };
 }

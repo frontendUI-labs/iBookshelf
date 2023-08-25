@@ -131,7 +131,7 @@ function CardComponent({
 }) {
   const [favorite, setFavorite] = useState(false); //active | inactive
   return (
-    <div className="border-[1px] border-gray-200 rounded-lg p-4">
+    <div className="border-[1px] border-gray-200 rounded-lg p-4 flex flex-col items-center">
       <div className="bg-[#c4c4c4] rounded-lg relative w-full h-[320px]">
         <img
           className=" h-full w-full rounded-lg select-none"

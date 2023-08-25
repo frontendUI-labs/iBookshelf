@@ -2,7 +2,7 @@ import SideBar from "../components/ui/SideBar";
 import MainContent from "../components/ui/MainContent";
 import OnSaleBook from "../components/ui/OnSaleBook";
 import { useGetBooks } from "../hooks/books.ts";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export enum LayoutType {
   GRID = "grid",
@@ -12,6 +12,7 @@ export enum LayoutType {
 function Filter() {
   const [range, setRange] = useState<[number, number]>([6, 16]);
   const [layout, setLayout] = useState<LayoutType>(LayoutType.GRID);
+  const [rating, setRating] = useState(0);
 
   const {
     books,
@@ -22,12 +23,16 @@ function Filter() {
     handleNextPage,
     handlePreviousPage,
   } = useGetBooks({
-    pageLimit: layout === LayoutType.GRID ? 12 : 5,
+    pageLimit: layout === LayoutType.GRID ? 20 : 5,
   });
 
-  const booksOnDiscount = books.filter((book) => {
-    return book.discountPercentage > 0;
-  });
+  const [totalBooks, setTotalBooks] = useState(books);
+  useEffect(() => {
+    setTotalBooks(books);
+  }, []);
+
+  console.log(totalBooks, books, "aca");
+
   const allPrices = books.map((book) => book.price);
   const minPrice = Math.min(...allPrices);
   const maxPrice = Math.max(...allPrices);
@@ -36,22 +41,30 @@ function Filter() {
     Math.floor(maxPrice) + 1,
   ];
 
-  const priceRangeBooks = books.filter((book) => {
-    const [initialValue, finalValue] = range;
-
-    return book.price >= initialValue && book.price <= finalValue;
-  });
+  // const priceRangeBooks = books.filter((book) => {
+  //   const [initialValue, finalValue] = range;
+  //   return book.price >= initialValue && book.price <= finalValue;
+  // });
 
   return (
     <>
       {isError && <p>Fallo algo</p>}
       <div className="container m-auto ">
         <div className=" grid grid-cols-[400px,1fr] py-10 mb-12 ">
-          <SideBar range={range} setRange={setRange} priceRange={priceRange} />
+          <SideBar
+            rating={rating}
+            setTotalBooks={setTotalBooks}
+            setRating={setRating}
+            range={range}
+            setRange={setRange}
+            priceRange={priceRange}
+          />
           {isLoading && <p>Cargando...</p>}
           {isSuccess && (
             <MainContent
-              priceRangeBooks={priceRangeBooks}
+              books={books}
+              totalBooks={totalBooks}
+              // ratingBooks={ratingBooks}
               layout={layout}
               setLayout={setLayout}
               pageRange={pageRange}
@@ -60,7 +73,7 @@ function Filter() {
             />
           )}
         </div>
-        <OnSaleBook booksOnDiscount={booksOnDiscount} />
+        <OnSaleBook />
       </div>
     </>
   );
