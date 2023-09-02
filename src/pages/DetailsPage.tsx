@@ -6,7 +6,6 @@ import {
   Plus,
   ShieldCheck,
   ShoppingCart,
-  Star,
   ThumbsUp,
   Twitter,
   Zap,
@@ -20,7 +19,6 @@ import { useGetBookDetails } from "../hooks/books";
 import TabsComponent from "../common/tabs";
 import LayoutDetails from "../components/ui/LayoutDetails";
 import OnSaleBook from "../components/ui/OnSaleBook";
-import Benefits from "../components/ui/BenefitsCard";
 import RelatedBooksContainer from "../common/related-books";
 
 function Details() {
@@ -187,44 +185,6 @@ function Details() {
           </div>
           <OnSaleBook />
         </LayoutDetails>
-        <div className="benefits flex flex-wrap justify-between container mx-auto">
-          <Benefits
-            benefit="Quick Delivery"
-            description="Delivery dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
-            icon={
-              <Zap
-                className={"text-purple-600 fill-purple-600 w-[25px] h-[25px]"}
-              />
-            }
-          />
-          <Benefits
-            benefit="Secure Payment"
-            description="Payment dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
-            icon={
-              <ThumbsUp
-                className={"text-purple-600 fill-purple-600 w-[25px] h-[25px]"}
-              />
-            }
-          />
-          <Benefits
-            benefit="Best Quality"
-            description="Quality dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
-            icon={
-              <ShieldCheck
-                className={"text-purple-600 fill-purple-600 w-[25px] h-[25px]"}
-              />
-            }
-          />
-          <Benefits
-            benefit="Return Guarantee"
-            description="Guarantee dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
-            icon={
-              <Star
-                className={"text-purple-600 fill-purple-600 w-[25px] h-[25px]"}
-              />
-            }
-          />
-        </div>
       </>
     )
   );

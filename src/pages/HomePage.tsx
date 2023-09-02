@@ -1,11 +1,7 @@
-// import React, { useState } from "react";
 import { twMerge } from "tailwind-merge";
 import {
   ChevronLeftCircle,
   ChevronRightCircle,
-  Zap,
-  ThumbsUp,
-  ShieldCheck,
   Star,
   Bookmark,
   MoveRight,
@@ -15,7 +11,6 @@ import {
   Feather,
   MoveLeft,
 } from "lucide-react";
-import Benefits from "../components/ui/BenefitsCard";
 import { useState, type ReactNode, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import {
@@ -25,12 +20,20 @@ import {
   A11y,
   Autoplay,
 } from "swiper/modules";
-
 import "swiper/css";
 import "swiper/css/bundle";
 import CartButton from "../components/ui/CartButton";
 import Button from "../common/Button";
 import { Link } from "react-router-dom";
+import {
+  useGetBooksRecomended,
+  useGetBooksPopular,
+  useGetBooksOnDiscount,
+  useGetBooksFlashDiscount,
+  useGetBooksFeature,
+} from "../hooks/books";
+import ContainerBenefits from "../components/ui/BenefitsCard";
+import { Book } from "../types/book";
 
 const PointsIcon = ({
   color,
@@ -120,31 +123,31 @@ function MainCard() {
           description: `"Explore a World of Books: Our diverse collection caters to every taste and interest, promising captivating reads for all."`,
         },
       ].map((slide) => (
-        <SwiperSlide key={slide.title} className="px-10 lg:p-24">
-          <div className="relative z-20 flex flex-col gap-8 justify-around lg:gap-10 lg:w-[480px] h-full">
+        <SwiperSlide key={slide.title} className="px-6 lg:p-24">
+          <div className="relative z-20 flex flex-col gap-4 justify-around md:gap-10 md:w-[480px] h-full">
             <p className="text-purple-600 text-base font-bold lg:text-lg tracking-[4px]">
               BACK TO SCHOOL
             </p>
             <h1 className="text-[35px] lg:text-[60px] font-bold text-6xl">
               {slide.title}
             </h1>
-            <p className="text-2xl italic lg:text-4xl">for our community</p>
-            <p className="font-basic text-base font-base w-2/3 lg:text-base ">
+            <p className="text-2xl italic md:text-4xl">for our community</p>
+            <p className="font-basic text-base font-base w-2/3 md:text-base ">
               {slide.description}
             </p>
-            <div>
-              <Button className="w-1/2 flex justify-between">
+            <div className="sm:w-1/2">
+              <Button className="w-2/3 flex justify-between">
                 <span>Get the deal</span>
                 <MoveRight />
               </Button>
-              <Button variant="secondary" className="w-1/2">
+              <Button variant="secondary" className="w-2/3">
                 See other promos
               </Button>
             </div>
           </div>
           <img
             className={twMerge(
-              "absolute bottom-10 right-0 lg:left-1/2 first-letter:object-contains",
+              "absolute bottom-10 right-0 md:left-1/2 first-letter:object-contains",
               slide.img === "/images/firstImage.png"
                 ? "w-[350px] h-[350px] -right-14"
                 : "w-[200px] h-[300px]"
@@ -158,6 +161,14 @@ function MainCard() {
   );
 }
 function BestBook() {
+  const { booksPopular } = useGetBooksPopular();
+  const moreRating = booksPopular.map((book) => book.rating);
+  const maxRating = Math.max(...moreRating);
+  const newPopularBook = [...booksPopular];
+  const mostPopular = newPopularBook.filter(
+    (book) => book.rating === maxRating
+  );
+  const Categories = ["Most Popular", "Best Seller", "Best Reader"];
   return (
     <div className="overflow-hidden font-heading rounded-3xl">
       <Swiper
@@ -174,35 +185,9 @@ function BestBook() {
         navigation={{
           nextEl: ".bestBook-nextEl",
           prevEl: ".bestBook-prevEl",
-          // disabledClass: "hidden",
         }}
       >
-        {[
-          {
-            section: "Best Seller",
-            title: "Don't Forget to Write: A Novel",
-            gnre: "SCIENCE",
-            fixedPrice: "58.25",
-            actualPrice: "60.00",
-            bg: "https://m.media-amazon.com/images/I/41zqVJPSAQL.jpg",
-          },
-          {
-            section: "Best Reader",
-            title: "Watching You: A Novel",
-            gnre: "DRAMA",
-            fixedPrice: "38.25",
-            actualPrice: "40.00",
-            bg: "https://m.media-amazon.com/images/I/41pbe4-oNpL.jpg",
-          },
-          {
-            section: "Most Popular",
-            title: "Divine Rivals: A Novel (Letters of Enchantment Book 1)",
-            gnre: "COMEDY",
-            fixedPrice: "38.25",
-            actualPrice: "40.00",
-            bg: "https://m.media-amazon.com/images/I/51Q3d7HwOmL.jpg",
-          },
-        ].map((book) => {
+        {mostPopular.map((book, idx) => {
           return (
             <SwiperSlide key={book.title}>
               <div
@@ -211,42 +196,50 @@ function BestBook() {
                 )}
               >
                 <img
-                  className="blur-md absolute left-0 top-0 w-full lg:h-full lg:w-100vh "
-                  src={book.bg}
+                  className="blur-md object-cover absolute left-0 top-0 w-full h-full md:w-100vh "
+                  src={book.cover}
                   alt="cover"
                 />
-                <div className="relative z-10 pt-4 flex flex-col justify-center items-center gap-1 lg:gap-4">
-                  <h1 className="text-3xl font-semibold lg:text-5xl">
-                    {book.section}
-                  </h1>
+                <div className="relative z-10 pt-4 flex flex-col justify-center items-center gap-1 md:gap-4">
+                  <div>
+                    <h1 className="text-center text-3xl font-semibold lg:text-5xl">
+                      {Categories[idx]}
+                    </h1>
+                  </div>
                   <p className="text-base">Based sales this week</p>
                   <img
-                    src={book.bg}
+                    src={book.cover}
                     className={twMerge(
                       "overflow-hidden w-[200px] h-[290px] rounded-xl border-2 border-white boxShadow"
                     )}
                     alt=""
                   />
-                  <p className="flex flex-col text-center font-semibold text-xl">
-                    {book.title}
-                    <Link to={`${book.gnre.toLowerCase()}`}>
-                      <span className="text-xs font-thin font-basic opacity-60">
-                        {book.gnre}
+                  <div className="flex flex-col text-center font-semibold lg:text-xl">
+                    <Link to={`/details/${book.slug}`}>
+                      <p className="hover:text-blue-400">{book.title}</p>
+                    </Link>
+                    <Link to={`${book.categorySlug}`}>
+                      <span className="uppercase text-xs font-thin font-basic opacity-60">
+                        {book.categorySlug}
                       </span>
                     </Link>
-                  </p>
+                  </div>
                   <div className="bg-white px-6 py-3 text-lg font-semibold flex  gap-4 rounded-xl">
-                    <p className="text-gray-100 line-through">
-                      {book.actualPrice}
+                    <p className="text-gray-100 line-through">{book.price}</p>
+                    <p className="text-black">
+                      USD{" "}
+                      {(
+                        book.price -
+                        book.price * book.discountPercentage
+                      ).toFixed(2)}
                     </p>
-                    <p className="text-black">USD {book.fixedPrice}</p>
                   </div>
                 </div>
               </div>
             </SwiperSlide>
           );
         })}
-        <button className="bestBook-prevEl absolute z-10 left-5 top-1/2 -translate-y-1/2">
+        <button className="bestBook-prevEl absolute z-10 left-5 top-1/2 -translate-y-1/2 ">
           <ChevronLeftCircle className="fill-gray-500 text-white  w-9 h-9 hover:text-purple-700" />
         </button>
         <button className="bestBook-nextEl absolute z-10 right-5 top-1/2 -translate-y-1/2 ">
@@ -256,61 +249,70 @@ function BestBook() {
     </div>
   );
 }
-function BooksRecomended({
-  color,
-  children,
-  title,
-  description,
-}: {
-  color?: string;
-  title: string;
-  description: string;
-  children: ReactNode;
-}) {
+function BooksRecomended() {
+  const { booksRecomended } = useGetBooksRecomended();
+
   return (
-    <div
-      className={twMerge(
-        "relative overflow-hidden py-6 px-10 font-heading h-[445px] bg-blue-100 rounded-3xl lg:px-[70px] lg:py-[40px] flex flex-col justify-between gap-3",
-        color
-      )}
-    >
-      {children}
-      <div>
-        <h3 className="text-2xl mb-2 lg:text-4xl font-semibold lg:mb-8 relative">
-          {title}
+    <div className="relative overflow-hidden mb-10 bg-orange-100 pt-6 px-10 font-heading h-[445px] rounded-3xl flex flex-col justify-around gap-3 md:py-10 md:gap-8 lg:px-[70px] xl:w-1/2 2xl:justify-between">
+      <CircleDecoration
+        width="340px"
+        height="340px"
+        className="-top-1/2 -right-1/4"
+        color="bg-orange-200"
+      />
+      <CircleDecoration
+        width="215px"
+        height="215px"
+        className="-bottom-1/4 -left-10"
+        color="bg-orange-300"
+      />
+      <PointsIcon
+        className="top-10 right-10"
+        orientation="horizontal"
+        color="bg-orange-400 opacity-40"
+      />
+      <div className="md:w-9/12 2xl:w-11/12">
+        <h3 className="text-2xl mb-2 md:text-4xl font-semibold md:mb-8 relative">
+          Recomended For You
         </h3>
-        <p className="text-sm lg:w-9/12 font-basic font-light relative">
-          {description}
+        <p className="relative text-sm  font-basic font-light ">
+          Discover and Explore your next favorite read, here you will find
+          personalized book suggestions that match your interests and
+          preferences.
         </p>
       </div>
       <div>
         <Swiper
           modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
-          spaceBetween={40}
-          autoplay={{
-            delay: 2500,
-            disableOnInteraction: true,
-            pauseOnMouseEnter: true,
-          }}
+          // autoplay={{
+          //   delay: 2500,
+          //   disableOnInteraction: true,
+          //   pauseOnMouseEnter: true,
+          // }}
           loop
           breakpoints={{
             320: {
               slidesPerView: 1,
               slidesPerGroup: 1,
-              spaceBetween: 10,
             },
             640: {
               slidesPerView: 2,
-              slidesPerGroup: 2,
+              slidesPerGroup: 1,
             },
             768: {
               slidesPerView: 3,
-              slidesPerGroup: 3,
-              spaceBetween: 10,
+              slidesPerGroup: 2,
+              spaceBetween: 20,
             },
             1024: {
+              slidesPerView: 3,
+              slidesPerGroup: 2,
+              spaceBetween: 18,
+            },
+            1536: {
               slidesPerView: 4,
-              slidesPerGroup: 4,
+              slidesPerGroup: 3,
+              spaceBetween: 30,
             },
           }}
           className="relative overflow-visible"
@@ -322,59 +324,26 @@ function BooksRecomended({
             // disabledClass: "hidden",
           }}
         >
-          {[
-            {
-              bg: "https://m.media-amazon.com/images/I/41FJG4ahE6L.jpg",
-            },
-            {
-              bg: "https://m.media-amazon.com/images/I/416toFaYhUL.jpg",
-            },
-            {
-              bg: "https://m.media-amazon.com/images/I/41Ds5rRv+2L.jpg",
-            },
-            {
-              bg: "https://m.media-amazon.com/images/I/41rWzmdpuiL.jpg",
-            },
-            {
-              bg: "https://m.media-amazon.com/images/I/41shZGS-G+L.jpg",
-            },
-            {
-              bg: "https://m.media-amazon.com/images/I/41EhEN9nsmL.jpg",
-            },
-            {
-              bg: "https://m.media-amazon.com/images/I/41HTb6Rv+7L.jpg",
-            },
-            {
-              bg: "https://m.media-amazon.com/images/I/412kxZO5s7L.jpg",
-            },
-            {
-              bg: "https://m.media-amazon.com/images/I/51F2Qy-MQXL.jpg",
-            },
-            {
-              bg: "https://m.media-amazon.com/images/I/51M+z-t6QFL.jpg",
-            },
-            {
-              bg: "https://m.media-amazon.com/images/I/41SlmRbDStL.jpg",
-            },
-            {
-              bg: "https://m.media-amazon.com/images/I/41P2OAEeKsL.jpg",
-            },
-          ].map((book) => {
+          {booksRecomended.map((book) => {
             return (
-              <SwiperSlide key={book.bg}>
-                <img
-                  className="w-[200px] aspect-[4/5] object-cover rounded-xl border-4 border-white"
-                  src={book.bg}
-                  alt=""
-                />
+              <SwiperSlide
+                key={book.cover}
+                className="flex items-center justify-center sm:justify-start"
+              >
+                <Link to={`/details/${book.slug}`}>
+                  <img
+                    className="w-[200px] aspect-[4/5] object-cover rounded-xl border-[3px] border-orange-300 2xl:aspect-[3/4]"
+                    src={book.cover}
+                    alt=""
+                  />
+                </Link>
               </SwiperSlide>
             );
           })}
-
-          <button className="booksRecomended-prevEl hidden lg:first-letter:absolute z-10 -left-3 top-1/2 -translate-y-1/2">
+          <button className="booksRecomended-prevEl absolute z-10 -left-3 top-1/2 -translate-y-1/2 sm:-left-5 lg:-left-12">
             <ChevronLeftCircle className="fill-white w-12 h-12 hover:text-orange-600" />
           </button>
-          <button className="booksRecomended-nextEl hidden lg:absolute z-10 -right-3 top-1/2 -translate-y-1/2 ">
+          <button className="booksRecomended-nextEl absolute z-10 -right-3 top-1/2 -translate-y-1/2 sm:right-3 md:-right-5 lg:right-2 xl:-right-12">
             <ChevronRightCircle className=" fill-white w-12 h-12 hover:text-orange-600" />
           </button>
         </Swiper>
@@ -382,7 +351,108 @@ function BooksRecomended({
     </div>
   );
 }
-const DescriptionOfEachSection = ({
+function BooksPopular() {
+  const { booksPopular } = useGetBooksPopular();
+  return (
+    <div className="relative overflow-hidden mb-10 bg-blue-100 py-6 px-10 font-heading h-[445px] rounded-3xl flex flex-col justify-around gap-3 md:py-10 md:gap-8 lg:px-[70px] xl:w-1/2 2xl:justify-between">
+      <CircleDecoration
+        width="240px"
+        height="240px"
+        className="-top-1/4 right-1/4"
+        color="bg-blue-200"
+      />
+      <CircleDecoration
+        width="450px"
+        height="450px"
+        className="-bottom-1/4 -left-1/4"
+        color="bg-blue-200"
+      />
+      <PointsIcon
+        className="top-1/4 right-10"
+        orientation="vertical"
+        color="bg-blue-300"
+      />
+      <div>
+        <h3 className="text-2xl mb-2 md:text-4xl font-semibold md:mb-8 relative">
+          Popular in 2023
+        </h3>
+        <p className="relative text-sm md:w-9/12 font-basic font-light 2xl:w-11/12">
+          Stay up to date with the literary trends of 2023! Explore our 'Popular
+          in 2023 For You' .Immerse yourself in the stories that have captured
+          the hearts and minds of readers worldwide.
+        </p>
+      </div>
+      <div>
+        <Swiper
+          modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
+          // autoplay={{
+          //   delay: 2500,
+          //   disableOnInteraction: true,
+          //   pauseOnMouseEnter: true,
+          // }}
+          loop
+          breakpoints={{
+            320: {
+              slidesPerView: 1,
+              slidesPerGroup: 1,
+            },
+            640: {
+              slidesPerView: 2,
+              slidesPerGroup: 1,
+            },
+            768: {
+              slidesPerView: 3,
+              slidesPerGroup: 2,
+              spaceBetween: 20,
+            },
+            1024: {
+              slidesPerView: 3,
+              slidesPerGroup: 2,
+              spaceBetween: 18,
+            },
+            1536: {
+              slidesPerView: 4,
+              slidesPerGroup: 3,
+              spaceBetween: 30,
+            },
+          }}
+          className="relative overflow-visible"
+          slidesPerView={4}
+          slidesPerGroup={4}
+          navigation={{
+            nextEl: ".booksRecomended-nextEl",
+            prevEl: ".booksRecomended-prevEl",
+            // disabledClass: "hidden",
+          }}
+        >
+          {booksPopular.map((book) => {
+            return (
+              <SwiperSlide
+                key={book.cover}
+                className="flex items-center justify-center sm:justify-start"
+              >
+                <Link to={`/details/${book.slug}`}>
+                  <img
+                    className="w-[200px] aspect-[4/5] object-cover rounded-xl border-[3px] border-blue-300 2xl:aspect-[3/4]"
+                    src={book.cover}
+                    alt=""
+                  />
+                </Link>
+              </SwiperSlide>
+            );
+          })}
+          <button className="booksRecomended-prevEl absolute z-10 -left-3 top-1/2 -translate-y-1/2 sm:-left-5 lg:-left-12">
+            <ChevronLeftCircle className="fill-white w-12 h-12 hover:text-orange-600" />
+          </button>
+          <button className="booksRecomended-nextEl absolute z-10 -right-3 top-1/2 -translate-y-1/2 sm:right-3 md:-right-5 lg:right-2 xl:-right-12">
+            <ChevronRightCircle className=" fill-white w-12 h-12 hover:text-orange-600" />
+          </button>
+        </Swiper>
+      </div>
+    </div>
+  );
+}
+const TitleOfEachSection = ({
   title,
   description,
   position,
@@ -392,22 +462,18 @@ const DescriptionOfEachSection = ({
   position?: string;
 }) => {
   return (
-    <div
-      className={twMerge(
-        "flex flex-col text-center gap-4 mb-8 lg:mb-14 mt-3",
-        position
-      )}
-    >
-      <h2 className="text-3xl md:text-4xl lg:text-[50px] font-semibold">
+    <div className={twMerge("flex flex-col text-center gap-4 mb-8", position)}>
+      <h2 className="text-3xl md:text-4xl md:text-[50px] font-semibold">
         {title}
       </h2>
-      <p className="text-sm font-basic font-light lg:text-base">
+      <p className="text-sm font-basic font-light md:text-base">
         {description}
       </p>
     </div>
   );
 };
 const SpecialsBooks = () => {
+  const { booksDiscount } = useGetBooksOnDiscount();
   return (
     <div>
       <Swiper
@@ -427,19 +493,21 @@ const SpecialsBooks = () => {
           },
           640: {
             slidesPerView: 2,
-            slidesPerGroup: 2,
+            slidesPerGroup: 1,
+            spaceBetween: 10,
           },
           768: {
             slidesPerView: 2,
-            slidesPerGroup: 2,
-            spaceBetween: 10,
+            slidesPerGroup: 1,
+            spaceBetween: 20,
           },
           1024: {
             slidesPerView: 3,
-            slidesPerGroup: 3,
+            slidesPerGroup: 1,
+            spaceBetween: 30,
           },
         }}
-        spaceBetween={40}
+        // spaceBetween={40}
         slidesPerView={3}
         navigation={{
           prevEl: ".specialBook-prevEl",
@@ -447,91 +515,49 @@ const SpecialsBooks = () => {
           // disabledClass: "hidden",
         }}
       >
-        {[
-          {
-            title: "Self Heal By Design",
-            gnre: "BIOGRAPHY",
-            author: "Barbara O'Neill",
-            actualPrice: "8.78",
-            prevPrice: "15",
-            bg: "https://m.media-amazon.com/images/I/51dyPjyi8aL.jpg",
-          },
-          {
-            title: "Stop Overthinking",
-            gnre: "HORROR",
-            author: "Nick Trenton",
-            actualPrice: "18.78",
-            prevPrice: "25",
-            bg: "https://m.media-amazon.com/images/I/51SPsmOpFDL.jpg",
-          },
-          {
-            title: "Dirty Truths (Boston Billionaires Book 4)",
-            gnre: "THRILLER",
-            author: "Brittanee Nicole",
-            actualPrice: "28.78",
-            prevPrice: "35",
-            bg: "https://m.media-amazon.com/images/I/51X14q2cr8L.jpg",
-          },
-          {
-            title: "The Beginner's Guide to Stoicism",
-            gnre: "BIOGRAPHY",
-            author: "Matthew Van Natta",
-            actualPrice: "18.78",
-            prevPrice: "22",
-            bg: "https://m.media-amazon.com/images/I/51CY98UlqqL.jpg",
-          },
-          {
-            title: "Whiskey Lies (Boston Billionaires Book 1)",
-            gnre: "DRAMA",
-            author: "Brittanee Nicole",
-            actualPrice: "9.78",
-            prevPrice: "12",
-            bg: "https://m.media-amazon.com/images/I/41CCCfSaZ7L.jpg",
-          },
-          {
-            title: "Meditations: A New Translation (Modern Library)",
-            gnre: "POLITIC",
-            author: "Marcus Aurelius",
-            actualPrice: "8.78",
-            prevPrice: "15",
-            bg: "https://m.media-amazon.com/images/I/41zY8V+5QEL.jpg",
-          },
-        ].map((card) => (
-          <SwiperSlide key={card.title}>
+        {booksDiscount.map((book) => (
+          <SwiperSlide key={book.title}>
             <div className="rounded-2xl border-2 border-gray-300 overflow-y-hidden boxShadow">
-              <img
-                className="h-[200px] w-full object-cover rounded-b-2xl lg:h-[300px]"
-                src={card.bg}
-                alt=""
-              />
-              <div className="text-start p-3 lg:p-7 lg:h-[430px] flex flex-col justify-between">
-                <h3 className="font-semibold mb-3 lg:text-2xl lg:mb-5">
-                  {card.title}
-                </h3>
+              <Link to={`/details/${book.slug}`}>
+                <img
+                  className="h-[200px] w-full object-cover rounded-b-2xl md:h-[300px]"
+                  src={book.cover}
+                  alt=""
+                />
+              </Link>
+              <div className="text-start p-3 md:p-7 flex flex-col justify-between">
+                <Link to={`/details/${book.slug}`}>
+                  <h3 className="line-clamp-1 font-semibold mb-3 md:text-2xl md:mb-5 hover:text-purple-600">
+                    {book.title}
+                  </h3>
+                </Link>
                 <div>
-                  <button className="bg-purple-400 inline-block text-purple-600 text-xs font-basic font-normal py-2 px-3 rounded-xl">
-                    {card.gnre}
-                  </button>
+                  <Link to={`/${book.categorySlug}`}>
+                    <div className="uppercase tracking-wider bg-purple-400 inline-block text-purple-600 text-xs font-basic font-normal py-2 px-3 rounded-xl hover:text-orange-400 hover:bg-orange-200 ">
+                      {book.categorySlug}
+                    </div>
+                  </Link>
                 </div>
-                <p className="text-xs mt-4 font-light font-basic lg:text-base">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris
+                <p className="line-clamp-4 text-xs mt-4 font-light font-basic md:text-base">
+                  {book.synopsis}
                 </p>
-                <p className="my-3 text-sm font-normal font-basic lg:my-8 lg:text-base">
-                  {card.author}
+                <p className="my-3 text-sm font-normal font-basic md:my-8 md:text-base">
+                  {book.author}
                 </p>
-                <div className="flex flex-col-reverse gap-2 lg:flex justify-between">
+                <div className="flex flex-col-reverse gap-2 md:flex justify-between">
                   <div>
                     <CartButton text="Add to cart" />
                   </div>
                   <p className="flex items-center gap-4">
-                    <span className="text-xl font-semibold lg:text-3xl">
-                      $ {card.actualPrice}
+                    <span className="text-xl font-semibold md:text-3xl">
+                      $
+                      {(
+                        book.price -
+                        book.price * book.discountPercentage
+                      ).toFixed(2)}
                     </span>
-                    <span className="text-base font-normal text-gray-100 line-through lg:text-xl">
-                      $ {card.prevPrice}
+                    <span className="text-base font-normal text-gray-100 line-through md:text-xl">
+                      $ {book.price}
                     </span>
                   </p>
                 </div>
@@ -585,7 +611,7 @@ const Timer = ({
   const secondsLeft = remainingTime % 60;
 
   return (
-    <div className="border-2 border-gray-300 rounded-2xl flex justify-around items-center lg:gap-14 lg:px-10 py-3 mb-16">
+    <div className="w-full border-2 border-gray-300 py-3 mb-8 rounded-2xl flex justify-around items-center sm:w-2/3 md:gap-14 md:px-10 lg:w-1/2 2xl:mb-16 2xl:w-4/12">
       <div className="flex flex-col gap-1">
         <span className="text-[50px] font-semibold text-orange-400">
           {formatTime(daysLeft)}
@@ -613,43 +639,168 @@ const Timer = ({
     </div>
   );
 };
-const FlashBooks = ({
-  title,
-  gnre,
-  priceActual,
-  prevPrice,
-  img,
-}: {
-  title: string;
-  gnre: string;
-  priceActual: string;
-  prevPrice: string;
-  img: string;
-}) => {
+const FlashBooks = () => {
+  const { bookFlashDiscount } = useGetBooksFlashDiscount();
   return (
-    <div className="p-5 flex flex-col items-center lg:h-[500px]">
-      <img
-        className="rounded-2xl h-[330px] aspect-[3/4]"
-        src={img}
-        alt="cover"
-      />
-      <div className="flex flex-col items-center lg:gap-2 lg:mt-3">
-        <Link to={"/details"} className="hover:text-purple-600">
-          <h3 className="text-xl font-semibold">{title}</h3>
-        </Link>
-        <Link to={`/${gnre.toLowerCase()}`}>
-          <span className="text-sm font-normal text-purple-600">{gnre}</span>
-        </Link>
-        <div className="flex items-center justify-center gap-4">
-          <span className="text-2xl text-purple-600 font-semibold">
-            $ {priceActual}
-          </span>
-          <span className="text-base font-normal text-gray-500 line-through lg:text-xl">
-            $ {prevPrice}
-          </span>
+    <>
+      {bookFlashDiscount.map((book) => (
+        <div
+          key={book.title}
+          className="p-5 flex flex-col items-center gap-4 md:h-[500px] md:aspect-[3/4]"
+        >
+          <Link to={`/details/${book.slug}`}>
+            <img
+              className="border-[0.5px] border-orange-600 rounded-2xl h-[330px] aspect-[3/4] hover:scale-105 duration-300"
+              src={book.cover}
+              alt="cover"
+            />
+          </Link>
+          <div className="flex flex-col items-center md:gap-2 md:mt-3">
+            <Link
+              to={`/details/${book.slug}`}
+              className="hover:text-purple-600"
+            >
+              <h3 className="text-xl font-semibold line-clamp-2 md:px-10">
+                {book.title}
+              </h3>
+            </Link>
+            <Link to={`/${book.categorySlug}`}>
+              <span className="uppercase tracking-wide text-sm font-normal text-purple-600 hover:text-orange-400">
+                {book.categorySlug}
+              </span>
+            </Link>
+            <div className="flex items-center justify-center gap-4">
+              <span className="text-2xl text-purple-600 font-semibold">
+                ${" "}
+                {(book.price - book.price * book.discountPercentage).toFixed(2)}
+              </span>
+              <span className="text-base font-normal text-gray-500 line-through md:text-xl">
+                $ {book.price}
+              </span>
+            </div>
+          </div>
         </div>
+      ))}
+    </>
+  );
+};
+const FeatureBooks = () => {
+  const { isSuccess, booksFeature } = useGetBooksFeature();
+  const [selectedBook, setSelectedBook] = useState<Book>();
+  console.log(booksFeature);
+
+  useEffect(() => {
+    if (isSuccess) {
+      setSelectedBook(booksFeature[0]);
+    }
+  }, [booksFeature]);
+
+  const handleBookClick = (book: Book) => {
+    setSelectedBook(book);
+  };
+
+  return (
+    <>
+      <div className="xl:w-1/2">
+        <div className="lg:w-1/2 xl:w-10/12">
+          <TitleOfEachSection
+            position="text-start"
+            title=" Featured Books"
+            description="Discover our Featured Books collection – handpicked titles that promise exceptional reads. Explore captivating stories and more in this curated selection of must-reads."
+          />
+        </div>
+        {selectedBook && (
+          <div className="p-2 bg-white rounded-xl md:grid grid-cols-[0.9fr,1.1fr] md:p-8 gap-6 boxShadow xl:h-[480px] ">
+            <Link to={`/details/${selectedBook.slug}`}>
+              <img
+                className="w-full object-cover h-[300px] aspect-[4/5] rounded-2xl hover:scale-105 duration-300 md:h-auto bg-gray-100 lg:h-full "
+                src={selectedBook.cover}
+                alt="cover"
+              />
+            </Link>
+            <div className="pt-3 px-2 text-start flex flex-col gap-1 justify-between">
+              <div className="flex gap-4">
+                <div className="relative">
+                  <Bookmark className="text-purple-600 w-[70px] h-[70px]" />
+                  <Star className="fill-orange-400 text-white absolute -top-3 -right-[6px] w-[42px] h-[42px]" />
+                </div>
+                <div>
+                  <Link to={`/details/${selectedBook.slug}`}>
+                    <h3 className="line-clamp-2 text-2xl font-semibold hover:text-purple-600 md:text-3xl">
+                      {selectedBook.title}
+                    </h3>
+                  </Link>
+                  <Link to={`/${selectedBook.categorySlug}`}>
+                    <span className="uppercase text-sm font-medium text-purple-600 hover:text-orange-400 md:text-base">
+                      {selectedBook.categorySlug}
+                    </span>
+                  </Link>
+                </div>
+              </div>
+              <div className="mb-2 md:mb-0">
+                <h4 className="text-lg font-medium mb-3">Synopsis</h4>
+                <p className="line-clamp-4 text-xs font-basic font-light md:text-sm">
+                  {selectedBook.synopsis}
+                </p>
+              </div>
+              <div className="flex gap-12">
+                <div className="flex flex-col md:gap-2">
+                  <span className="text-xs font-normal text-gray-100 md:text-sm">
+                    Writen by
+                  </span>
+                  <span className="text-sm font-medium md:text-lg ">
+                    {selectedBook.author}
+                  </span>
+                </div>
+                <div className="flex flex-col md:gap-2">
+                  <span className="text-xs font-normal text-gray-100 md:text-sm">
+                    Year
+                  </span>
+                  <span className="text-sm font-medium md:text-lg ">
+                    {new Date(selectedBook.publishDate).getFullYear()}
+                  </span>
+                </div>
+              </div>
+              <div className="flex justify-between">
+                <div className="flex items-center justify-center gap-2 2xl:gap-4">
+                  <span className="text-xl font-semibold md:text-2xl 2xl:text-3xl">
+                    ${" "}
+                    {(
+                      selectedBook.price -
+                      selectedBook.price * selectedBook.discountPercentage
+                    ).toFixed(2)}
+                  </span>
+                  <span className="text-sm font-normal text-gray-400 line-through md:text-base 2xl:text-2xl">
+                    ${selectedBook.price}
+                  </span>
+                </div>
+                <CartButton text="ADD" />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
-    </div>
+      <div className="grid grid-cols-2 xl:w-1/2 md:grid-cols-3 gap-9">
+        {[
+          booksFeature.map((book) => {
+            return (
+              <button
+                className="hover:scale-105 duration-300"
+                key={book.title}
+                onClick={() => handleBookClick(book)}
+              >
+                <img
+                  key={book.cover}
+                  className="h-full  aspect-[3/4] rounded-xl object-cover"
+                  src={book.cover}
+                  alt="cover"
+                />
+              </button>
+            );
+          }),
+        ]}
+      </div>
+    </>
   );
 };
 const TestimonialCard = () => {
@@ -674,12 +825,18 @@ const TestimonialCard = () => {
           },
           768: {
             slidesPerView: 2,
-            slidesPerGroup: 2,
+            slidesPerGroup: 1,
             spaceBetween: 10,
           },
           1024: {
+            slidesPerView: 2,
+            slidesPerGroup: 1,
+            spaceBetween: 20,
+          },
+          1280: {
             slidesPerView: 3,
-            slidesPerGroup: 3,
+            slidesPerGroup: 1,
+            spaceBetween: 30,
           },
         }}
       >
@@ -727,11 +884,11 @@ const TestimonialCard = () => {
           },
         ].map((card) => (
           <SwiperSlide key={card.title}>
-            <div className="text-center p-6 flex flex-col justify-between rounded-xl font-basic border-2 border-gray-300 h-[235px] boxShadow lgpx-10 lg:py-8">
-              <h3 className="text-base font-medium mb-8 lg:text-xl">
+            <div className="text-center p-6 flex flex-col justify-between rounded-xl font-basic border-2 border-gray-300 boxShadow lgpx-10 md:py-8">
+              <h3 className="line-clamp-2 text-base font-medium mb-8 lg:text-xl">
                 {card.title}
               </h3>
-              <div className="flex flex-col gap-3 items-center justify-between lg:flex-row">
+              <div className="flex flex-col gap-3 items-center justify-between md:flex-row">
                 <div className="flex items-center gap-5">
                   <img
                     className="w-[60px] h-[60px] rounded-full object-cover"
@@ -739,7 +896,7 @@ const TestimonialCard = () => {
                     alt="user"
                   />
                   <div className="text-start">
-                    <h4 className="text-sm font-semibold lg:text-base">
+                    <h4 className="text-sm font-semibold 2xl:text-base ">
                       {card.user}
                     </h4>
                     <span className="text-xs font-normal">Book Lovers</span>
@@ -749,7 +906,7 @@ const TestimonialCard = () => {
                   {Array.from({ length: 5 }).map((_, id) => (
                     <Star
                       key={id}
-                      className="fill-orange-600 text-orange-600 w-3 h-3 lg:w-6 lg:h-6"
+                      className="fill-orange-600 text-orange-600 w-3 h-3 md:w-4 md:h-4 lg:w-6 lg:h-6"
                     />
                   ))}
                 </div>
@@ -777,7 +934,7 @@ const NewsBlogs = ({
   profile: string;
 }) => {
   return (
-    <div className="border-b-2 bprder-gray-100 rounded-2xl overflow-hidden lg:border-none">
+    <div className="rounded-2xl overflow-hidden">
       <a href={link} target="_blank">
         <img
           className="h-[250px] bg-gray-100 rounded-b-2xl w-full object-cover hover:scale-105 duration-300"
@@ -786,13 +943,13 @@ const NewsBlogs = ({
         />
       </a>
 
-      <div className="text-start py-3 flex flex-col gap-4 lg:py-7">
+      <div className="text-start py-3 flex flex-col gap-4 md:py-7">
         <a href={link} target="_blank">
           <h3 className="text-lg font-medium flex hover:text-purple-600">
             {title}
           </h3>
         </a>
-        <div className="text-sm font-light font-basic lg:mb-5">
+        <div className="text-sm font-light font-basic md:mb-5">
           <p className="mb-2">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore...
@@ -828,10 +985,10 @@ const SectionsBooks = ({
   return (
     <div className="text-center flex flex-col items-center">
       <div className="">{icon}</div>
-      <h2 className="text-3xl font-bold lg:mb-[10px] lg:mt-10 lg:text-5xl">
+      <h2 className="text-3xl font-bold md:mb-[10px] md:mt-10 md:text-5xl">
         {quantity}
       </h2>
-      <span className="text-base font-medium text-gray-100 lg:text-xl">
+      <span className="text-base font-medium text-gray-100 md:text-xl">
         {section}
       </span>
     </div>
@@ -839,14 +996,13 @@ const SectionsBooks = ({
 };
 
 function Home() {
-  const iconClassName = "text-purple-600 fill-purple-600 w-[25px] h-[25px]";
   const iconSectionClass =
-    "w-[70px] h-[70px] lg:w-[100px] lg:h-[100px] fill-purple-600 text-white stroke-[0.75px]";
+    "w-[70px] h-[70px] md:w-[100px] md:h-[100px] fill-purple-600 text-white stroke-[0.75px]";
   return (
     <>
-      <div className="my-[30px] px-4 mx-auto font-heading flex flex-col gap-[100px] lg:px-0">
-        <div className="main flex flex-col gap-4 lg:grid grid-cols-[3fr,1fr] gap-x-3 lg:h-[662px] container mx-auto">
-          <div className="relative flex items-center justify-center h-[600px] bg-purple-400 rounded-3xl overflow-hidden">
+      <div className="my-[30px] mx-auto font-heading flex flex-col gap-[100px] sm:px-0">
+        <div className="main container mx-auto flex flex-col gap-4 md:grid grid-cols-[2fr,1fr] px-2 lg:grid-cols-[3fr,1fr] gap-x-3 md:h-[662px] ">
+          <div className="relative flex py-8 items-center justify-center md:h-[600px] bg-purple-400 rounded-3xl overflow-hidden">
             <MainCard />
             <PointsIcon
               className="top-10 left-10"
@@ -873,137 +1029,40 @@ function Home() {
           </div>
           <BestBook />
         </div>
-        <div className="benefits flex flex-wrap justify-between lg:container mx-auto">
-          <Benefits
-            benefit="Quick Delivery"
-            description="Experience the joy of rapid book delivery with our efficient and quick service."
-            icon={<Zap className={iconClassName} />}
-          />
-          <Benefits
-            benefit="Secure Payment"
-            description="Your payment is secure with us. Enjoy worry-free book shopping knowing your transactions are safe."
-            icon={<ShieldCheck className={iconClassName} />}
-          />
-          <Benefits
-            benefit="Best Quality"
-            description="Immerse yourself in a world of captivating stories with our handpicked selection of the finest books."
-            icon={<ThumbsUp className={iconClassName} />}
-          />
-          <Benefits
-            benefit="Return Guarantee"
-            description="Enjoy your reading journey without worry. Our reliable return guarantee ensures your satisfaction."
-            icon={<Star className={iconClassName} />}
-          />
+        <div className="benefits">
+          <ContainerBenefits bg="bg-purple-600 py-24" />
         </div>
-        <div className="recomended lg:flex gap-8 container mx-auto">
-          <BooksRecomended
-            title="Recomended For You"
-            color="bg-orange-100"
-            description="Discover and Explore your next favorite read, here you will find personalized book suggestions that match your interests and preferences."
-          >
-            <CircleDecoration
-              width="340px"
-              height="340px"
-              className="-top-1/2 -right-1/4"
-              color="bg-orange-200"
-            />
-            <CircleDecoration
-              width="215px"
-              height="215px"
-              className="-bottom-1/4 -left-10"
-              color="bg-orange-300"
-            />
-            <PointsIcon
-              className="top-10 right-10"
-              orientation="horizontal"
-              color="bg-orange-400 opacity-40"
-            />
-          </BooksRecomended>
-          <BooksRecomended
-            title="Popular in 2020"
-            color="bg-blue-100"
-            description="Popular dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-          >
-            <CircleDecoration
-              width="240px"
-              height="240px"
-              className="-top-1/4 right-1/4"
-              color="bg-blue-200"
-            />
-            <CircleDecoration
-              width="450px"
-              height="450px"
-              className="-bottom-1/4 -left-1/4"
-              color="bg-blue-200"
-            />
-            <PointsIcon
-              className="top-1/4 right-10"
-              orientation="vertical"
-              color="bg-blue-300"
-            />
-          </BooksRecomended>
+        <div className="recomended container mx-auto px-4 lg:px-14 xl:flex gap-4 2xl:mt-20">
+          <BooksRecomended />
+          <BooksPopular />
         </div>
-        <div className="special lg:container mx-auto">
-          <DescriptionOfEachSection
-            title="Special Offers"
-            description="Unlock a world of unbeatable book deals. Grab limited-time
-              discounts and promotions on a diverse range of titles."
-          />
+        <div className="special container mx-auto px-4 lg:px-14 lg:mt-10 2xl:mt-20">
+          <div className="mb-8 lg:mb-16 xl:px-60 2xl:px-96">
+            <TitleOfEachSection
+              title="Special Offers"
+              description="Dive into our 'Special Offers' section and unlock a world of unbeatable book deals. Grab discounts and promotions on a diverse range of books."
+            />
+          </div>
           <SpecialsBooks />
         </div>
-        <div className="flashSale text-center lg:flex flex-col items-center lg:container mx-auto py-[70px]">
-          <div className="relative mb-16">
+        <div className="flashSale container mx-auto px-4  py-[70px] text-center flex flex-col items-center  md:mt-20 lg:px-14">
+          <div className="relative md:mb-8 2xl:mb-16 xl:px-60 2xl:px-96">
             <PointsIcon
               color="bg-purple-400"
               orientation="vertical"
               className="-top-1/4 left-1/2 translate-x-20 -z-10"
             />
-            <DescriptionOfEachSection
+            <TitleOfEachSection
               title="Flash Sale"
-              description="Discover our incredible limited time offers on books, don't miss
-              this opportunity to buy your favorite books at incredible prices!"
+              description="Explore high-quality books at incredible prices in our Flash Sale section. These deals are for a limited time only, so act fast and discover your next read at the best price."
             />
           </div>
           <Timer days={2} hours={5} minutes={42} seconds={19} />
-          <div className="flex flex-col gap-1 lg:flex-row lg:gap-8 lg:mb-[100px]">
-            <FlashBooks
-              title="King: A Life"
-              gnre="BIOGRAPHY"
-              priceActual="54.78"
-              prevPrice="70.00"
-              img="https://m.media-amazon.com/images/I/41NYMGH6BML.jpg"
-            />
-            <FlashBooks
-              title="The Art of War"
-              gnre="DRAMA , BIOGRAPHY"
-              priceActual="34.56"
-              prevPrice="50.00"
-              img="https://m.media-amazon.com/images/I/41UmGUKpWeL.jpg"
-            />
-            <FlashBooks
-              title="Uncuffed Voices: Her Story Is My Story"
-              gnre="THRILLER"
-              priceActual="14.56"
-              prevPrice="20.00"
-              img="https://m.media-amazon.com/images/I/41b6bz1DacL.jpg"
-            />
-            <FlashBooks
-              title="Nobody Needs to Know: A Memoir"
-              gnre="DRAMA"
-              priceActual="76.12"
-              prevPrice="90.00"
-              img="https://m.media-amazon.com/images/I/41oauiSSkkL.jpg"
-            />
-            <FlashBooks
-              title="Girls Found (Rainey Paxton Series Book 4)"
-              gnre="BIOGRAPHY"
-              priceActual="76.12"
-              prevPrice="90.00"
-              img="https://m.media-amazon.com/images/I/51kRaBYEnTL.jpg"
-            />
+          <div className="flex flex-col md:flex-row md:mb-[50px]">
+            <FlashBooks />
           </div>
         </div>
-        <div className="feature w-full lg:h-[800px] bg-purple-400 relative overflow-hidden py-[70px]">
+        <div className="feature w-full bg-purple-400 relative overflow-hidden py-[70px] xl:h-[800px]">
           <CircleDecoration
             color="bg-purple-100"
             width="450px"
@@ -1026,103 +1085,14 @@ function Home() {
             orientation="horizontal"
             className="bottom-10 right-16"
           />
-          <div className="relative flex flex-col lg:flex-row justify-between gap-16 container mx-auto">
-            <div className="lg:w-1/2">
-              <DescriptionOfEachSection
-                position="text-start"
-                title=" Featured Books"
-                description="Explore our collection of carefully selected featured books.
-                  Immerse yourself in compelling stories and discover why these
-                  books are worthy of the spotlight."
-              />
-              <div className="p-2 bg-white rounded-xl lg:grid grid-cols-[0.9fr,1.1fr] lg:h-[480px] lg:p-8 gap-10 boxShadow">
-                <img
-                  className="w-full h-[200px] bg-gray-100 rounded-2xl object-cover lg:h-full"
-                  src="https://m.media-amazon.com/images/I/41OEBfsc2dL.jpg"
-                  alt="cover"
-                />
-                <div className="pt-3 px-2 text-start flex flex-col gap-1 justify-between">
-                  <div className="flex gap-4">
-                    <div className="relative">
-                      <Bookmark className="text-purple-600 w-[70px] h-[70px]" />
-                      <Star className="fill-orange-400 text-white absolute -top-3 -right-[6px] w-[42px] h-[42px]" />
-                    </div>
-                    <div>
-                      <h3 className="text-2xl font-semibold lg:text-3xl ">
-                        Kabul
-                      </h3>
-                      <span className="text-sm font-medium text-purple-600 lg:text-base">
-                        POLITICS
-                      </span>
-                    </div>
-                  </div>
-                  <div className="mb-2 lg:mb-0">
-                    <h4 className="text-lg font-medium mb-3">Synopsis</h4>
-                    <p className="text-xs font-basic font-light lg:text-sm">
-                      This hardhitting book is the definitive account of the
-                      Biden administrations most disgraceful hourand the chaos
-                      it unleashed in the world Americas chaotic retreat from
-                      Afghanistan in 2021...
-                    </p>
-                  </div>
-                  <div className="flex gap-12">
-                    <div className="flex flex-col lg:gap-2">
-                      <span className="text-xs font-normal text-gray-100 lg:text-sm">
-                        Writen by
-                      </span>
-                      <span className="text-sm font-medium lg:text-lg ">
-                        Jerry Dunleavy"
-                      </span>
-                    </div>
-                    <div className="flex flex-col lg:gap-2">
-                      <span className="text-xs font-normal text-gray-100 lg:text-sm">
-                        Year
-                      </span>
-                      <span className="text-sm font-medium lg:text-lg ">
-                        2021
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex justify-between">
-                    <div className="flex items-center gap-4">
-                      <span className="text-xl font-semibold lg:text-3xl">
-                        $ 84.78
-                      </span>
-                      <span className="text-sm font-normal text-gray-400 line-through lg:text-xl">
-                        $90.00
-                      </span>
-                    </div>
-                    <CartButton text="ADD" />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 lg:w-1/2 lg:grid-cols-3 gap-9">
-              {[
-                { bg: "https://m.media-amazon.com/images/I/51L4qKzRemL.jpg" },
-                { bg: "https://m.media-amazon.com/images/I/41yv3GD0f9L.jpg" },
-                { bg: "https://m.media-amazon.com/images/I/41XG4Tq5VPL.jpg" },
-                { bg: "https://m.media-amazon.com/images/I/41cnk8xkzhL.jpg" },
-                { bg: "https://m.media-amazon.com/images/I/416MEFX9RBL.jpg" },
-                { bg: "https://m.media-amazon.com/images/I/5109wtVUAvL.jpg" },
-              ].map((card, id) => {
-                return (
-                  <img
-                    key={id}
-                    className="h-full rounded-xl object-cover"
-                    src={card.bg}
-                    alt="cover"
-                  />
-                );
-              })}
-            </div>
+          <div className="container mx-auto px-4 relative flex flex-col gap-16  lg:px-14 xl:flex-row justify-between ">
+            <FeatureBooks />
           </div>
         </div>
-        <div className="testimonials text-center flex flex-col items-center lg:py-[50px] lg:p-0">
-          <DescriptionOfEachSection
+        <div className="testimonials text-center flex flex-col items-center md:py-[50px]">
+          <TitleOfEachSection
             title="Testimonials"
-            description="Join the community of satisfied book enthusiasts and share your
-              own story with us."
+            description="Read  testimonials that highlight the satisfaction and joy our books bring to readers like you."
           />
           <div className="flex mb-16">
             {Array.from({ length: 4 }).map((_, id) => (
@@ -1131,13 +1101,13 @@ function Home() {
                 src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
                 alt="user"
                 className={twMerge(
-                  " w-[38px] h-[38px] rounded-full bg-red-100 border-4 border-white object-cover lg:w-[58px] lg:h-[58px]",
+                  " w-[38px] h-[38px] rounded-full bg-red-100 border-4 border-white object-cover md:w-[58px] md:h-[58px]",
                   id > 0 && `-ml-4`
                 )}
               />
             ))}
-            <div className="w-[38px] h-[38px] rounded-full bg-purple-600 border-4 border-white -ml-4 flex justify-center items-center lg:w-[58px] lg:h-[58px]">
-              <span className="poppins text-xs font-semibold text-white lg:text-base">
+            <div className="w-[38px] h-[38px] rounded-full bg-purple-600 border-4 border-white -ml-4 flex justify-center items-center md:w-[58px] md:h-[58px]">
+              <span className="poppins text-xs font-semibold text-white md:text-base">
                 21k+
               </span>
             </div>
@@ -1146,19 +1116,19 @@ function Home() {
             <TestimonialCard />
           </div>
         </div>
-        <div className="latest flex flex-col text-start lg:container mx-auto lg:py-[50px]">
-          <div className="flex justify-between items-end mb-10 lg:mb-20">
-            <DescriptionOfEachSection
+        <div className="latest container mx-auto flex flex-col text-start px-4  md:py-[50px] lg:px-14">
+          <div className="flex justify-between items-end mb-10 lg:mb-10 lg:w-4/6 ">
+            <TitleOfEachSection
               title="Letest News"
               position="text-start"
-              description="Stay updated with the literary world through our curated blogs section.Dive into the stories behind the stories and immerse yourself in the dynamic world of books."
+              description="Explore the Latest News section for the freshest updates in the world of books. Stay in the know with our articles on new releases, author interviews, and literary events."
             />
             {/* <button className="boxShadow bg-purple-600 px-6 py-3 rounded-xl text-white text-lg font-medium flex items-center gap-10">
               <span>View more</span>
               <MoveRight />
             </button> */}
           </div>
-          <div className="flex flex-wrap gap-10">
+          <div className="flex flex-col mx-auto gap-16 md:grid grid-cols-2 md:gap-8 lg:gap-16 xl:grid-cols-4 xl:gap-5">
             <NewsBlogs
               title="Why reading is important for our children?"
               user="Lidya Humble"
@@ -1193,8 +1163,8 @@ function Home() {
             />
           </div>
         </div>
-        <div className="counter lg:container lg:mx-auto lg:py-[20px]">
-          <div className="flex flex-col gap-6 lg:flex-row justify-between px-[150px] ">
+        <div className="counter container mx-auto md:py-[20px] lg:px-14">
+          <div className="flex flex-col mx-auto gap-6 justify-between sm:grid grid-cols-2 md:gap-y-10 lg:grid-cols-4">
             <SectionsBooks
               section="Happy Customers"
               quantity="125,663"

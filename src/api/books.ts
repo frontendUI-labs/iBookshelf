@@ -106,3 +106,36 @@ export const getBooksPrice = async () => {
 
   return response;
 };
+
+export const getPopularBooks = async () => {
+  const { data, error } = await supabaseClient
+    .from("books")
+    .select("*")
+    .eq("isPopular", true);
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data;
+};
+
+export const getBooksFlashDiscount = async () => {
+  const response = await supabaseClient
+    .from("books")
+    .select("*")
+    .gte("discountPercentage", 0.5);
+  if (response.error) {
+    throw new Error(response.error.message);
+  }
+  return response;
+};
+
+export const getBooksFeature = async () => {
+  const response = await supabaseClient
+    .from("books")
+    .select("*")
+    .eq("isFeatured", true);
+  if (response.error) {
+    throw new Error(response.error.message);
+  }
+  return response;
+};
