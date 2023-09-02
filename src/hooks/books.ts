@@ -1,13 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 import {
-  getBookDetails,
   getBooks,
+  getRecommendedBooks,
+  getPopularBooks,
+  getBooksFlashDiscount,
+  getBooksFeature,
+  getBookDetails,
   getBooksOnDiscount,
   getBooksPrice,
   getBooksRating,
-  getRecommendedBooks,
   getRelatedBooks,
 } from "../api/books.ts";
+
 import usePagination from "./pagination.ts";
 
 export function useGetBooks({
@@ -99,6 +103,7 @@ export function useGetBooksOnDiscount() {
     booksDiscount: response?.data?.data ?? [],
   };
 }
+
 export function useGetBookPrices() {
   const response = useQuery({
     queryKey: ["pricerange"],
@@ -119,5 +124,49 @@ export function useGetBooksRating(rating: number) {
     ...response,
 
     ratingBooks: response?.data?.data ?? [],
+  };
+}
+
+export function useGetBooksRecomended() {
+  const response = useQuery({
+    queryKey: ["recomendedBooks"],
+    queryFn: getRecommendedBooks,
+  });
+  return {
+    ...response,
+    booksRecomended: response?.data ?? [],
+  };
+}
+
+export function useGetBooksPopular() {
+  const response = useQuery({
+    queryKey: ["popularBooks"],
+    queryFn: getPopularBooks,
+  });
+  return {
+    ...response,
+    booksPopular: response?.data ?? [],
+  };
+}
+
+export function useGetBooksFlashDiscount() {
+  const repsonse = useQuery({
+    queryKey: ["flashDiscountBooks"],
+    queryFn: getBooksFlashDiscount,
+  });
+  return {
+    ...repsonse,
+    bookFlashDiscount: repsonse?.data?.data ?? [],
+  };
+}
+
+export function useGetBooksFeature() {
+  const response = useQuery({
+    queryKey: ["featureBooks"],
+    queryFn: getBooksFeature,
+  });
+  return {
+    ...response,
+    booksFeature: response?.data?.data ?? [],
   };
 }

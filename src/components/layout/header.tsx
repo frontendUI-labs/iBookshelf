@@ -8,6 +8,7 @@ import {
   Cpu,
   FolderHeart,
   Landmark,
+  Menu,
   MenuSquare,
   PenSquare,
   Rocket,
@@ -22,25 +23,116 @@ function Header() {
   const languages = ["ENG", "ESP"];
 
   return (
-    <div className="flex gap-8 justify-center items-center py-5 border-b-2 border-gray-300">
-      <div className="flex items-center gap-[20px]">
-        <Link to="/">
-          <div className="bg-purple-600 p-3 rounded-lg ">
-            <img src="/icons/Vector.svg" alt="" />{" "}
+    <div className="container mx-auto px-4 md:flex justify-center items-center gap-4 py-5 border-b-2 border-gray-300 xl:gap-8 ">
+      <div className="flex justify-between">
+        <div className="flex items-center gap-5 md:gap-3">
+          <Link to="/">
+            <div className="bg-purple-600 p-3 rounded-lg ">
+              <img src="/icons/Vector.svg" alt="" />{" "}
+            </div>
+          </Link>
+          <div className="flex flex-col">
+            <img src="/icons/Bookoe.svg" alt="" />
+            <span className="hidden text-[13px] xl:flex">
+              Book Store Website
+            </span>
           </div>
-        </Link>
-        <div className="flex flex-col">
-          <img src="/icons/Bookoe.svg" alt="" />
-          <span className="text-[13px]">Book Store Website</span>
+        </div>
+        <div className="flex items-center rounded-lg md:hidden">
+          <NavigationMenu.Root className="relative z-20 ">
+            <NavigationMenu.List className=" center m-0 rounded-[6px] bg-white">
+              <NavigationMenu.Item>
+                <NavigationMenu.Trigger defaultValue="active">
+                  <>
+                    <Menu className="text-purple-600 stroke-[2.5px] hover:scale-110 duration-200" />
+                  </>
+                </NavigationMenu.Trigger>
+                <NavigationMenu.Content className="bg-white px-2 py-2 z-3 absolute top-[40px] right-0 border border-gray-200 rounded-md  ">
+                  <NavigationMenu.Link asChild>
+                    <Link
+                      className="flex w-full m-0 p-2  gap-4 rounded-xl hover:bg-gray-300 hover:text-purple-600  focus:text-purple-600 outline-purple-600"
+                      to="/biography"
+                    >
+                      <PenSquare />
+                      Biography
+                    </Link>
+                  </NavigationMenu.Link>
+                  <NavigationMenu.Link asChild>
+                    <Link
+                      className="flex w-full m-0 p-2  gap-4 rounded-xl hover:bg-gray-300 hover:text-purple-600  focus:text-purple-600 outline-purple-600"
+                      to="/biography"
+                    >
+                      <BarChartBig />
+                      Business
+                    </Link>
+                  </NavigationMenu.Link>
+                  <NavigationMenu.Link asChild>
+                    <Link
+                      className="flex w-full m-0 p-2  gap-4 rounded-xl hover:bg-gray-300 hover:text-purple-600  focus:text-purple-600 outline-purple-600"
+                      to="/biography"
+                    >
+                      <Cpu />
+                      Tech
+                    </Link>
+                  </NavigationMenu.Link>
+                  <NavigationMenu.Link asChild>
+                    <Link
+                      className="flex w-full m-0 p-2  gap-4 rounded-xl hover:bg-gray-300 hover:text-purple-600  focus:text-purple-600 outline-purple-600"
+                      to="/biography"
+                    >
+                      <ActivitySquare />
+                      Health
+                    </Link>
+                  </NavigationMenu.Link>
+                  <NavigationMenu.Link asChild>
+                    <Link
+                      className="flex w-full m-0 p-2  gap-4 rounded-xl hover:bg-gray-300 hover:text-purple-600  focus:text-purple-600 outline-purple-600"
+                      to="/biography"
+                    >
+                      <Landmark />
+                      Politics
+                    </Link>
+                  </NavigationMenu.Link>
+                  <NavigationMenu.Link asChild>
+                    <Link
+                      className="flex w-full m-0 p-2  gap-4 rounded-xl hover:bg-gray-300 hover:text-purple-600  focus:text-purple-600 outline-purple-600"
+                      to="/biography"
+                    >
+                      <FolderHeart />
+                      Romance
+                    </Link>
+                  </NavigationMenu.Link>
+                  <NavigationMenu.Link asChild>
+                    <Link
+                      className="flex w-full m-0 p-2  gap-4 rounded-xl hover:bg-gray-300 hover:text-purple-600  focus:text-purple-600 outline-purple-600"
+                      to="/biography"
+                    >
+                      <Rocket />
+                      Science Fiction
+                    </Link>
+                  </NavigationMenu.Link>
+                  <NavigationMenu.Link asChild>
+                    <Link
+                      className="flex w-full m-0 p-2  gap-4 rounded-xl hover:bg-gray-300 hover:text-purple-600  focus:text-purple-600 outline-purple-600"
+                      to="/biography"
+                    >
+                      <Bike />
+                      Sports
+                    </Link>
+                  </NavigationMenu.Link>
+                </NavigationMenu.Content>
+              </NavigationMenu.Item>
+            </NavigationMenu.List>
+          </NavigationMenu.Root>
         </div>
       </div>
-      <div className="border-[1px] border-gray-200 flex items-center rounded-lg h-[60px] w-[870px]">
+      <div className="hidden border-[1px] border-gray-200 md:flex items-center rounded-lg h-[60px] w-[870px]">
         <NavigationMenu.Root className="relative z-20 ">
           <NavigationMenu.List className=" center m-0 rounded-[6px] bg-white">
             <NavigationMenu.Item>
               <NavigationMenu.Trigger
                 defaultValue="active"
-                className="w-[300px] text-purple-600 group flex select-none items-center h-[57px] justify-around gap-4 rounded-[4px] px-4 py-2 text-[15px] font-medium outline-purple-600"
+                className="xl:w-[300px] text-purple-600 group flex select-none items-center h-[57px] justify-around gap-4 rounded-[4px] px-4 py-2 text-[15px] font-medium outline-purple-600"
               >
                 <>
                   <MenuSquare />
@@ -51,7 +143,7 @@ function Header() {
                   />
                 </>
               </NavigationMenu.Trigger>
-              <NavigationMenu.Content className=" bg-white w-[600px] z-3 absolute top-[60px] px-2 py-2 left-0 border border-gray-200 rounded-b-md  ">
+              <NavigationMenu.Content className=" bg-white md:w-[570px] z-3 absolute top-[60px] px-2 py-2 left-0 border border-gray-200 rounded-b-md lg:w-[600px] ">
                 <div className="flex">
                   <NavigationMenu.Link asChild>
                     <Link
@@ -198,7 +290,7 @@ function Header() {
           />
         </div>
       </div>
-      <div className="flex gap-8 items-center">
+      <div className="hidden  lg:flex gap-1 xl:gap-8 items-center">
         <HeartIconHeader />
         <CartIcon />
         <div className="bg-[#c4c4c4] rounded-lg h-[60px] w-[60px]">
