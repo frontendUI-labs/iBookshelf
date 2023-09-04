@@ -34,6 +34,7 @@ import {
 } from "../hooks/books";
 import ContainerBenefits from "../components/ui/BenefitsCard";
 import { Book } from "../types/book";
+import OnSaleBook from "../components/ui/OnSaleBook";
 
 const PointsIcon = ({
   color,
@@ -140,7 +141,7 @@ function MainCard() {
             <p className="text-purple-600 text-base font-bold lg:text-lg tracking-[4px]">
               BACK TO SCHOOL
             </p>
-            <h1 className="text-[35px] lg:text-[60px] font-bold text-6xl">
+            <h1 className="text-[35px] xl:text-[60px] font-bold text-6xl">
               {slide.title}
             </h1>
             <p className="text-2xl italic md:text-4xl">for our community</p>
@@ -152,7 +153,7 @@ function MainCard() {
                 <span>Get the deal</span>
                 <MoveRight />
               </Button>
-              <Button variant="secondary" className="w-2/3">
+              <Button variant="ternary" className="w-2/3">
                 See other promos
               </Button>
             </div>
@@ -1067,6 +1068,9 @@ function Home() {
           <div className="flex flex-col md:flex-row md:mb-[50px]">
             <FlashBooks />
           </div>
+        </div>
+        <div className="onsale container mx-auto px-4 lg:px-14">
+          <OnSaleBook />
         </div>
         <div className="feature w-full bg-purple-400 relative overflow-hidden py-[70px] xl:h-[800px]">
           <CircleDecoration

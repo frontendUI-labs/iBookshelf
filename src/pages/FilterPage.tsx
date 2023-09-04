@@ -9,6 +9,7 @@ import {
 } from "../constants/books.ts";
 import { LayoutType } from "../types/book.ts";
 import { useParams } from "react-router-dom";
+import ContainerBenefits from "../components/ui/BenefitsCard.tsx";
 
 function Filter() {
   const [range, setRange] = useState<[number, number]>([0, 16]);
@@ -76,6 +77,7 @@ function Filter() {
           )}
         </div>
         <OnSaleBook />
+        <ContainerBenefits />
       </div>
     </>
   );
