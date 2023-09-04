@@ -48,7 +48,7 @@
 }
 .hero-carousel-pagination {
   text-align: start;
-  padding-left: 40px;
+  padding-left: 10px;
   --swiper-pagination-bottom: -20px;
   left: -100px;
   @apply absolute -top-full;
@@ -60,4 +60,10 @@
 }
 .boxShadow {
   box-shadow: 0px 25px 33px 0px rgba(108, 93, 211, 0.25);
+}
+
+@media (min-width: 1024px) {
+  .hero-carousel-pagination {
+    --swiper-pagination-bottom: -30px;
+  }
 }

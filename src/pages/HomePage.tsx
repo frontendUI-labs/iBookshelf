@@ -93,11 +93,23 @@ function MainCard() {
   return (
     <Swiper
       modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
-      // autoplay={{
-      //   delay: 3000,
-      //   disableOnInteraction: true,
-      //   pauseOnMouseEnter: true,
-      // }}
+      autoplay={{
+        delay: 3000,
+        disableOnInteraction: true,
+        pauseOnMouseEnter: true,
+      }}
+      breakpoints={{
+        320: {
+          slidesPerView: 1,
+          slidesPerGroup: 1,
+        },
+
+        1024: {
+          slidesPerView: 1,
+          slidesPerGroup: 1,
+          spaceBetween: 100,
+        },
+      }}
       loop
       className="relative z-10 overflow-y-visible"
       slidesPerView={1}
@@ -123,8 +135,8 @@ function MainCard() {
           description: `"Explore a World of Books: Our diverse collection caters to every taste and interest, promising captivating reads for all."`,
         },
       ].map((slide) => (
-        <SwiperSlide key={slide.title} className="px-6 lg:p-24">
-          <div className="relative z-20 flex flex-col gap-4 justify-around md:gap-10 md:w-[480px] h-full">
+        <SwiperSlide key={slide.title}>
+          <div className="relative z-20 flex flex-col gap-4 lg:gap-8">
             <p className="text-purple-600 text-base font-bold lg:text-lg tracking-[4px]">
               BACK TO SCHOOL
             </p>
@@ -132,11 +144,11 @@ function MainCard() {
               {slide.title}
             </h1>
             <p className="text-2xl italic md:text-4xl">for our community</p>
-            <p className="font-basic text-base font-base w-2/3 md:text-base ">
+            <p className="font-basic text-base font-base w-2/3 md:text-base lg:w-1/2">
               {slide.description}
             </p>
-            <div className="sm:w-1/2">
-              <Button className="w-2/3 flex justify-between">
+            <div className="sm:w-1/2 2xl:w-4/12">
+              <Button className="w-2/3 flex justify-around">
                 <span>Get the deal</span>
                 <MoveRight />
               </Button>
@@ -147,10 +159,10 @@ function MainCard() {
           </div>
           <img
             className={twMerge(
-              "absolute bottom-10 right-0 md:left-1/2 first-letter:object-contains",
+              "absolute bottom-10 right-0 md:left-1/2 lg:right-0 2xl:bottom-0",
               slide.img === "/images/firstImage.png"
-                ? "w-[350px] h-[350px] -right-14"
-                : "w-[200px] h-[300px]"
+                ? "w-[350px] h-[350px] -right-14 2xl:w-[500px] 2xl:h-[500px] "
+                : "w-[200px] h-[300px] 2xl:w-[400px] 2xl:h-[400px] "
             )}
             src={slide.img}
             alt=""
@@ -170,16 +182,16 @@ function BestBook() {
   );
   const Categories = ["Most Popular", "Best Seller", "Best Reader"];
   return (
-    <div className="overflow-hidden font-heading rounded-3xl">
+    <div className="font-heading">
       <Swiper
         id="bestBook"
-        className=" relative"
+        className="relative"
         modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
-        // autoplay={{
-        //   delay: 2000,
-        //   disableOnInteraction: true,
-        //   pauseOnMouseEnter: true,
-        // }}
+        autoplay={{
+          delay: 2000,
+          disableOnInteraction: true,
+          pauseOnMouseEnter: true,
+        }}
         loop
         slidesPerView={1}
         navigation={{
@@ -192,17 +204,17 @@ function BestBook() {
             <SwiperSlide key={book.title}>
               <div
                 className={twMerge(
-                  " text-white h-full rounded-xl border-4 border-white flex flex-col justify-center items-center gap-4"
+                  "text-white flex flex-col justify-center items-center gap-4"
                 )}
               >
                 <img
-                  className="blur-md object-cover absolute left-0 top-0 w-full h-full md:w-100vh "
+                  className="blur-md object-[cover] absolute left-0 top-0 w-full h-full"
                   src={book.cover}
                   alt="cover"
                 />
-                <div className="relative z-10 pt-4 flex flex-col justify-center items-center gap-1 md:gap-4">
+                <div className="relative z-10 py-4 flex flex-col justify-center items-center gap-1 md:gap-4">
                   <div>
-                    <h1 className="text-center text-3xl font-semibold lg:text-5xl">
+                    <h1 className="text-center text-3xl font-semibold 2xl:text-5xl">
                       {Categories[idx]}
                     </h1>
                   </div>
@@ -210,16 +222,18 @@ function BestBook() {
                   <img
                     src={book.cover}
                     className={twMerge(
-                      "overflow-hidden w-[200px] h-[290px] rounded-xl border-2 border-white boxShadow"
+                      " w-[200px] h-[290px] rounded-xl border-2 border-white boxShadow"
                     )}
                     alt=""
                   />
-                  <div className="flex flex-col text-center font-semibold lg:text-xl">
+                  <div className="flex flex-col text-center font-semibold 2xl:text-xl">
                     <Link to={`/details/${book.slug}`}>
-                      <p className="hover:text-blue-400">{book.title}</p>
+                      <p className="line-clamp-1 px-4 hover:text-blue-400 ">
+                        {book.title}
+                      </p>
                     </Link>
-                    <Link to={`${book.categorySlug}`}>
-                      <span className="uppercase text-xs font-thin font-basic opacity-60">
+                    <Link to={`/filter/${book.categorySlug}`}>
+                      <span className="uppercase text-xs font-thin font-basic opacity-60 hover:font-bold">
                         {book.categorySlug}
                       </span>
                     </Link>
@@ -253,7 +267,7 @@ function BooksRecomended() {
   const { booksRecomended } = useGetBooksRecomended();
 
   return (
-    <div className="relative overflow-hidden mb-10 bg-orange-100 pt-6 px-10 font-heading h-[445px] rounded-3xl flex flex-col justify-around gap-3 md:py-10 md:gap-8 lg:px-[70px] xl:w-1/2 2xl:justify-between">
+    <div className="relative h-full overflow-hidden mb-10 bg-orange-100 py-6 px-10 font-heading  rounded-3xl flex flex-col justify-around gap-3 md:py-10 md:gap-8 lg:px-[70px]  xl:w-1/2 2xl:justify-between">
       <CircleDecoration
         width="340px"
         height="340px"
@@ -276,19 +290,19 @@ function BooksRecomended() {
           Recomended For You
         </h3>
         <p className="relative text-sm  font-basic font-light ">
-          Discover and Explore your next favorite read, here you will find
-          personalized book suggestions that match your interests and
-          preferences.
+          Discover personalized recommendations just for you. Our 'Recommended
+          for You' section tailors book suggestions based on your preferences,
+          ensuring you find your next great read effortlessly.
         </p>
       </div>
       <div>
         <Swiper
           modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
-          // autoplay={{
-          //   delay: 2500,
-          //   disableOnInteraction: true,
-          //   pauseOnMouseEnter: true,
-          // }}
+          autoplay={{
+            delay: 2000,
+            disableOnInteraction: true,
+            pauseOnMouseEnter: true,
+          }}
           loop
           breakpoints={{
             320: {
@@ -301,7 +315,7 @@ function BooksRecomended() {
             },
             768: {
               slidesPerView: 3,
-              slidesPerGroup: 2,
+              slidesPerGroup: 1,
               spaceBetween: 20,
             },
             1024: {
@@ -309,15 +323,10 @@ function BooksRecomended() {
               slidesPerGroup: 2,
               spaceBetween: 18,
             },
-            1536: {
-              slidesPerView: 4,
-              slidesPerGroup: 3,
-              spaceBetween: 30,
-            },
           }}
           className="relative overflow-visible"
           slidesPerView={4}
-          slidesPerGroup={4}
+          slidesPerGroup={2}
           navigation={{
             nextEl: ".booksRecomended-nextEl",
             prevEl: ".booksRecomended-prevEl",
@@ -354,7 +363,7 @@ function BooksRecomended() {
 function BooksPopular() {
   const { booksPopular } = useGetBooksPopular();
   return (
-    <div className="relative overflow-hidden mb-10 bg-blue-100 py-6 px-10 font-heading h-[445px] rounded-3xl flex flex-col justify-around gap-3 md:py-10 md:gap-8 lg:px-[70px] xl:w-1/2 2xl:justify-between">
+    <div className="relative h-full overflow-hidden mb-10 bg-blue-100 py-6 px-10 font-heading  rounded-3xl flex flex-col justify-around gap-3 md:py-10 md:gap-8 lg:px-[70px]  xl:w-1/2 2xl:justify-between">
       <CircleDecoration
         width="240px"
         height="240px"
@@ -385,11 +394,11 @@ function BooksPopular() {
       <div>
         <Swiper
           modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
-          // autoplay={{
-          //   delay: 2500,
-          //   disableOnInteraction: true,
-          //   pauseOnMouseEnter: true,
-          // }}
+          autoplay={{
+            delay: 2000,
+            disableOnInteraction: true,
+            pauseOnMouseEnter: true,
+          }}
           loop
           breakpoints={{
             320: {
@@ -402,7 +411,7 @@ function BooksPopular() {
             },
             768: {
               slidesPerView: 3,
-              slidesPerGroup: 2,
+              slidesPerGroup: 1,
               spaceBetween: 20,
             },
             1024: {
@@ -410,15 +419,10 @@ function BooksPopular() {
               slidesPerGroup: 2,
               spaceBetween: 18,
             },
-            1536: {
-              slidesPerView: 4,
-              slidesPerGroup: 3,
-              spaceBetween: 30,
-            },
           }}
           className="relative overflow-visible"
           slidesPerView={4}
-          slidesPerGroup={4}
+          slidesPerGroup={2}
           navigation={{
             nextEl: ".booksRecomended-nextEl",
             prevEl: ".booksRecomended-prevEl",
@@ -480,11 +484,11 @@ const SpecialsBooks = () => {
         id="specialsBook"
         className="grid grid-cols-3 h-full overflow-y-visible"
         modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
-        // autoplay={{
-        //   delay: 2000,
-        //   disableOnInteraction: true,
-        //   pauseOnMouseEnter: true,
-        // }}
+        autoplay={{
+          delay: 3000,
+          disableOnInteraction: true,
+          pauseOnMouseEnter: true,
+        }}
         loop
         breakpoints={{
           320: {
@@ -507,7 +511,6 @@ const SpecialsBooks = () => {
             spaceBetween: 30,
           },
         }}
-        // spaceBetween={40}
         slidesPerView={3}
         navigation={{
           prevEl: ".specialBook-prevEl",
@@ -532,7 +535,7 @@ const SpecialsBooks = () => {
                   </h3>
                 </Link>
                 <div>
-                  <Link to={`/${book.categorySlug}`}>
+                  <Link to={`/filter/${book.categorySlug}`}>
                     <div className="uppercase tracking-wider bg-purple-400 inline-block text-purple-600 text-xs font-basic font-normal py-2 px-3 rounded-xl hover:text-orange-400 hover:bg-orange-200 ">
                       {book.categorySlug}
                     </div>
@@ -664,7 +667,7 @@ const FlashBooks = () => {
                 {book.title}
               </h3>
             </Link>
-            <Link to={`/${book.categorySlug}`}>
+            <Link to={`/filter/${book.categorySlug}`}>
               <span className="uppercase tracking-wide text-sm font-normal text-purple-600 hover:text-orange-400">
                 {book.categorySlug}
               </span>
@@ -730,7 +733,7 @@ const FeatureBooks = () => {
                       {selectedBook.title}
                     </h3>
                   </Link>
-                  <Link to={`/${selectedBook.categorySlug}`}>
+                  <Link to={`/details/${selectedBook.categorySlug}`}>
                     <span className="uppercase text-sm font-medium text-purple-600 hover:text-orange-400 md:text-base">
                       {selectedBook.categorySlug}
                     </span>
@@ -810,12 +813,12 @@ const TestimonialCard = () => {
         id="user"
         className="grid grid-cols-3 h-full overflow-y-visible"
         modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
-        // autoplay={{
-        //   delay: 1500,
-        //   disableOnInteraction: true,
-        //   pauseOnMouseEnter: true,
-        // }}
-        // loop
+        autoplay={{
+          delay: 1500,
+          disableOnInteraction: true,
+          pauseOnMouseEnter: true,
+        }}
+        loop
         spaceBetween={30}
         slidesPerView={3}
         breakpoints={{
@@ -925,6 +928,7 @@ const NewsBlogs = ({
   img,
   link,
   profile,
+  description,
 }: {
   title: string;
   user: string;
@@ -932,6 +936,7 @@ const NewsBlogs = ({
   img: string;
   link: string;
   profile: string;
+  description: string;
 }) => {
   return (
     <div className="rounded-2xl overflow-hidden">
@@ -950,10 +955,7 @@ const NewsBlogs = ({
           </h3>
         </a>
         <div className="text-sm font-light font-basic md:mb-5">
-          <p className="mb-2">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore...
-          </p>
+          <p className="mb-2 line-clamp-3">{description}</p>
           <a className="text-purple-600" href={link} target="_blank">
             Continue reading...
           </a>
@@ -1001,36 +1003,40 @@ function Home() {
   return (
     <>
       <div className="my-[30px] mx-auto font-heading flex flex-col gap-[100px] sm:px-0">
-        <div className="main container mx-auto flex flex-col gap-4 md:grid grid-cols-[2fr,1fr] px-2 lg:grid-cols-[3fr,1fr] gap-x-3 md:h-[662px] ">
-          <div className="relative flex py-8 items-center justify-center md:h-[600px] bg-purple-400 rounded-3xl overflow-hidden">
-            <MainCard />
-            <PointsIcon
-              className="top-10 left-10"
-              orientation="vertical"
-              color="bg-purple-200"
-            />
-            <CircleDecoration
-              width="600px"
-              height="600px"
-              className="-top-64 -right-1/4"
-              color="bg-orange-400 opacity-60"
-            />
-            <CircleDecoration
-              width="340px"
-              height="340px"
-              className="-bottom-48 left-1/2 "
-              color="bg-purple-300"
-            />
-            <PointsIcon
-              className="bottom-10 left-1/2"
-              orientation="horizontal"
-              color="bg-purple-600"
-            />
+        <div className="main container mx-auto px-4 lg:px-14">
+          <div className="flex flex-col gap-4 lg:grid grid-cols-[2fr,1fr] 2xl:grid-cols-[3fr,1fr] gap-x-3">
+            <div className="relative flex pl-6 py-16 items-center justify-center bg-purple-400 rounded-3xl overflow-hidden lg:pl-10 lg:py-12">
+              <MainCard />
+              <PointsIcon
+                className="top-10 left-10"
+                orientation="vertical"
+                color="bg-purple-200"
+              />
+              <CircleDecoration
+                width="600px"
+                height="600px"
+                className="-top-64 -right-1/4"
+                color="bg-orange-400 opacity-60"
+              />
+              <CircleDecoration
+                width="340px"
+                height="340px"
+                className="-bottom-48 left-1/2 "
+                color="bg-purple-300"
+              />
+              <PointsIcon
+                className="bottom-10 left-1/2"
+                orientation="horizontal"
+                color="bg-purple-600"
+              />
+            </div>
+            <div className="overflow-hidden rounded-3xl sm:w-1/2 sm:self-center lg:w-full ">
+              <BestBook />
+            </div>
           </div>
-          <BestBook />
         </div>
         <div className="benefits">
-          <ContainerBenefits bg="bg-purple-600 py-24" />
+          <ContainerBenefits />
         </div>
         <div className="recomended container mx-auto px-4 lg:px-14 xl:flex gap-4 2xl:mt-20">
           <BooksRecomended />
@@ -1136,6 +1142,7 @@ function Home() {
               profile="https://www.dell.org/wp-content/uploads/2022/01/KatieW.png"
               link="https://www.highspeedtraining.co.uk/hub/why-is-reading-important-for-children/"
               img="https://www.highspeedtraining.co.uk/hub/wp-content/uploads/2019/05/importance-of-reading-for-children-twit-1.jpg"
+              description="Reading allows us to be transported from our own world to another. Between the pages of a book, we can become immersed in the lives of fictional characters and learn about a culture entirely different from our own."
             />
             <NewsBlogs
               title="Benefits of reading: Smart, Diligent, Happy"
@@ -1144,6 +1151,7 @@ function Home() {
               profile="https://www.pngfind.com/pngs/m/443-4433119_circle-crop-profile-profile-picture-woman-circle-hd.png"
               link="https://www.meaningfulliving.ca/new-blog/2021/7/7/11-senior-reading-benefits"
               img="https://images.squarespace-cdn.com/content/v1/561d43ece4b001f1ad42dda6/1629229674926-TYJU5X5B4OV02H880G2W/Illustration+of+Reading+Benefits"
+              description="Reading is so much more than simply scanning words across a page and lugging around thick books in public to seem smart. There is something special about a good book, article, or story."
             />
             <NewsBlogs
               title="What Books you should read in 2020?"
@@ -1152,6 +1160,7 @@ function Home() {
               profile="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhGJPxvhV4u_WpRUlvawm9YpDkbtL0d8D2FlZ6HgC5JcoeHfqR-FmG0eWyeLfbATOv2EU&usqp=CAU"
               link="https://towardsdatascience.com/startup-books-you-should-read-in-2020-ba8684000128"
               img="https://miro.medium.com/v2/resize:fit:1400/1*Jg1oYMG_dN2MxbBzlgo0Xg.jpeg"
+              description="Reading books is one of the activities often quoted among those which characterizes successful CEOs. Our economy became a place where innovations are happening at small to medium-sized companies,"
             />
             <NewsBlogs
               title="10 Things you must know to improve your reading skills"
@@ -1160,6 +1169,7 @@ function Home() {
               profile="https://www.vhv.rs/dpng/d/551-5511364_circle-profile-man-hd-png-download.png"
               link="https://blog.madeeasy.in/how-to-improve-reading-skills"
               img="https://blog.madeeasy.in/wp-content/uploads/2022/02/how-to-improve-reading-skills-11-feb-2022.jpg"
+              description="No matter whether you read biographies, watch inspirational videos or listen to interviews of people who have created a mark for themselves in the world the one trait that stays common with all is ‘Reading’. "
             />
           </div>
         </div>
