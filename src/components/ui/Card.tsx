@@ -47,7 +47,7 @@ export function CardListLayout({
             <h3 className="text-xl  text-left font-bold hover:text-purple-600 line-clamp-3">
               <Link to={`/details/${slug}`}>{title}</Link>
             </h3>
-            <p className="text-sm text-left mt-2 text-purple-600 font-medium">
+            <p className="text-sm text-left mt-2 text-purple-600 font-medium cursor-pointer">
               {categories.toUpperCase()}
             </p>
           </div>
@@ -151,7 +151,7 @@ function CardComponent({
       <h3 className="text-xl text-center font-bold m-2 line-clamp-1 hover:text-purple-600">
         <Link to={`/details/${slug}`}>{title}</Link>
       </h3>
-      <p className="text-sm text-center m-2 select-none text-purple-600 font-medium">
+      <p className="text-sm text-center m-2 text-purple-600 font-medium cursor-pointer">
         {categories.toUpperCase()}
       </p>
       <Rating value={value} />

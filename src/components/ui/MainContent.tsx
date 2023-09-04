@@ -101,7 +101,7 @@ function MainContent({
                 cover={book.cover}
                 value={book.rating}
                 slug={book.slug}
-                categories={book.categorySlug}
+                categories={book.categories.name}
               />
             );
           })}
@@ -122,7 +122,7 @@ function MainContent({
                 publisher={book.publisher ?? "Santillana"}
                 totalReviews={book.totalReviews}
                 slug={book.slug}
-                categories={book.categorySlug}
+                categories={book.categories.name}
               />
             );
           })}

@@ -1,5 +1,9 @@
 export type Book = {
   author: string;
+  categories: {
+    name: string;
+    slug: string;
+  };
   categorySlug: string;
   cover: string;
   discountPercentage: number;

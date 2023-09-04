@@ -67,11 +67,15 @@ export function Rating({
   value,
   setRating,
   isActive,
+  setOrderBooks,
 }: {
   value: number;
-  setRating: React.Dispatch<React.SetStateAction<number>>;
-  isActive: boolean;
+  setRating?: React.Dispatch<React.SetStateAction<number>>;
+  isActive?: boolean;
+  setOrderBooks?: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+  if (setRating == undefined) return;
+  if (setOrderBooks == undefined) return;
   const realValue = Math.round(value);
 
   return (
@@ -82,6 +86,7 @@ export function Rating({
         isActive && "bg-purple-400"
       )}
       onClick={() => {
+        setOrderBooks(true);
         setRating(realValue);
       }}
     >
