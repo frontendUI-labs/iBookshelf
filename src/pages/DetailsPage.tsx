@@ -20,6 +20,7 @@ import TabsComponent from "../common/tabs";
 import LayoutDetails from "../components/ui/LayoutDetails";
 import OnSaleBook from "../components/ui/OnSaleBook";
 import RelatedBooksContainer from "../common/related-books";
+import ContainerBenefits from "../components/ui/BenefitsCard";
 
 function Details() {
   const { bookSlug } = useParams<{
@@ -183,6 +184,9 @@ function Details() {
               </Link>
             </div>
           </div>
+        </LayoutDetails>
+        <ContainerBenefits bg="bg-purple-300" />
+        <LayoutDetails>
           <OnSaleBook />
         </LayoutDetails>
       </>

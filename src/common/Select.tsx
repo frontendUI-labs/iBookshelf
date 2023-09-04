@@ -18,7 +18,7 @@ function Select({
     <RuiSelect.Root>
       <RuiSelect.Trigger
         className={twMerge(
-          "h-full  inline-flex items-center justify-center p-6 text-[13px] leading-none  gap-[5px]  shadow-black/10 focus:shadow-[0_0_0_2px] focus:shadow-black data-[placeholder]:text-violet9 outline-none w-inherit",
+          "h-full inline-flex items-center justify-center p-6 text-[13px] leading-none  gap-[5px]  shadow-black/10 focus:shadow-[0_0_0_2px] focus:shadow-black data-[placeholder]:text-violet9 outline-none w-inherit",
           variant === "primary" &&
             "bg-transparent rounded-s-lg w-[185px] gap-4",
           variant === "secondary" &&
@@ -36,7 +36,7 @@ function Select({
         <RuiSelect.Content
           sideOffset={10}
           position="popper"
-          className="w-[--radix-select-trigger-width] overflow-hidden bg-white rounded-md shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]"
+          className="relative z-10 w-[--radix-select-trigger-width] overflow-hidden bg-white rounded-md shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]"
         >
           <RuiSelect.Viewport className="p-[5px] w-full">
             {options.map((option) => (

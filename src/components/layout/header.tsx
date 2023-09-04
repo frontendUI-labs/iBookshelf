@@ -51,7 +51,7 @@ function Header() {
                   <NavigationMenu.Link asChild>
                     <Link
                       className="flex w-full m-0 p-2  gap-4 rounded-xl hover:bg-gray-300 hover:text-purple-600  focus:text-purple-600 outline-purple-600"
-                      to="/biography"
+                      to="/filter/biography"
                     >
                       <PenSquare />
                       Biography
@@ -60,7 +60,7 @@ function Header() {
                   <NavigationMenu.Link asChild>
                     <Link
                       className="flex w-full m-0 p-2  gap-4 rounded-xl hover:bg-gray-300 hover:text-purple-600  focus:text-purple-600 outline-purple-600"
-                      to="/biography"
+                      to="/filter/business"
                     >
                       <BarChartBig />
                       Business
@@ -69,7 +69,7 @@ function Header() {
                   <NavigationMenu.Link asChild>
                     <Link
                       className="flex w-full m-0 p-2  gap-4 rounded-xl hover:bg-gray-300 hover:text-purple-600  focus:text-purple-600 outline-purple-600"
-                      to="/biography"
+                      to="/filter/tech"
                     >
                       <Cpu />
                       Tech
@@ -78,7 +78,7 @@ function Header() {
                   <NavigationMenu.Link asChild>
                     <Link
                       className="flex w-full m-0 p-2  gap-4 rounded-xl hover:bg-gray-300 hover:text-purple-600  focus:text-purple-600 outline-purple-600"
-                      to="/biography"
+                      to="/filter/health"
                     >
                       <ActivitySquare />
                       Health
@@ -87,7 +87,7 @@ function Header() {
                   <NavigationMenu.Link asChild>
                     <Link
                       className="flex w-full m-0 p-2  gap-4 rounded-xl hover:bg-gray-300 hover:text-purple-600  focus:text-purple-600 outline-purple-600"
-                      to="/biography"
+                      to="/filter/politics"
                     >
                       <Landmark />
                       Politics
@@ -96,7 +96,7 @@ function Header() {
                   <NavigationMenu.Link asChild>
                     <Link
                       className="flex w-full m-0 p-2  gap-4 rounded-xl hover:bg-gray-300 hover:text-purple-600  focus:text-purple-600 outline-purple-600"
-                      to="/biography"
+                      to="/filter/romance"
                     >
                       <FolderHeart />
                       Romance
@@ -105,7 +105,7 @@ function Header() {
                   <NavigationMenu.Link asChild>
                     <Link
                       className="flex w-full m-0 p-2  gap-4 rounded-xl hover:bg-gray-300 hover:text-purple-600  focus:text-purple-600 outline-purple-600"
-                      to="/biography"
+                      to="/filter/science-fiction"
                     >
                       <Rocket />
                       Science Fiction
@@ -114,7 +114,7 @@ function Header() {
                   <NavigationMenu.Link asChild>
                     <Link
                       className="flex w-full m-0 p-2  gap-4 rounded-xl hover:bg-gray-300 hover:text-purple-600  focus:text-purple-600 outline-purple-600"
-                      to="/biography"
+                      to="/filter/sports"
                     >
                       <Bike />
                       Sports
@@ -132,7 +132,7 @@ function Header() {
             <NavigationMenu.Item>
               <NavigationMenu.Trigger
                 defaultValue="active"
-                className="xl:w-[300px] text-purple-600 group flex select-none items-center h-[57px] justify-around gap-4 rounded-[4px] px-4 py-2 text-[15px] font-medium outline-purple-600"
+                className="xl:w-[150px] text-purple-600 group flex select-none items-center h-[57px] justify-around gap-4 rounded-[4px] px-4 py-2 text-[15px] font-medium outline-purple-600"
               >
                 <>
                   <MenuSquare />
@@ -148,7 +148,7 @@ function Header() {
                   <NavigationMenu.Link asChild>
                     <Link
                       className="w-full m-0 flex flex-col p-2  gap-4 rounded-xl hover:bg-gray-300 hover:text-purple-600  focus:text-purple-600 outline-purple-600"
-                      to="/biography"
+                      to="/filter/biography"
                     >
                       <div className="flex gap-4">
                         <PenSquare />
@@ -163,7 +163,7 @@ function Header() {
                   <NavigationMenu.Link asChild>
                     <Link
                       className="w-full m-0 flex flex-col p-2  gap-4 rounded-xl hover:bg-gray-300 hover:text-purple-600  focus:text-purple-600 outline-purple-600"
-                      to="/business"
+                      to="/filter/business"
                     >
                       <div className="flex gap-4">
                         <BarChartBig />
@@ -180,7 +180,7 @@ function Header() {
                   <NavigationMenu.Link asChild>
                     <Link
                       className="w-full m-0 flex flex-col p-2  gap-4 rounded-xl hover:bg-gray-300 hover:text-purple-600  focus:text-purple-600 outline-purple-600"
-                      to="/tech"
+                      to="/filter/tech"
                     >
                       <div className="flex gap-4">
                         <Cpu />
@@ -195,7 +195,7 @@ function Header() {
                   <NavigationMenu.Link asChild>
                     <Link
                       className="w-full m-0 flex flex-col p-2  gap-4 rounded-xl hover:bg-gray-300 hover:text-purple-600  focus:text-purple-600 outline-purple-600"
-                      to="/health"
+                      to="/filter/health"
                     >
                       <div className="flex gap-4">
                         <ActivitySquare />
@@ -212,7 +212,7 @@ function Header() {
                   <NavigationMenu.Link asChild>
                     <Link
                       className="w-full m-0 flex flex-col p-2  gap-4 rounded-xl hover:bg-gray-300 hover:text-purple-600  focus:text-purple-600 outline-purple-600"
-                      to="/politics"
+                      to="/filter/politics"
                     >
                       <div className="flex gap-4">
                         <Landmark />
@@ -227,7 +227,7 @@ function Header() {
                   <NavigationMenu.Link asChild>
                     <Link
                       className="w-full m-0 flex flex-col p-2  gap-4 rounded-xl hover:bg-gray-300 hover:text-purple-600  focus:text-purple-600 outline-purple-600"
-                      to="/romance"
+                      to="/filter/romance"
                     >
                       <div className="flex gap-4">
                         <FolderHeart />
@@ -244,7 +244,7 @@ function Header() {
                   <NavigationMenu.Link asChild>
                     <Link
                       className="w-full m-0 flex flex-col p-2  gap-4 rounded-xl hover:bg-gray-300 hover:text-purple-600  focus:text-purple-600 outline-purple-600"
-                      to="/science-fiction"
+                      to="/filter/science-fiction"
                     >
                       <div className="flex gap-4">
                         <Rocket />
@@ -259,7 +259,7 @@ function Header() {
                   <NavigationMenu.Link asChild>
                     <Link
                       className="w-full m-0 flex flex-col p-2  gap-4 rounded-xl hover:bg-gray-300 hover:text-purple-600  focus:text-purple-600 outline-purple-600"
-                      to="/sports"
+                      to="/filter/sports"
                     >
                       <div className="flex gap-4">
                         <Bike />
@@ -282,7 +282,7 @@ function Header() {
           id="search"
           placeholder="Search over 30 million book titles"
         />
-        <div>
+        <div className="px-2">
           <Button
             children={<Search color="var(--primary)" />}
             type="button"
