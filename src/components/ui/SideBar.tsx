@@ -43,6 +43,9 @@ function SideBar({
                 key={book.id}
                 className="block truncate hover:text-purple-600 hover:bg-purple-400 p-1 focus:bg-purple-400 outline-purple-600"
                 to={`/details/${book.slug}`}
+                onClick={() => {
+                  window.scrollTo(0, 0);
+                }}
               >
                 {book.title}
               </Link>
@@ -56,6 +59,9 @@ function SideBar({
             categories.map((category) => {
               return (
                 <Link
+                  onClick={() => {
+                    window.scrollTo(0, 0);
+                  }}
                   className={twMerge(
                     "block truncate hover:text-purple-600  capitalize hover:bg-purple-400 p-1 focus:bg-purple-400 outline-purple-600",
                     selectedCategory === category.slug && "bg-purple-400"
