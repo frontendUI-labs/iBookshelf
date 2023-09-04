@@ -14,6 +14,10 @@ export interface Database {
       books: {
         Row: {
           author: string;
+          categories: {
+            name: string;
+            slug: string;
+          };
           categorySlug: string;
           cover: string;
           discountPercentage: number;

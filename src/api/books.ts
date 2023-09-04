@@ -4,8 +4,12 @@ export type PageRange = [number, number];
 
 export const getBooks = async (
   pageRange: PageRange,
+  orderBooks: boolean,
   filter: {
     rating: number;
+    category: string;
+    initialRange: number;
+    finalRange: number;
   }
 ) => {
   const [startRange, endRange] = pageRange;
@@ -17,9 +21,38 @@ export const getBooks = async (
       categories (name, slug) 
       `
     )
-    // .select("*")
     .filter("rating", "gte", filter.rating)
-    .range(startRange, endRange);
+    .filter("categorySlug", filter.category ? "eq" : "not.eq", filter.category)
+    .filter("price", "gte", filter.initialRange)
+    .filter("price", "lte", filter.finalRange)
+    .range(startRange, endRange)
+    .order("rating", { ascending: orderBooks });
+
+  return response;
+};
+
+export const getBookDetails = async (bookSlug: string) => {
+  const response = await supabaseClient
+    .from("books")
+    .select("*")
+    .eq("slug", bookSlug);
+  if (response.error) {
+    throw new Error(response.error.message);
+  }
+
+  return response;
+};
+
+export const getRelatedBooks = async (
+  bookCategory: string,
+  bookSlug: string
+) => {
+  const response = await supabaseClient
+    .from("books")
+    .select("*")
+    .filter("categorySlug", "eq", bookCategory)
+    .filter("slug", "not.eq", bookSlug)
+    .range(0, 2);
 
   return response;
 };
@@ -45,7 +78,6 @@ export const getBooksOnDiscount = async () => {
   if (response.error) {
     throw new Error(response.error.message);
   }
-
   return response;
 };
 
@@ -56,6 +88,17 @@ export const getBooksRating = async (rating: number) => {
     .select("*")
     .gte("rating", rating)
     .range(0, 30);
+
+  if (response.error) {
+    throw new Error(response.error.message);
+  }
+
+  return response;
+};
+
+export const getBooksPrice = async () => {
+  // const [startRange, endRange] = pageRange;
+  const response = await supabaseClient.from("books").select("price");
 
   if (response.error) {
     throw new Error(response.error.message);

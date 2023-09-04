@@ -12,8 +12,10 @@ function SliderInputComponent({
   return (
     <div>
       <Slider.Root
-        onValueChange={(event) => setRange(event)}
-        defaultValue={range}
+        onValueChange={(value) => {
+          setRange(value as [number, number]);
+        }}
+        value={range}
         className="relative flex items-center select-none touch-none w-full h-5 pb-[60px] pt-4"
         max={priceRange[1]}
         step={0.5}

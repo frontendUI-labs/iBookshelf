@@ -4,7 +4,7 @@ import AcordionComponent from "./Accordion";
 import SliderInputComponent from "./SliderInput";
 import { useGetCategories } from "../../hooks/categories.ts";
 import React from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useGetRecommendedBooks } from "../../hooks/books.ts";
 import { Rating } from "./Icons.tsx";
 import { twMerge } from "tailwind-merge";
@@ -15,19 +15,20 @@ function SideBar({
   setRange,
   setRating,
   rating,
+  selectedCategory,
+  setOrderBooks,
 }: {
   range: [number, number];
   priceRange: [number, number];
   setRange: React.Dispatch<React.SetStateAction<[number, number]>>;
   setRating: React.Dispatch<React.SetStateAction<number>>;
   rating: number;
+  selectedCategory: string;
+  setOrderBooks: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { isSuccess, categories, isError, isLoading } = useGetCategories();
   const { isSuccess: isRecommendedSuccess, recommendedBooks } =
     useGetRecommendedBooks();
-
-  const { category: selectedCategory } = useParams();
-
   return (
     <div className=" p-4">
       <h3 className="text-4xl font-bold">Filter Option</h3>
@@ -68,30 +69,53 @@ function SideBar({
             })}
         </AcordionComponent>
 
-        <AcordionComponent title="Price Range" id="main-3">
+        <AcordionComponent title="Filter by Price" id="main-3">
           <SliderInputComponent
             range={range}
             setRange={setRange}
             priceRange={priceRange}
           />
         </AcordionComponent>
-        <AcordionComponent title="Filter by Language" id="main-4">
+        <AcordionComponent title="Filter by Stars" id="main-4">
           {[5, 4, 3, 2, 1].map((value) => (
             <Rating
               key={value}
+              setOrderBooks={setOrderBooks}
               setRating={setRating}
               value={value}
               isActive={value === rating}
             />
           ))}
         </AcordionComponent>
+        <AcordionComponent title="Filter by Language" id="main-5">
+          {["Spanish", "English", "French", "Italian", "Portuguese"].map(
+            (language, id) => (
+              <Link
+                className={twMerge(
+                  "block truncate hover:text-purple-600  capitalize hover:bg-purple-400 p-1 focus:bg-purple-400 outline-purple-600"
+                  // selectedCategory === language && "bg-purple-400"
+                )}
+                to={`/filter/${language}`}
+                key={id}
+              >
+                {language}
+              </Link>
+            )
+          )}
+        </AcordionComponent>
       </div>
-      <div className="w-full">
-        <Button type="submit" variant="primary">
-          Refine Search
+
+      <Link to={"/filter"} className="w-full">
+        <Button
+          onClick={() => {
+            setRating(0);
+            setRange([0, 16]);
+          }}
+          variant="primary"
+        >
+          Reset Filter
         </Button>
-        <Button variant="secondary">Reset Filter</Button>
-      </div>
+      </Link>
     </div>
   );
 }

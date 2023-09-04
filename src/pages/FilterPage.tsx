@@ -1,23 +1,26 @@
 import SideBar from "../components/ui/SideBar";
 import MainContent from "../components/ui/MainContent";
 import OnSaleBook from "../components/ui/OnSaleBook";
-import { useGetBooks } from "../hooks/books.ts";
+import { useGetBookPrices, useGetBooks } from "../hooks/books.ts";
 import { useState } from "react";
 import {
   BOOK_PAGINATION_GRID_COUNT,
   BOOK_PAGINATION_LIST_COUNT,
 } from "../constants/books.ts";
 import { LayoutType } from "../types/book.ts";
+import { useParams } from "react-router-dom";
 
 function Filter() {
-  const [range, setRange] = useState<[number, number]>([6, 16]);
+  const [range, setRange] = useState<[number, number]>([0, 16]);
+  const [orderBooks, setOrderBooks] = useState(false);
   const [layout, setLayout] = useState<LayoutType>(LayoutType.GRID);
   const [rating, setRating] = useState(0);
-
+  const { category: selectedCategory } = useParams();
   const pageLimit =
     layout === LayoutType.GRID
       ? BOOK_PAGINATION_GRID_COUNT
       : BOOK_PAGINATION_LIST_COUNT;
+  const [initialRange, finalRange] = range;
 
   const {
     books,
@@ -30,20 +33,20 @@ function Filter() {
   } = useGetBooks({
     pageLimit,
     rating,
+    category: selectedCategory as string,
+    initialRange,
+    finalRange,
+    orderBooks,
   });
 
-  const allPrices = books.map((book) => book.price);
-  const minPrice = Math.min(...allPrices);
-  const maxPrice = Math.max(...allPrices);
+  const { bookprices } = useGetBookPrices();
+  const eachPrice = bookprices?.map((book) => book.price);
+  const minPrice = Math.min(...eachPrice);
+  const maxPrice = Math.max(...eachPrice);
   const priceRange: [number, number] = [
     Math.floor(minPrice),
     Math.floor(maxPrice) + 1,
   ];
-
-  // const priceRangeBooks = books.filter((book) => {
-  //   const [initialValue, finalValue] = range;
-  //   return book.price >= initialValue && book.price <= finalValue;
-  // });
 
   return (
     <>
@@ -51,6 +54,8 @@ function Filter() {
       <div className="container m-auto ">
         <div className=" grid grid-cols-[400px,1fr] py-10 mb-12 ">
           <SideBar
+            setOrderBooks={setOrderBooks}
+            selectedCategory={selectedCategory as string}
             rating={rating}
             setRating={setRating}
             range={range}
@@ -58,10 +63,9 @@ function Filter() {
             priceRange={priceRange}
           />
           {isLoading && <p>Cargando...</p>}
-          {isSuccess && (
+          {isSuccess && books && (
             <MainContent
               books={books}
-              // ratingBooks={ratingBooks}
               pageLimit={pageLimit}
               layout={layout}
               setLayout={setLayout}
