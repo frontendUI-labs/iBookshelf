@@ -74,8 +74,8 @@ export function Rating({
   isActive?: boolean;
   setOrderBooks?: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  if (setRating == undefined) return;
-  if (setOrderBooks == undefined) return;
+  // if (setRating === undefined) return;
+  // if (setOrderBooks === undefined) return;
   const realValue = Math.round(value);
 
   return (
@@ -86,8 +86,12 @@ export function Rating({
         isActive && "bg-purple-400"
       )}
       onClick={() => {
-        setOrderBooks(true);
-        setRating(realValue);
+        if (setOrderBooks && setRating !== undefined) {
+          window.scrollTo(0, 0);
+
+          setOrderBooks(true);
+          setRating(realValue);
+        }
       }}
     >
       {Array.from({ length: realValue }).map((_, id) => {
