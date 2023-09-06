@@ -18,6 +18,7 @@ import Button from "../../common/Button";
 import Select from "../../common/Select";
 import { CartIcon, HeartIconHeader } from "../ui/Icons";
 import { Link } from "react-router-dom";
+import DialogDemo from "../ui/DialogCart";
 
 function Header() {
   const languages = ["ENG", "ESP"];
@@ -292,7 +293,7 @@ function Header() {
       </div>
       <div className="hidden  lg:flex gap-1 xl:gap-8 items-center">
         <HeartIconHeader />
-        <CartIcon />
+        <DialogDemo />
         <div className="bg-[#c4c4c4] rounded-lg h-[60px] w-[60px]">
           <img
             className=""

@@ -2,8 +2,6 @@ import {
   FacebookIcon,
   Mail,
   MessagesSquare,
-  Minus,
-  Plus,
   ShieldCheck,
   ShoppingCart,
   ThumbsUp,
@@ -11,7 +9,10 @@ import {
   Zap,
 } from "lucide-react";
 import { HeartIcon, Rating } from "../components/ui/Icons";
-import SocialButtons, { ButtonsSocials } from "../components/ui/SocialButtons";
+import SocialButtons, {
+  ButtonsSocials,
+  MoreandLessButton,
+} from "../components/ui/SocialButtons";
 import { useState } from "react";
 import Button from "../common/Button";
 import { Link, useParams } from "react-router-dom";
@@ -27,17 +28,8 @@ function Details() {
     bookSlug: string;
   }>();
   const [favorite, setFavorite] = useState(false); //active | inactive
-  const [counter, setCounter] = useState(1);
   const { isSuccess, bookDetails } = useGetBookDetails(bookSlug as string);
   if (!bookDetails) return;
-
-  function addCounter() {
-    setCounter(counter + 1);
-  }
-  function reduceCounter() {
-    if (counter <= 1) return;
-    setCounter(counter - 1);
-  }
 
   const discount =
     isSuccess &&
@@ -143,15 +135,7 @@ function Details() {
                   )}
                 </div>
                 <div className="flex items-center">
-                  <div className="flex items-center gap-4 border border-gray-400 rounded-lg h-full">
-                    <ButtonsSocials onClick={reduceCounter}>
-                      <Minus className="text-purple-600" />
-                    </ButtonsSocials>
-                    <span className="font-bold">{counter}</span>
-                    <ButtonsSocials onClick={addCounter}>
-                      <Plus className="text-purple-600" />
-                    </ButtonsSocials>
-                  </div>
+                  <MoreandLessButton />
                   <div className="flex items-center">
                     <Button variant="primary">
                       <ShoppingCart />
