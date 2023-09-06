@@ -1,4 +1,6 @@
-import { ReactNode } from "react";
+import { Minus, Plus } from "lucide-react";
+import { ReactNode, useState } from "react";
+import { twMerge } from "tailwind-merge";
 
 function SocialButtons({ children }: { children: ReactNode }) {
   return <div className="flex gap-4 text-white">{children}</div>;
@@ -22,5 +24,35 @@ export function ButtonsSocials({
     >
       {children}
     </button>
+  );
+}
+
+export function MoreandLessButton({ gap }: { gap?: string }) {
+  const [counter, setCounter] = useState(1);
+
+  function addCounter() {
+    setCounter(counter + 1);
+  }
+  function reduceCounter() {
+    if (counter <= 1) return;
+    setCounter(counter - 1);
+  }
+  return (
+    <>
+      <div
+        className={twMerge(
+          "flex items-center gap-4 border border-gray-400 rounded-lg",
+          gap
+        )}
+      >
+        <ButtonsSocials onClick={reduceCounter}>
+          <Minus className="text-purple-600" />
+        </ButtonsSocials>
+        <span className="font-bold">{counter}</span>
+        <ButtonsSocials onClick={addCounter}>
+          <Plus className="text-purple-600" />
+        </ButtonsSocials>
+      </div>
+    </>
   );
 }
