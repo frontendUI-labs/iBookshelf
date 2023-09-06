@@ -1,4 +1,3 @@
-import React from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { CartIcon } from "./Icons";
 import { X, XCircle } from "lucide-react";

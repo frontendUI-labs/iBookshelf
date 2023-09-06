@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import Button from "../../common/Button";
 import Select from "../../common/Select";
-import { CartIcon, HeartIconHeader } from "../ui/Icons";
+import { HeartIconHeader } from "../ui/Icons";
 import { Link } from "react-router-dom";
 import DialogDemo from "../ui/DialogCart";
 
