@@ -73,7 +73,6 @@ function RelatedBooksContainer({
   bookSlug: string;
 }) {
   const { relatedBooks } = useGetRelatedBooks(bookCategory, bookSlug);
-  console.log(relatedBooks, "bookCategory");
 
   if (!relatedBooks) return;
   return (

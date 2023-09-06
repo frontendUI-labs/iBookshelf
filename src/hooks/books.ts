@@ -21,6 +21,7 @@ export function useGetBooks({
   initialRange,
   finalRange,
   orderBooks,
+  inputValue,
 }: {
   pageLimit: number;
   rating: number;
@@ -28,6 +29,7 @@ export function useGetBooks({
   initialRange: number;
   finalRange: number;
   orderBooks: boolean;
+  inputValue: string;
 }) {
   const { handlePreviousPage, handleNextPage, pageRange } =
     usePagination(pageLimit);
@@ -41,6 +43,7 @@ export function useGetBooks({
       initialRange,
       finalRange,
       orderBooks,
+      inputValue,
     ],
     queryFn: () =>
       getBooks(pageRange, orderBooks, {
@@ -48,6 +51,7 @@ export function useGetBooks({
         category,
         initialRange,
         finalRange,
+        inputValue,
       }),
   });
 

@@ -11,7 +11,7 @@ import { LayoutType } from "../types/book.ts";
 import { useParams } from "react-router-dom";
 import ContainerBenefits from "../components/ui/BenefitsCard.tsx";
 
-function Filter() {
+function Filter({ inputValue }: { inputValue: string }) {
   const [range, setRange] = useState<[number, number]>([0, 16]);
   const [orderBooks, setOrderBooks] = useState(false);
   const [layout, setLayout] = useState<LayoutType>(LayoutType.GRID);
@@ -38,7 +38,10 @@ function Filter() {
     initialRange,
     finalRange,
     orderBooks,
+    inputValue,
   });
+
+  console.log(books, "books", inputValue);
 
   const { bookprices } = useGetBookPrices();
   const eachPrice = bookprices?.map((book) => book.price);
