@@ -10,8 +10,10 @@ export const getBooks = async (
     category: string;
     initialRange: number;
     finalRange: number;
+    inputValue: string;
   }
 ) => {
+  console.log(filter.inputValue, "aca");
   const [startRange, endRange] = pageRange;
   const response = await supabaseClient
     .from("books")
@@ -25,6 +27,11 @@ export const getBooks = async (
     .filter("categorySlug", filter.category ? "eq" : "not.eq", filter.category)
     .filter("price", "gte", filter.initialRange)
     .filter("price", "lte", filter.finalRange)
+    .textSearch("title", filter.inputValue, {
+      type: "websearch",
+    })
+    // .filter("title", "textsearch", filter.inputValue)
+    // .filter("title", "textSearch", "rich")
     .range(startRange, endRange)
     .order("rating", { ascending: orderBooks });
 

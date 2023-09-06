@@ -19,9 +19,15 @@ import Select from "../../common/Select";
 import { HeartIconHeader } from "../ui/Icons";
 import { Link } from "react-router-dom";
 import DialogDemo from "../ui/DialogCart";
+import { useRef } from "react";
 
-function Header() {
+function Header({
+  setSearchInput,
+}: {
+  setSearchInput: React.Dispatch<React.SetStateAction<string>>;
+}) {
   const languages = ["ENG", "ESP"];
+  const inputRef = useRef(null);
 
   return (
     <div className="container mx-auto px-4 md:flex justify-center items-center gap-4 py-5 border-b-2 border-gray-300 xl:gap-8 ">
@@ -127,7 +133,15 @@ function Header() {
           </NavigationMenu.Root>
         </div>
       </div>
-      <div className="hidden border-[1px] border-gray-200 md:flex items-center rounded-lg h-[60px] w-[870px]">
+      <form
+        className="hidden border-[1px] border-gray-200 md:flex items-center rounded-lg h-[60px] w-[870px]"
+        onSubmit={(event) => {
+          event.preventDefault();
+          const actualValue = inputRef.current?.value;
+          console.log(actualValue, "actualValue");
+          setSearchInput(actualValue);
+        }}
+      >
         <NavigationMenu.Root className="relative z-20 ">
           <NavigationMenu.List className=" center m-0 rounded-[6px] bg-white">
             <NavigationMenu.Item>
@@ -281,16 +295,17 @@ function Header() {
           className="border-x h-full p-6 w-full flex-1 outline-purple-600 text-purple-600"
           type="text"
           id="search"
+          ref={inputRef}
           placeholder="Search over 30 million book titles"
         />
-        <div className="px-2">
-          <Button
-            children={<Search color="var(--primary)" />}
-            type="button"
-            variant="icon"
-          />
+        <div>
+          <Button type="submit" variant="icon">
+            <Link to={"/filter"}>
+              <Search color="var(--primary)" />
+            </Link>
+          </Button>
         </div>
-      </div>
+      </form>
       <div className="hidden  lg:flex gap-1 xl:gap-8 items-center">
         <HeartIconHeader />
         <DialogDemo />

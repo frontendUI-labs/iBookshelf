@@ -691,7 +691,6 @@ const FlashBooks = () => {
 const FeatureBooks = () => {
   const { isSuccess, booksFeature } = useGetBooksFeature();
   const [selectedBook, setSelectedBook] = useState<Book>();
-  console.log(booksFeature);
 
   useEffect(() => {
     if (isSuccess) {
