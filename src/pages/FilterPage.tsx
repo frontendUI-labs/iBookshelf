@@ -10,8 +10,11 @@ import {
 import { LayoutType } from "../types/book.ts";
 import { useParams } from "react-router-dom";
 import ContainerBenefits from "../components/ui/BenefitsCard.tsx";
+import { useAppContext } from "../bookContext/AppContext.tsx";
 
-function Filter({ inputValue }: { inputValue: string }) {
+function Filter() {
+  const { inputValue } = useAppContext();
+
   const [range, setRange] = useState<[number, number]>([0, 16]);
   const [orderBooks, setOrderBooks] = useState(false);
   const [layout, setLayout] = useState<LayoutType>(LayoutType.GRID);
@@ -41,8 +44,6 @@ function Filter({ inputValue }: { inputValue: string }) {
     inputValue,
   });
 
-  console.log(books, "books", inputValue);
-
   const { bookprices } = useGetBookPrices();
   const eachPrice = bookprices?.map((book) => book.price);
   const minPrice = Math.min(...eachPrice);
@@ -55,7 +56,7 @@ function Filter({ inputValue }: { inputValue: string }) {
   return (
     <>
       {isError && <p>Fallo algo</p>}
-      <div className="container m-auto ">
+      <div className="container m-auto font-heading">
         <div className=" grid grid-cols-[400px,1fr] py-10 mb-12 ">
           <SideBar
             setOrderBooks={setOrderBooks}
@@ -66,18 +67,17 @@ function Filter({ inputValue }: { inputValue: string }) {
             setRange={setRange}
             priceRange={priceRange}
           />
-          {isLoading && <p>Cargando...</p>}
-          {isSuccess && books && (
-            <MainContent
-              books={books}
-              pageLimit={pageLimit}
-              layout={layout}
-              setLayout={setLayout}
-              pageRange={pageRange}
-              handleNextPage={handleNextPage}
-              handlePreviousPage={handlePreviousPage}
-            />
-          )}
+          <MainContent
+            isSuccess={isSuccess}
+            isLoading={isLoading}
+            books={books}
+            pageLimit={pageLimit}
+            layout={layout}
+            setLayout={setLayout}
+            pageRange={pageRange}
+            handleNextPage={handleNextPage}
+            handlePreviousPage={handlePreviousPage}
+          />
         </div>
         <OnSaleBook />
         <ContainerBenefits />

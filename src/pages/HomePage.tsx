@@ -149,13 +149,11 @@ function MainCard() {
               {slide.description}
             </p>
             <div className="sm:w-1/2 2xl:w-4/12">
-              <Button className="w-2/3 flex justify-around">
+              <Button>
                 <span>Get the deal</span>
                 <MoveRight />
               </Button>
-              <Button variant="ternary" className="w-2/3">
-                See other promos
-              </Button>
+              <Button variant="primary">See other promos</Button>
             </div>
           </div>
           <img
@@ -200,7 +198,7 @@ function BestBook() {
           prevEl: ".bestBook-prevEl",
         }}
       >
-        {mostPopular.map((book, idx) => {
+        {mostPopular.map((book, index) => {
           return (
             <SwiperSlide key={book.title}>
               <div
@@ -216,7 +214,7 @@ function BestBook() {
                 <div className="relative z-10 py-4 flex flex-col justify-center items-center gap-1 md:gap-4">
                   <div>
                     <h1 className="text-center text-3xl font-semibold 2xl:text-5xl">
-                      {Categories[idx]}
+                      {Categories[index]}
                     </h1>
                   </div>
                   <p className="text-base">Based sales this week</p>
@@ -696,6 +694,7 @@ const FeatureBooks = () => {
     if (isSuccess) {
       setSelectedBook(booksFeature[0]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [booksFeature]);
 
   const handleBookClick = (book: Book) => {
@@ -790,7 +789,10 @@ const FeatureBooks = () => {
               <button
                 className="hover:scale-105 duration-300"
                 key={book.title}
-                onClick={() => handleBookClick(book)}
+                //@git-
+                onClick={() => {
+                  handleBookClick(book);
+                }}
               >
                 <img
                   key={book.cover}

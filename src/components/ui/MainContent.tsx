@@ -14,6 +14,8 @@ import { twMerge } from "tailwind-merge";
 import { Book, LayoutType } from "../../types/book.ts";
 
 import React from "react";
+import IsEmpty from "../../states/is-empty.tsx";
+import IsLoading from "../../states/is-loading.tsx";
 
 function MainContent({
   books,
@@ -23,6 +25,8 @@ function MainContent({
   handleNextPage,
   handlePreviousPage,
   pageLimit,
+  isLoading,
+  isSuccess,
 }: {
   books: Book[];
   pageRange: [number, number];
@@ -31,9 +35,10 @@ function MainContent({
   handleNextPage: () => void;
   handlePreviousPage: () => void;
   pageLimit: number;
+  isLoading: boolean;
+  isSuccess: boolean;
 }) {
   const options = ["Newest", "Popular", "Featured"];
-
   const toggleGroupItemClasses =
     "ToggleGroup.Item  hover:bg-violet3 color-mauve11 data-[state=on]:bg-violet6 data-[state=on]:text-violet12 flex h-[35px] w-[35px] items-center justify-center bg-white text-base leading-4 first:rounded-l last:rounded-r focus:z-10 ";
 
@@ -91,45 +96,23 @@ function MainContent({
           />
         </div>
       </div>
-      {layout === LayoutType.GRID ? (
+      {isLoading && <IsLoading />}
+      {isSuccess && books.length === 0 && <IsEmpty />}
+      {isSuccess && layout === LayoutType.GRID ? (
         <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 py-8">
           {books.map((book) => {
-            return (
-              <CardComponent
-                key={book.id}
-                title={book.title}
-                cover={book.cover}
-                value={book.rating}
-                slug={book.slug}
-                categories={book.categories.name}
-              />
-            );
+            return <CardComponent book={book} key={book.id} />;
           })}
         </div>
       ) : (
         <div className="gap-4 py-8 flex flex-col">
           {books.map((book) => {
-            return (
-              <CardListLayout
-                key={book.id}
-                author={book.author}
-                cover={book.cover}
-                value={book.rating}
-                title={book.title}
-                price={book.price}
-                synopsis={book.synopsis ?? ""}
-                pages={book.pages ?? 321}
-                publisher={book.publisher ?? "Santillana"}
-                totalReviews={book.totalReviews}
-                slug={book.slug}
-                categories={book.categories.name}
-              />
-            );
+            return <CardListLayout book={book} key={book.id} />;
           })}
         </div>
       )}
       <div className="flex items-center justify-between">
-        <p>Showing {books.length} from 50 data</p>
+        {books.length > 1 ? <p>Showing {books.length} books</p> : null}
         <div className="flex">
           {pageRange[0] > 0 && (
             <Button onClick={handlePreviousPage} variant="secondary">

@@ -1,5 +1,4 @@
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
-
 import {
   ActivitySquare,
   BarChartBig,
@@ -16,35 +15,36 @@ import {
 } from "lucide-react";
 import Button from "../../common/Button";
 import Select from "../../common/Select";
-import { HeartIconHeader } from "../ui/Icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import DialogDemo from "../ui/DialogCart";
 import { useRef } from "react";
+import FavoriteDialog from "../ui/DialogFavorite";
+import { useAppContext } from "../../bookContext/AppContext";
 
-function Header({
-  setSearchInput,
-}: {
-  setSearchInput: React.Dispatch<React.SetStateAction<string>>;
-}) {
+function Header() {
+  const { setSearchInput } = useAppContext();
+  const navigate = useNavigate();
+  console.log(navigate, "acaa");
+
   const languages = ["ENG", "ESP"];
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <div className="container mx-auto px-4 md:flex justify-center items-center gap-4 py-5 border-b-2 border-gray-300 xl:gap-8 ">
+    <div className="container mx-auto px-4 md:flex justify-center items-center gap-4 py-5 border-b-2 border-gray-300 xl:gap-8 font-heading">
       <div className="flex justify-between">
-        <div className="flex items-center gap-5 md:gap-3">
-          <Link to="/">
+        <Link to="/">
+          <div className="flex items-center gap-5 md:gap-3">
             <div className="bg-purple-600 p-3 rounded-lg ">
               <img src="/icons/Vector.svg" alt="" />{" "}
             </div>
-          </Link>
-          <div className="flex flex-col">
-            <img src="/icons/Bookoe.svg" alt="" />
-            <span className="hidden text-[13px] xl:flex">
-              Book Store Website
-            </span>
+            <div className="flex flex-col">
+              <img src="/icons/Bookoe.svg" alt="" />
+              <span className="hidden text-[13px] xl:flex">
+                Book Store Website
+              </span>
+            </div>
           </div>
-        </div>
+        </Link>
         <div className="flex items-center rounded-lg md:hidden">
           <NavigationMenu.Root className="relative z-20 ">
             <NavigationMenu.List className=" center m-0 rounded-[6px] bg-white">
@@ -133,15 +133,7 @@ function Header({
           </NavigationMenu.Root>
         </div>
       </div>
-      <form
-        className="hidden border-[1px] border-gray-200 md:flex items-center rounded-lg h-[60px] w-[870px]"
-        onSubmit={(event) => {
-          event.preventDefault();
-          const actualValue = inputRef.current?.value;
-          console.log(actualValue, "actualValue");
-          setSearchInput(actualValue);
-        }}
-      >
+      <div className="hidden border-[1px] border-gray-200 md:flex items-center rounded-lg h-[60px] w-full">
         <NavigationMenu.Root className="relative z-20 ">
           <NavigationMenu.List className=" center m-0 rounded-[6px] bg-white">
             <NavigationMenu.Item>
@@ -291,23 +283,39 @@ function Header({
             </NavigationMenu.Item>
           </NavigationMenu.List>
         </NavigationMenu.Root>
-        <input
-          className="border-x h-full p-6 w-full flex-1 outline-purple-600 text-purple-600"
-          type="text"
-          id="search"
-          ref={inputRef}
-          placeholder="Search over 30 million book titles"
-        />
-        <div>
-          <Button type="submit" variant="icon">
-            <Link to={"/filter"}>
+        <form
+          action=""
+          onSubmit={(event) => {
+            event.preventDefault();
+            navigate("/filter");
+            if (inputRef.current) {
+              const actualValue = inputRef.current.value;
+              setSearchInput(actualValue);
+            }
+          }}
+          className="flex h-full w-full"
+        >
+          <label htmlFor="search" className="sr-only">
+            Search your favorite book
+          </label>
+          <input
+            className="border-x h-full p-6 w-full flex-1 outline-purple-600 text-purple-600"
+            type="text"
+            id="search"
+            ref={inputRef}
+            placeholder="Search over 30 million book titles"
+          />
+          <div className="w-[80px]  h-full flex items-center justify-center">
+            <Button variant="icon">
+              {/* <Link type="submit" to={"/filter"} className="">
+            </Link> */}
               <Search color="var(--primary)" />
-            </Link>
-          </Button>
-        </div>
-      </form>
+            </Button>
+          </div>
+        </form>
+      </div>
       <div className="hidden  lg:flex gap-1 xl:gap-8 items-center">
-        <HeartIconHeader />
+        <FavoriteDialog />
         <DialogDemo />
         <div className="bg-[#c4c4c4] rounded-lg h-[60px] w-[60px]">
           <img

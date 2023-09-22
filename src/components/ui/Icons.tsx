@@ -16,16 +16,15 @@ export function HeartIconHeader({ onClick }: { onClick?: () => void }) {
 
 export function HeartIcon({
   variant,
-  onClick,
   bg,
+  onClick,
 }: {
   bg?: string;
   variant?: boolean;
-  onClick?: () => void;
+  onClick: () => void;
 }) {
   return (
-    <div
-      tabIndex={0}
+    <button
       onClick={onClick}
       className={twMerge(
         `h-[50px] w-[50px] rounded-lg flex items-center justify-center cursor-pointer bg-${bg} text-purple-600 outline-purple-600 hover:text-purple-600 `,
@@ -33,7 +32,7 @@ export function HeartIcon({
       )}
     >
       <Heart />
-    </div>
+    </button>
   );
 }
 

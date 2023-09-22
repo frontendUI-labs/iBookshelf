@@ -13,7 +13,6 @@ export const getBooks = async (
     inputValue: string;
   }
 ) => {
-  console.log(filter.inputValue, "aca");
   const [startRange, endRange] = pageRange;
   const response = await supabaseClient
     .from("books")
@@ -27,14 +26,17 @@ export const getBooks = async (
     .filter("categorySlug", filter.category ? "eq" : "not.eq", filter.category)
     .filter("price", "gte", filter.initialRange)
     .filter("price", "lte", filter.finalRange)
-    .textSearch("title", filter.inputValue, {
-      type: "websearch",
-    })
-    // .filter("title", "textsearch", filter.inputValue)
-    // .filter("title", "textSearch", "rich")
+    .filter("title", "ilike", `%${filter.inputValue}%`)
     .range(startRange, endRange)
     .order("rating", { ascending: orderBooks });
 
+  return response;
+};
+
+export const updateFavorite = async () => {
+  const response = await supabaseClient
+    .from("books")
+    .update({ isFavorite: true });
   return response;
 };
 

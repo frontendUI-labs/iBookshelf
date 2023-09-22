@@ -10,6 +10,7 @@ import {
   getBooksPrice,
   getBooksRating,
   getRelatedBooks,
+  updateFavorite,
 } from "../api/books.ts";
 
 import usePagination from "./pagination.ts";
@@ -65,6 +66,14 @@ export function useGetBooks({
     handleNextPage,
     handlePreviousPage,
   };
+}
+
+export function useUptadateFavorite() {
+  const response = useQuery({
+    queryKey: ["FavoriteBooks"],
+    queryFn: updateFavorite,
+  });
+  return response;
 }
 
 export function useGetBookDetails(bookSlug: string) {

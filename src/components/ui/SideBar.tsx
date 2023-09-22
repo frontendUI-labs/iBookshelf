@@ -18,8 +18,8 @@ function SideBar({
   selectedCategory,
   setOrderBooks,
 }: {
-  range: [number, number];
   priceRange: [number, number];
+  range: [number, number];
   setRange: React.Dispatch<React.SetStateAction<[number, number]>>;
   setRating: React.Dispatch<React.SetStateAction<number>>;
   rating: number;

@@ -40,7 +40,10 @@ function TabsComponent({ bookinfo }: { bookinfo: BookInfo }) {
 
   return (
     <div>
-      <Tabs.Root className="flex flex-col w-full " defaultValue="tab1">
+      <Tabs.Root
+        className="flex flex-col w-full font-heading"
+        defaultValue="tab1"
+      >
         <Tabs.List
           className="shrink-0 flex border-b border-mauve6"
           aria-label="Details Product"
