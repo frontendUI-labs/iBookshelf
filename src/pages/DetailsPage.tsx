@@ -13,7 +13,6 @@ import SocialButtons, {
   ButtonsSocials,
   MoreandLessButton,
 } from "../components/ui/SocialButtons";
-import { useState } from "react";
 import Button from "../common/Button";
 import { Link, useParams } from "react-router-dom";
 import { useGetBookDetails } from "../hooks/books";
@@ -22,25 +21,30 @@ import LayoutDetails from "../components/ui/LayoutDetails";
 import OnSaleBook from "../components/ui/OnSaleBook";
 import RelatedBooksContainer from "../common/related-books";
 import ContainerBenefits from "../components/ui/BenefitsCard";
+import { useAppContext } from "../bookContext/AppContext";
 
 function Details() {
   const { bookSlug } = useParams<{
     bookSlug: string;
   }>();
-  const [favorite, setFavorite] = useState(false); //active | inactive
   const { isSuccess, bookDetails } = useGetBookDetails(bookSlug as string);
+  const { getfavoriteBooks, favoriteBooks } = useAppContext();
+
   if (!bookDetails) return;
 
   const discount =
     isSuccess &&
     bookDetails.price - bookDetails.price * bookDetails?.discountPercentage;
-
   const bookCategory = bookDetails?.categorySlug;
+  const indexOfCard = [...favoriteBooks].findIndex(
+    (favoriteBook) => favoriteBook.id === bookDetails.id
+  );
+
   return (
     isSuccess && (
       <>
         <LayoutDetails>
-          <div className="flex gap-[60px]">
+          <div className="flex gap-[60px] font-heading ">
             <img
               className="object-cover rounded-lg aspect-[3/4] h-full"
               src={bookDetails.cover}
@@ -143,9 +147,9 @@ function Details() {
                     </Button>
                     <HeartIcon
                       onClick={() => {
-                        setFavorite(!favorite);
+                        getfavoriteBooks(bookDetails);
                       }}
-                      variant={favorite}
+                      variant={!!favoriteBooks[indexOfCard]}
                       bg="purple-400"
                     />
                   </div>
