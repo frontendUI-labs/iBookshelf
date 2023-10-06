@@ -19,12 +19,13 @@ import { Link, useNavigate } from "react-router-dom";
 import DialogDemo from "../ui/DialogCart";
 import { useRef } from "react";
 import FavoriteDialog from "../ui/DialogFavorite";
-import { useAppContext } from "../../bookContext/AppContext";
+
+import { useDispatch } from "react-redux";
+import { appSliceBook } from "../../redux/input-slice";
 
 function Header() {
-  const { setSearchInput } = useAppContext();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  console.log(navigate, "acaa");
 
   const languages = ["ENG", "ESP"];
   const inputRef = useRef<HTMLInputElement>(null);
@@ -290,7 +291,9 @@ function Header() {
             navigate("/filter");
             if (inputRef.current) {
               const actualValue = inputRef.current.value;
-              setSearchInput(actualValue);
+
+              // setSearchInput(actualValue);
+              dispatch(appSliceBook(actualValue));
             }
           }}
           className="flex h-full w-full"

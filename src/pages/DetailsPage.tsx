@@ -21,14 +21,20 @@ import LayoutDetails from "../components/ui/LayoutDetails";
 import OnSaleBook from "../components/ui/OnSaleBook";
 import RelatedBooksContainer from "../common/related-books";
 import ContainerBenefits from "../components/ui/BenefitsCard";
-import { useAppContext } from "../bookContext/AppContext";
+import { useDispatch, useSelector } from "react-redux";
+import { addBook } from "../redux/book-slice";
+import { Book } from "../types/book";
+import { RootBookState } from "../redux/store";
 
 function Details() {
   const { bookSlug } = useParams<{
     bookSlug: string;
   }>();
   const { isSuccess, bookDetails } = useGetBookDetails(bookSlug as string);
-  const { getfavoriteBooks, favoriteBooks } = useAppContext();
+  const favoriteBooks: Book[] = useSelector(
+    (state: RootBookState) => state.user.bookState
+  );
+  const dispatch = useDispatch();
 
   if (!bookDetails) return;
 
@@ -147,7 +153,7 @@ function Details() {
                     </Button>
                     <HeartIcon
                       onClick={() => {
-                        getfavoriteBooks(bookDetails);
+                        dispatch(addBook(bookDetails));
                       }}
                       variant={!!favoriteBooks[indexOfCard]}
                       bg="purple-400"

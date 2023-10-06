@@ -3,7 +3,10 @@ import { Heart, HeartCrack, X, XCircle } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
-import { useAppContext } from "../../bookContext/AppContext";
+import { useSelector, useDispatch } from "react-redux";
+import { addBook } from "../../redux/book-slice";
+import { Book } from "../../types/book";
+import { RootBookState } from "../../redux/store";
 
 const EmptyDialog = () => {
   return (
@@ -17,8 +20,11 @@ const EmptyDialog = () => {
 };
 
 const FavoriteDialog = () => {
+  const favoriteBooks: Book[] = useSelector(
+    (state: RootBookState) => state.user.bookState
+  );
   const [open, setOpen] = useState(false);
-  const { getfavoriteBooks, favoriteBooks } = useAppContext();
+  const dispatch = useDispatch();
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
@@ -46,7 +52,7 @@ const FavoriteDialog = () => {
           <div className="h-[85%] flex flex-col justify-between pb-20 overflow-auto ">
             <ul className="flex flex-col gap-2">
               {favoriteBooks.length > 0 ? (
-                favoriteBooks.map((book, id) => (
+                favoriteBooks.map((book: Book, id) => (
                   <li
                     key={id}
                     className="flex w-full flex-col border-b border-neutral-300"
@@ -54,7 +60,7 @@ const FavoriteDialog = () => {
                     <div className="relative w-full flex gap-2 justify-between  p-4 hover:bg-gray-200 group  rounded-xl group duration-500">
                       <button
                         onClick={() => {
-                          getfavoriteBooks(book);
+                          dispatch(addBook(book));
 
                           // removeBook(book.id);
                         }}

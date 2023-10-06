@@ -10,10 +10,13 @@ import {
 import { LayoutType } from "../types/book.ts";
 import { useParams } from "react-router-dom";
 import ContainerBenefits from "../components/ui/BenefitsCard.tsx";
-import { useAppContext } from "../bookContext/AppContext.tsx";
+import { useSelector } from "react-redux";
+import { RootInputState } from "../redux/store.tsx";
 
 function Filter() {
-  const { inputValue } = useAppContext();
+  const searchQuery = useSelector(
+    (state: RootInputState) => state.app.searchQuery
+  );
 
   const [range, setRange] = useState<[number, number]>([0, 16]);
   const [orderBooks, setOrderBooks] = useState(false);
@@ -41,7 +44,7 @@ function Filter() {
     initialRange,
     finalRange,
     orderBooks,
-    inputValue,
+    searchQuery,
   });
 
   const { bookprices } = useGetBookPrices();
