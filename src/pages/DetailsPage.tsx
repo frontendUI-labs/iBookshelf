@@ -10,9 +10,9 @@ import {
 import { HeartIcon, Rating } from "../components/ui/Icons";
 import SocialButtons, {
   ButtonsSocials,
-  MoreandLessButton,
+  // MoreandLessButton,
 } from "../components/ui/SocialButtons";
-import Button from "../common/Button";
+// import Button from "../common/Button";
 import { Link, useParams } from "react-router-dom";
 import { useGetBookDetails } from "../hooks/books";
 import TabsComponent from "../common/tabs";
@@ -24,6 +24,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { addBook } from "../redux/book-slice";
 import { Book } from "../types/book";
 import { RootBookState } from "../redux/store";
+import { addToCart } from "../redux/cartSlice";
+import CartButton from "../components/ui/CartButton";
 
 function Details() {
   const dispatch = useDispatch();
@@ -37,7 +39,6 @@ function Details() {
   const favoriteBooks: Book[] = useSelector(
     (state: RootBookState) => state.user.bookState
   );
-  const dispatch = useDispatch();
 
   if (!bookDetails) return;
   const discount =
@@ -169,7 +170,11 @@ function Details() {
                     />
                     <HeartIcon
                       onClick={() => {
-                        dispatch(addBook(bookDetails));
+                        const bookWithQty = {
+                          ...bookDetails,
+                          quantity: 1,
+                        };
+                        dispatch(addBook(bookWithQty));
                       }}
                       variant={!!favoriteBooks[indexOfCard]}
                       bg="purple-400"

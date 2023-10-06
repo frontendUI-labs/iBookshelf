@@ -46,7 +46,7 @@ function BookCartDialog() {
     <div className="h-full flex flex-col justify-between pb-20">
       <ul className="flex flex-col gap-2 overflow-y-auto">
         {[
-          cartBooks.length > 0 ? (
+          cartBooks.length > 0 &&
             cartBooks.map((book: Book, idx) => {
               const priceOfQtY = (
                 (book.price - book.price * book.discountPercentage) *
@@ -55,6 +55,8 @@ function BookCartDialog() {
               function setOpen(_arg0: boolean) {
                 throw new Error("Function not implemented.");
               }
+              console.log(idx, "idx");
+
               return (
                 <li
                   key={idx}
@@ -118,14 +120,14 @@ function BookCartDialog() {
                   </div>
                 </li>
               );
-            })
-          ) : (
-            <div className="mt-10 flex flex-col items-center gap-10 font-heading overflow-hidden font-bold text-3xl">
-              <ShoppingCart className="w-14 h-14" />
-              <p className="">Your cart is empty!</p>
-            </div>
-          ),
+            }),
         ]}
+        {cartBooks.length === 0 && (
+          <div className="mt-10 flex flex-col items-center gap-10 font-heading overflow-hidden font-bold text-3xl">
+            <ShoppingCart className="w-14 h-14" />
+            <p className="">Your cart is empty!</p>
+          </div>
+        )}
       </ul>
       <div className="flex flex-col gap-3 text-lg ">
         <div className="flex justify-between border-b-[1px] border-gray-200 py-2">

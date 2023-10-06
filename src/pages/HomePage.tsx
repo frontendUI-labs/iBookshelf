@@ -219,7 +219,7 @@ function BestBook() {
                 <div className="relative z-10 py-4 flex flex-col justify-center items-center gap-1 md:gap-4">
                   <div>
                     <h1 className="text-center text-3xl font-semibold 2xl:text-5xl">
-                      {Categories[index]}
+                      {Categories[idx]}
                     </h1>
                   </div>
                   <p className="text-base">Based sales this week</p>

@@ -11,24 +11,23 @@ import cartReducer from "./cartSlice.tsx";
 const persisConfig = {
   key: "root",
   storage,
-  whitelist: ["bookState"],
-};
-const persistConfigCart = {
-  key: "root",
-  storage,
+  // whitelist: ["bookState", "inputState", "cartState"],
 };
 const rootReduce = combineReducers({
   bookState: userReducer,
+  // inputState: appReducer,
+  cartState: cartReducer,
 });
 
 const persistedReducer = persistReducer(persisConfig, rootReduce);
+// const persistedReducerCart = persistReducer(persisConfig, cartReducer);
+
 export const store = configureStore({
   reducer: {
+    // user: persistedReducer,
     user: persistedReducer,
     app: appReducer,
-    cart: persistReducer(persistConfigCart, cartReducer),
-
-    //
+    cart: persistReducer(persisConfig, cartReducer),
   },
   middleware: [thunk],
 });

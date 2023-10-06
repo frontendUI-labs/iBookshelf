@@ -14,6 +14,7 @@ import {
 } from "../api/books.ts";
 
 import usePagination from "./pagination.ts";
+import { CartBook } from "../redux/cartSlice.tsx";
 
 export function useGetBooks({
   pageLimit,
@@ -59,7 +60,7 @@ export function useGetBooks({
   return {
     isLoading,
     isError,
-    books: data?.data ?? [],
+    books: data?.data ?? ([] as CartBook[]),
     error,
     isSuccess,
     pageRange,

@@ -8,7 +8,6 @@ import PaymentPage from "./pages/PaymentPage";
 import DetailsPage from "./pages/DetailsPage";
 import Footer from "./components/layout/Footer";
 import Header from "./components/layout/header";
-import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { Provider } from "react-redux";
 import { store } from "./redux/store.tsx";
@@ -23,11 +22,7 @@ export const showToast = () => {
     autoClose: 1000,
   });
 };
-function MainLayout({
-  setSearchInput,
-}: {
-  setSearchInput: React.Dispatch<React.SetStateAction<string>>;
-}) {
+function MainLayout() {
   return (
     <>
       <Header />
@@ -43,7 +38,6 @@ function MainLayout({
   );
 }
 const App = (): FunctionComponent => {
-  const [inputValue, setSearchInput] = useState("");
   const persistor = persistStore(store);
 
   return (
@@ -54,24 +48,15 @@ const App = (): FunctionComponent => {
             <QueryClientProvider client={queryClient}>
               <ReactQueryDevtools />
               <Routes>
-                <Route
-                  path="/"
-                  element={<MainLayout setSearchInput={setSearchInput} />}
-                >
+                <Route path="/" element={<MainLayout />}>
                   <Route path="/" element={<HomePage />} />
-                  <Route
-                    path="/filter"
-                    element={<FilterPage inputValue={inputValue} />}
-                  />
-                  <Route
-                    path="/filter/:category"
-                    element={<FilterPage inputValue={inputValue} />}
-                  />
+                  <Route path="/filter" element={<FilterPage />} />
+                  <Route path="/filter/:category" element={<FilterPage />} />
                   <Route path="/details/:bookSlug" element={<DetailsPage />} />
                   <Route path="/checkout" element={<PaymentPage />} />
                 </Route>
               </Routes>
-              <ReactQueryDevtools initialIsOpen={false} />
+              {/* <ReactQueryDevtools initialIsOpen={false} /> */}
             </QueryClientProvider>
           </BrowserRouter>
         </PersistGate>

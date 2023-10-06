@@ -14,25 +14,6 @@ function RelatedBooks({
   relatedbook: Book;
   onClick: () => void;
 }) {
-  // function RelatedBooks({
-  //   cover,
-  //   title,
-  //   category,
-  //   rate,
-  //   totalReviews,
-  //   price,
-  //   slug,
-  //   onClick,
-  // }: {
-  //   cover: string;
-  //   title: string;
-  //   category: string;
-  //   rate: number;
-  //   totalReviews: number;
-  //   price: number;
-  //   slug: string;
-  //   onClick?: () => void;
-  // }) {
   return (
     <div className="flex flex-col gap-4  mt-4 ">
       <div className="flex gap-4">

@@ -29,7 +29,7 @@ const Button: React.FC<ButtonProps> = ({
         variant === "secondary" &&
           "text-[rgb(24_24_27)] bg-[rgba(228_228_231)]",
         variant === "ternary" && "text-purple-600 bg-gray-200",
-        variant === "icon" && "bg-none text-purple-600 justify-start p-0"
+        variant === "icon" && "bg-none"
       )}
     >
       {children}
