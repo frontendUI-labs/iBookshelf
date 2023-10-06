@@ -28,7 +28,7 @@ function ContainerBenefits({ bg }: { bg?: string }) {
   const iconClassName = "text-purple-600 fill-purple-600 w-[25px] h-[25px]";
   return (
     <div className={twMerge("py-24", bg)}>
-      <div className="container mx-auto px-4 flex flex-col items-center gap-6 sm:gap-10 md:grid grid-cols-2 lg:px-14 lg:gap-4 xl:grid-cols-4">
+      <div className="container mx-auto px-4 flex flex-col items-center gap-6 sm:gap-10 md:grid grid-cols-2 lg:gap-4 xl:grid-cols-4">
         <Benefits
           benefit="Quick Delivery"
           description="Experience the joy of rapid book delivery with our efficient and quick service."

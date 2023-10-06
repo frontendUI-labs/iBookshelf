@@ -30,10 +30,24 @@ function SaleBooks({ book }: { book: Book }) {
         </div>
       </div>
       <h3 className="text-lg font-bold hover:text-purple-600 truncate">
-        <Link to={`/details/${book.slug}`}>{book.title}</Link>
+        <Link
+          onClick={() => {
+            window.scrollTo(0, 0);
+          }}
+          to={`/details/${book.slug}`}
+        >
+          {book.title}
+        </Link>
       </h3>
-      <p className="text-sm text-purple-600 font-medium capitalize">
-        {book.categorySlug}
+      <p className="text-sm text-purple-600 font-medium capitalize hover:text-orange-600">
+        <Link
+          onClick={() => {
+            window.scrollTo(0, 0);
+          }}
+          to={`/filter/${book.categorySlug}`}
+        >
+          {book.categorySlug}
+        </Link>
       </p>
       <div className="flex items-center justify-between mt-5">
         <div className="flex items-center gap-2">

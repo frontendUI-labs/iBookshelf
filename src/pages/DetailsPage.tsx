@@ -3,7 +3,6 @@ import {
   Mail,
   MessagesSquare,
   ShieldCheck,
-  ShoppingCart,
   ThumbsUp,
   Twitter,
   Zap,
@@ -11,9 +10,9 @@ import {
 import { HeartIcon, Rating } from "../components/ui/Icons";
 import SocialButtons, {
   ButtonsSocials,
-  MoreandLessButton,
+  // MoreandLessButton,
 } from "../components/ui/SocialButtons";
-import Button from "../common/Button";
+// import Button from "../common/Button";
 import { Link, useParams } from "react-router-dom";
 import { useGetBookDetails } from "../hooks/books";
 import TabsComponent from "../common/tabs";
@@ -25,8 +24,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { addBook } from "../redux/book-slice";
 import { Book } from "../types/book";
 import { RootBookState } from "../redux/store";
+import { addToCart } from "../redux/cartSlice";
+import CartButton from "../components/ui/CartButton";
 
 function Details() {
+  const dispatch = useDispatch();
+  const handleAddToCart = (book: Book) => {
+    dispatch(addToCart(book));
+  };
   const { bookSlug } = useParams<{
     bookSlug: string;
   }>();
@@ -34,10 +39,8 @@ function Details() {
   const favoriteBooks: Book[] = useSelector(
     (state: RootBookState) => state.user.bookState
   );
-  const dispatch = useDispatch();
 
   if (!bookDetails) return;
-
   const discount =
     isSuccess &&
     bookDetails.price - bookDetails.price * bookDetails?.discountPercentage;
@@ -52,7 +55,7 @@ function Details() {
         <LayoutDetails>
           <div className="flex gap-[60px] font-heading ">
             <img
-              className="object-cover rounded-lg aspect-[3/4] h-full"
+              className="object-cover rounded-lg h-full aspect-[3/4]  border-2 border-slate-500  boxShadow"
               src={bookDetails.cover}
               alt=""
             />
@@ -139,21 +142,39 @@ function Details() {
                         ${discount}
                       </span>
                       <span className="bg-orange-400 py-1 px-4 rounded-full text-white font-bold">
-                        {bookDetails?.discountPercentage * 100}
+                        {bookDetails?.discountPercentage * 100} %
                       </span>
                     </>
                   )}
                 </div>
-                <div className="flex items-center">
-                  <MoreandLessButton />
-                  <div className="flex items-center">
-                    <Button variant="primary">
-                      <ShoppingCart />
-                      <span>Add to cart</span>
-                    </Button>
+                <div className="flex gap-4 items-center">
+                  {/* <MoreandLessButton
+                    counter={bookDetails.quantity}
+                    addToCart={() => {
+                      addToCart(bookDetails);
+                    }}
+                    reduceCounter={() => {
+                      removeAndDecrementBook(bookDetails);
+                    }}
+                  /> */}
+                  <div className="flex gap-2 ">
+                    <CartButton
+                      onClick={() => {
+                        const bookWithQty = {
+                          ...bookDetails,
+                          quantity: 1,
+                        };
+                        handleAddToCart(bookWithQty);
+                      }}
+                      text="Add to cart"
+                    />
                     <HeartIcon
                       onClick={() => {
-                        dispatch(addBook(bookDetails));
+                        const bookWithQty = {
+                          ...bookDetails,
+                          quantity: 1,
+                        };
+                        dispatch(addBook(bookWithQty));
                       }}
                       variant={!!favoriteBooks[indexOfCard]}
                       bg="purple-400"

@@ -4,9 +4,10 @@ import { twMerge } from "tailwind-merge";
 type ButtonProps = {
   onClick?: () => void;
   children: ReactNode;
-  variant?: "primary" | "danger" | "secondary" | "icon";
+  variant?: "primary" | "ternary" | "secondary" | "icon";
   type?: "button" | "submit";
   id?: string;
+  className?: string;
 };
 const Button: React.FC<ButtonProps> = ({
   onClick,
@@ -27,8 +28,8 @@ const Button: React.FC<ButtonProps> = ({
         variant === "primary" && "text-[rgb(250_250_250)] bg-purple-600",
         variant === "secondary" &&
           "text-[rgb(24_24_27)] bg-[rgba(228_228_231)]",
-        variant === "danger" && "text-[rgb(250_250_250)] bg-[rgb(239_68_68)]",
-        variant === "icon" && "bg-none "
+        variant === "ternary" && "text-purple-600 bg-gray-200",
+        variant === "icon" && "bg-none"
       )}
     >
       {children}

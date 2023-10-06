@@ -62,7 +62,7 @@ function TabsComponent({ bookinfo }: { bookinfo: BookInfo }) {
           </Tabs.Trigger>
         </Tabs.List>
         <Tabs.Content
-          className="grow p-4 bg-white rounded-b-md outline-none focus:shadow-[0_0_0_2px] focus:shadow-black"
+          className="grow p-4 bg-white rounded-b-md outline-none  focus:shadow-black"
           value="tab1"
         >
           <div className="grid grid-cols-[350px,1fr] border-x border-t border-gray-200 p-2 items-center">

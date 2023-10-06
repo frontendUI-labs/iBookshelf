@@ -59,7 +59,7 @@ function Filter() {
   return (
     <>
       {isError && <p>Fallo algo</p>}
-      <div className="container m-auto font-heading">
+      <div className="container m-auto font-heading mt-24">
         <div className=" grid grid-cols-[400px,1fr] py-10 mb-12 ">
           <SideBar
             setOrderBooks={setOrderBooks}

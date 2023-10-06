@@ -108,9 +108,9 @@ const Footer = () => {
   const iconClassName = "text-purple-600 w-[25px] h-[25px]";
   return (
     <>
-      <div className="mt-40 flex flex-col gap-20 mb-4 pb-10 border-b-2 border-gray-300 sm:px-5 lg:px-14">
+      <div className="mt-40 flex flex-col gap-20 mb-4 pb-10 border-b-2 border-gray-300 sm:px-5">
         <ContactCard />
-        <div className="container m-auto px-4 flex flex-col gap-6 font-heading md:mt-16 lg:grid grid-cols-2 xl:flex xl:flex-row justify-between">
+        <div className="container m-auto px-2 flex flex-col gap-6 font-heading md:mt-16 lg:grid grid-cols-2 xl:flex xl:flex-row justify-between">
           <div className="follow w-full flex flex-col gap-2 md:w-[420px] md:gap-6">
             <div className="flex items-center gap-[20px]">
               <div className="bg-purple-600 p-3 rounded-lg ">
@@ -226,7 +226,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="px-4 container m-auto pb-4 flex flex-col md:flex-row items-center justify-between font-heading text-xs font-normal md:text-base">
-        <p>iBookshrelf Book Store Website - © 2023 All Rights Reserved</p>
+        <p>iBookshelf Book Store Website - © 2023 All Rights Reserved</p>
         <p className="flex gap-2 items-center">
           Made with
           <span>
