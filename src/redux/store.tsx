@@ -6,13 +6,17 @@ import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import thunk from "redux-thunk";
 import { Book } from "../types/book";
+import cartReducer from "./cartSlice.tsx";
 
 const persisConfig = {
   key: "root",
   storage,
   whitelist: ["bookState"],
 };
-
+const persistConfigCart = {
+  key: "root",
+  storage,
+};
 const rootReduce = combineReducers({
   bookState: userReducer,
 });
@@ -22,6 +26,8 @@ export const store = configureStore({
   reducer: {
     user: persistedReducer,
     app: appReducer,
+    cart: persistReducer(persistConfigCart, cartReducer),
+
     //
   },
   middleware: [thunk],
@@ -37,3 +43,8 @@ export interface RootInputState {
     searchQuery: string;
   };
 }
+// export interface CartBookType {
+//   cart: {
+//     cartBooks: Book[];
+//   };
+// }

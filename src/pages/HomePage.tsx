@@ -35,6 +35,8 @@ import {
 import ContainerBenefits from "../components/ui/BenefitsCard";
 import { Book } from "../types/book";
 import OnSaleBook from "../components/ui/OnSaleBook";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../redux/cartSlice";
 
 const PointsIcon = ({
   color,
@@ -132,7 +134,7 @@ function MainCard() {
         },
         {
           title: "Read our all Books",
-          img: "/images/thirdImage.png",
+          img: "/images/shelfImg.png",
           description: `"Explore a World of Books: Our diverse collection caters to every taste and interest, promising captivating reads for all."`,
         },
       ].map((slide) => (
@@ -148,8 +150,8 @@ function MainCard() {
             <p className="font-basic text-base font-base w-2/3 md:text-base lg:w-1/2">
               {slide.description}
             </p>
-            <div className="sm:w-1/2 2xl:w-4/12">
-              <Button>
+            <div className="sm:w-1/2 2xl:w-5/12">
+              <Button className="w-2/3 flex justify-around">
                 <span>Get the deal</span>
                 <MoveRight />
               </Button>
@@ -198,7 +200,9 @@ function BestBook() {
           prevEl: ".bestBook-prevEl",
         }}
       >
-        {mostPopular.map((book, index) => {
+        {mostPopular.map((book, idx) => {
+          const priceDescount =
+            book.price - book.price * book.discountPercentage;
           return (
             <SwiperSlide key={book.title}>
               <div
@@ -206,6 +210,7 @@ function BestBook() {
                   "text-white flex flex-col justify-center items-center gap-4"
                 )}
               >
+                {" "}
                 <img
                   className="blur-md object-[cover] absolute left-0 top-0 w-full h-full"
                   src={book.cover}
@@ -218,34 +223,50 @@ function BestBook() {
                     </h1>
                   </div>
                   <p className="text-base">Based sales this week</p>
-                  <img
-                    src={book.cover}
-                    className={twMerge(
-                      " w-[200px] h-[290px] rounded-xl border-2 border-white boxShadow"
-                    )}
-                    alt=""
-                  />
+                  <Link
+                    onClick={() => {
+                      window.scrollTo(0, 0);
+                    }}
+                    to={`/details/${book.slug}`}
+                  >
+                    <img
+                      src={book.cover}
+                      className={twMerge(
+                        " w-[200px] h-[290px] rounded-xl border-2 border-white boxShadow  hover:scale-105 duration-200 hover:border-purple-700"
+                      )}
+                      alt="cover"
+                    />
+                  </Link>
                   <div className="flex flex-col text-center font-semibold 2xl:text-xl">
-                    <Link to={`/details/${book.slug}`}>
-                      <p className="line-clamp-1 px-4 hover:text-blue-400 ">
+                    <p className="line-clamp-1 px-4 hover:text-blue-400 ">
+                      <Link
+                        onClick={() => {
+                          window.scrollTo(0, 0);
+                        }}
+                        to={`/details/${book.slug}`}
+                      >
                         {book.title}
-                      </p>
-                    </Link>
-                    <Link to={`/filter/${book.categorySlug}`}>
-                      <span className="uppercase text-xs font-thin font-basic opacity-60 hover:font-bold">
+                      </Link>
+                    </p>
+
+                    <span className="uppercase text-xs font-thin font-basic opacity-60 hover:font-bold">
+                      <Link
+                        onClick={() => {
+                          window.scrollTo(0, 0);
+                        }}
+                        to={`/filter/${book.categorySlug}`}
+                      >
                         {book.categorySlug}
-                      </span>
-                    </Link>
+                      </Link>
+                    </span>
                   </div>
                   <div className="bg-white px-6 py-3 text-lg font-semibold flex  gap-4 rounded-xl">
-                    <p className="text-gray-100 line-through">{book.price}</p>
-                    <p className="text-black">
-                      USD{" "}
-                      {(
-                        book.price -
-                        book.price * book.discountPercentage
-                      ).toFixed(2)}
-                    </p>
+                    {priceDescount == book.price ? (
+                      ""
+                    ) : (
+                      <p className="text-gray-100 line-through">{book.price}</p>
+                    )}
+                    <p className="text-black">USD {priceDescount.toFixed(2)}</p>
                   </div>
                 </div>
               </div>
@@ -338,9 +359,14 @@ function BooksRecomended() {
                 key={book.cover}
                 className="flex items-center justify-center sm:justify-start"
               >
-                <Link to={`/details/${book.slug}`}>
+                <Link
+                  onClick={() => {
+                    window.scrollTo(0, 0);
+                  }}
+                  to={`/details/${book.slug}`}
+                >
                   <img
-                    className="w-[200px] aspect-[4/5] object-cover rounded-xl border-[3px] border-orange-300 2xl:aspect-[3/4]"
+                    className="w-[200px] aspect-[4/5] object-cover rounded-xl border-[3px] border-orange-300 2xl:aspect-[3/4] hover:scale-105 duration-300 hover:border-orange-600"
                     src={book.cover}
                     alt=""
                   />
@@ -434,9 +460,14 @@ function BooksPopular() {
                 key={book.cover}
                 className="flex items-center justify-center sm:justify-start"
               >
-                <Link to={`/details/${book.slug}`}>
+                <Link
+                  onClick={() => {
+                    window.scrollTo(0, 0);
+                  }}
+                  to={`/details/${book.slug}`}
+                >
                   <img
-                    className="w-[200px] aspect-[4/5] object-cover rounded-xl border-[3px] border-blue-300 2xl:aspect-[3/4]"
+                    className="w-[200px] aspect-[4/5] object-cover rounded-xl border-[3px] border-blue-300 2xl:aspect-[3/4] hover:scale-105 duration-300 hover:border-blue-700"
                     src={book.cover}
                     alt=""
                   />
@@ -476,7 +507,14 @@ const TitleOfEachSection = ({
   );
 };
 const SpecialsBooks = () => {
+  const dispatch = useDispatch();
+
+  const handleAddToCart = (book: Book) => {
+    dispatch(addToCart(book));
+  };
+
   const { booksDiscount } = useGetBooksOnDiscount();
+
   return (
     <div>
       <Swiper
@@ -514,31 +552,45 @@ const SpecialsBooks = () => {
         navigation={{
           prevEl: ".specialBook-prevEl",
           nextEl: ".specialBook-nextEl",
-          // disabledClass: "hidden",
         }}
       >
         {booksDiscount.map((book) => (
           <SwiperSlide key={book.title}>
-            <div className="rounded-2xl border-2 border-gray-300 overflow-y-hidden boxShadow">
-              <Link to={`/details/${book.slug}`}>
+            <div className="rounded-2xl border-2 border-gray-300 overflow-y-hidden ">
+              <Link
+                onClick={() => {
+                  window.scrollTo(0, 0);
+                }}
+                to={`/details/${book.slug}`}
+              >
                 <img
-                  className="h-[200px] w-full object-cover rounded-b-2xl md:h-[300px]"
+                  className="h-[200px] w-full object-cover rounded-b-2xl md:h-[300px] hover:opacity-50"
                   src={book.cover}
                   alt=""
                 />
               </Link>
               <div className="text-start p-3 md:p-7 flex flex-col justify-between">
-                <Link to={`/details/${book.slug}`}>
-                  <h3 className="line-clamp-1 font-semibold mb-3 md:text-2xl md:mb-5 hover:text-purple-600">
+                <h3 className="line-clamp-1 font-semibold mb-3 md:text-2xl md:mb-5 hover:text-purple-600">
+                  <Link
+                    onClick={() => {
+                      window.scrollTo(0, 0);
+                    }}
+                    to={`/details/${book.slug}`}
+                  >
                     {book.title}
-                  </h3>
-                </Link>
-                <div>
-                  <Link to={`/filter/${book.categorySlug}`}>
-                    <div className="uppercase tracking-wider bg-purple-400 inline-block text-purple-600 text-xs font-basic font-normal py-2 px-3 rounded-xl hover:text-orange-400 hover:bg-orange-200 ">
-                      {book.categorySlug}
-                    </div>
                   </Link>
+                </h3>
+                <div>
+                  <div className="uppercase tracking-wider bg-purple-400 inline-block text-purple-600 text-xs font-basic font-normal py-2 px-3 rounded-xl hover:text-orange-400 hover:bg-orange-200 ">
+                    <Link
+                      onClick={() => {
+                        window.scrollTo(0, 0);
+                      }}
+                      to={`/filter/${book.categorySlug}`}
+                    >
+                      {book.categorySlug}
+                    </Link>
+                  </div>
                 </div>
                 <p className="line-clamp-4 text-xs mt-4 font-light font-basic md:text-base">
                   {book.synopsis}
@@ -546,9 +598,14 @@ const SpecialsBooks = () => {
                 <p className="my-3 text-sm font-normal font-basic md:my-8 md:text-base">
                   {book.author}
                 </p>
-                <div className="flex flex-col-reverse gap-2 md:flex justify-between">
+                <div className="flex flex-col-reverse gap-2 2xl:flex-row justify-between">
                   <div>
-                    <CartButton text="Add to cart" />
+                    <CartButton
+                      onClick={() => {
+                        handleAddToCart(book);
+                      }}
+                      text="Add to cart"
+                    />
                   </div>
                   <p className="flex items-center gap-4">
                     <span className="text-xl font-semibold md:text-3xl">
@@ -643,6 +700,12 @@ const Timer = ({
 };
 const FlashBooks = () => {
   const { bookFlashDiscount } = useGetBooksFlashDiscount();
+
+  const dispatch = useDispatch();
+  const handleAddToCart = (book: Book) => {
+    dispatch(addToCart(book));
+  };
+
   return (
     <>
       {bookFlashDiscount.map((book) => (
@@ -650,7 +713,12 @@ const FlashBooks = () => {
           key={book.title}
           className="p-5 flex flex-col items-center gap-4 md:h-[500px] md:aspect-[3/4]"
         >
-          <Link to={`/details/${book.slug}`}>
+          <Link
+            onClick={() => {
+              window.scrollTo(0, 0);
+            }}
+            to={`/details/${book.slug}`}
+          >
             <img
               className="border-[0.5px] border-orange-600 rounded-2xl h-[330px] aspect-[3/4] hover:scale-105 duration-300"
               src={book.cover}
@@ -658,19 +726,27 @@ const FlashBooks = () => {
             />
           </Link>
           <div className="flex flex-col items-center md:gap-2 md:mt-3">
-            <Link
-              to={`/details/${book.slug}`}
-              className="hover:text-purple-600"
-            >
-              <h3 className="text-xl font-semibold line-clamp-2 md:px-10">
+            <h3 className="text-xl font-semibold line-clamp-2 md:px-10 hover:text-purple-600">
+              <Link
+                onClick={() => {
+                  window.scrollTo(0, 0);
+                }}
+                to={`/details/${book.slug}`}
+              >
                 {book.title}
-              </h3>
-            </Link>
-            <Link to={`/filter/${book.categorySlug}`}>
-              <span className="uppercase tracking-wide text-sm font-normal text-purple-600 hover:text-orange-400">
+              </Link>
+            </h3>
+
+            <span className="uppercase tracking-wide text-sm font-normal text-purple-600 hover:text-orange-400">
+              <Link
+                onClick={() => {
+                  window.scrollTo(0, 0);
+                }}
+                to={`/filter/${book.categorySlug}`}
+              >
                 {book.categorySlug}
-              </span>
-            </Link>
+              </Link>
+            </span>
             <div className="flex items-center justify-center gap-4">
               <span className="text-2xl text-purple-600 font-semibold">
                 ${" "}
@@ -681,6 +757,12 @@ const FlashBooks = () => {
               </span>
             </div>
           </div>
+          <CartButton
+            onClick={() => {
+              handleAddToCart(book);
+            }}
+            text="Add to cart"
+          />
         </div>
       ))}
     </>
@@ -689,6 +771,10 @@ const FlashBooks = () => {
 const FeatureBooks = () => {
   const { isSuccess, booksFeature } = useGetBooksFeature();
   const [selectedBook, setSelectedBook] = useState<Book>();
+  const dispatch = useDispatch();
+  const handleAddToCart = (book: Book) => {
+    dispatch(addToCart(book));
+  };
 
   useEffect(() => {
     if (isSuccess) {
@@ -713,7 +799,12 @@ const FeatureBooks = () => {
         </div>
         {selectedBook && (
           <div className="p-2 bg-white rounded-xl md:grid grid-cols-[0.9fr,1.1fr] md:p-8 gap-6 boxShadow xl:h-[480px] ">
-            <Link to={`/details/${selectedBook.slug}`}>
+            <Link
+              onClick={() => {
+                window.scrollTo(0, 0);
+              }}
+              to={`/details/${selectedBook.slug}`}
+            >
               <img
                 className="w-full object-cover h-[300px] aspect-[4/5] rounded-2xl hover:scale-105 duration-300 md:h-auto bg-gray-100 lg:h-full "
                 src={selectedBook.cover}
@@ -727,16 +818,27 @@ const FeatureBooks = () => {
                   <Star className="fill-orange-400 text-white absolute -top-3 -right-[6px] w-[42px] h-[42px]" />
                 </div>
                 <div>
-                  <Link to={`/details/${selectedBook.slug}`}>
-                    <h3 className="line-clamp-2 text-2xl font-semibold hover:text-purple-600 md:text-3xl">
+                  <h3 className="line-clamp-2 text-2xl font-semibold hover:text-purple-600 md:text-3xl">
+                    <Link
+                      onClick={() => {
+                        window.scrollTo(0, 0);
+                      }}
+                      to={`/details/${selectedBook.slug}`}
+                    >
                       {selectedBook.title}
-                    </h3>
-                  </Link>
-                  <Link to={`/details/${selectedBook.categorySlug}`}>
-                    <span className="uppercase text-sm font-medium text-purple-600 hover:text-orange-400 md:text-base">
+                    </Link>
+                  </h3>
+
+                  <span className="uppercase text-sm font-medium text-purple-600 hover:text-orange-400 md:text-base">
+                    <Link
+                      onClick={() => {
+                        window.scrollTo(0, 0);
+                      }}
+                      to={`/filter/${selectedBook.categorySlug}`}
+                    >
                       {selectedBook.categorySlug}
-                    </span>
-                  </Link>
+                    </Link>
+                  </span>
                 </div>
               </div>
               <div className="mb-2 md:mb-0">
@@ -768,15 +870,28 @@ const FeatureBooks = () => {
                   <span className="text-xl font-semibold md:text-2xl 2xl:text-3xl">
                     ${" "}
                     {(
-                      selectedBook.price -
-                      selectedBook.price * selectedBook.discountPercentage
+                      selectedBook?.price -
+                      selectedBook?.price * selectedBook?.discountPercentage
                     ).toFixed(2)}
                   </span>
-                  <span className="text-sm font-normal text-gray-400 line-through md:text-base 2xl:text-2xl">
-                    ${selectedBook.price}
-                  </span>
+                  {selectedBook?.price -
+                    selectedBook?.price * selectedBook?.discountPercentage ===
+                  selectedBook.price ? (
+                    ""
+                  ) : (
+                    <span className="text-sm font-normal text-gray-400 line-through md:text-base 2xl:text-2xl">
+                      ${selectedBook.price}
+                    </span>
+                  )}
                 </div>
-                <CartButton text="ADD" />
+                <div>
+                  <CartButton
+                    text="ADD"
+                    onClick={() => {
+                      handleAddToCart(selectedBook);
+                    }}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -942,25 +1057,29 @@ const NewsBlogs = ({
 }) => {
   return (
     <div className="rounded-2xl overflow-hidden">
-      <a href={link} target="_blank">
+      <Link to={link} target="_blank">
         <img
           className="h-[250px] bg-gray-100 rounded-b-2xl w-full object-cover hover:scale-105 duration-300"
           src={img}
           alt="cover"
         />
-      </a>
+      </Link>
 
       <div className="text-start py-3 flex flex-col gap-4 md:py-7">
-        <a href={link} target="_blank">
+        <Link to={link} target="_blank">
           <h3 className="text-lg font-medium flex hover:text-purple-600">
             {title}
           </h3>
-        </a>
+        </Link>
         <div className="text-sm font-light font-basic md:mb-5">
           <p className="mb-2 line-clamp-3">{description}</p>
-          <a className="text-purple-600" href={link} target="_blank">
+          <Link
+            className="text-purple-600 hover:text-orange-600"
+            to={link}
+            target="_blank"
+          >
             Continue reading...
-          </a>
+          </Link>
         </div>
         <div className="flex items-center gap-5">
           <img
@@ -987,12 +1106,12 @@ const SectionsBooks = ({
   icon: ReactNode;
 }) => {
   return (
-    <div className="text-center flex flex-col items-center">
-      <div className="">{icon}</div>
-      <h2 className="text-3xl font-bold md:mb-[10px] md:mt-10 md:text-5xl">
+    <div className="text-center flex flex-col items-center group">
+      <div className="group-hover:scale-125 duration-200">{icon}</div>
+      <h2 className="group-hover:text-[#d6ae01] group-hover:scale-105 duration-200 text-3xl font-bold md:mb-[10px] md:mt-10 md:text-5xl ">
         {quantity}
       </h2>
-      <span className="text-base font-medium text-gray-100 md:text-xl">
+      <span className="group-hover:scale-110 duration-200 text-base font-medium text-gray-100 md:text-xl">
         {section}
       </span>
     </div>
@@ -1004,8 +1123,8 @@ function Home() {
     "w-[70px] h-[70px] md:w-[100px] md:h-[100px] fill-purple-600 text-white stroke-[0.75px]";
   return (
     <>
-      <div className="my-[30px] mx-auto font-heading flex flex-col gap-[100px] sm:px-0">
-        <div className="main container mx-auto px-4 lg:px-14">
+      <div className="my-[30px] mx-auto font-heading flex flex-col gap-[100px] pt-36 sm:px-0">
+        <div className="main container mx-auto px-4 ">
           <div className="flex flex-col gap-4 lg:grid grid-cols-[2fr,1fr] 2xl:grid-cols-[3fr,1fr] gap-x-3">
             <div className="relative flex pl-6 py-16 items-center justify-center bg-purple-400 rounded-3xl overflow-hidden lg:pl-10 lg:py-12">
               <MainCard />
@@ -1040,11 +1159,11 @@ function Home() {
         <div className="benefits">
           <ContainerBenefits />
         </div>
-        <div className="recomended container mx-auto px-4 lg:px-14 xl:flex gap-4 2xl:mt-20">
+        <div className="recomended container mx-auto px-4  xl:flex gap-4 2xl:mt-20">
           <BooksRecomended />
           <BooksPopular />
         </div>
-        <div className="special container mx-auto px-4 lg:px-14 lg:mt-10 2xl:mt-20">
+        <div className="special container mx-auto px-4 lg:mt-10 2xl:mt-20">
           <div className="mb-8 lg:mb-16 xl:px-60 2xl:px-96">
             <TitleOfEachSection
               title="Special Offers"
@@ -1053,7 +1172,7 @@ function Home() {
           </div>
           <SpecialsBooks />
         </div>
-        <div className="flashSale container mx-auto px-4  py-[70px] text-center flex flex-col items-center  md:mt-20 lg:px-14">
+        <div className="flashSale container mx-auto px-4  py-[70px] text-center flex flex-col items-center  md:mt-20 ">
           <div className="relative md:mb-8 2xl:mb-16 xl:px-60 2xl:px-96">
             <PointsIcon
               color="bg-purple-400"
@@ -1070,7 +1189,7 @@ function Home() {
             <FlashBooks />
           </div>
         </div>
-        <div className="onsale container mx-auto px-4 lg:px-14">
+        <div className="onsale container mx-auto px-4 ">
           <OnSaleBook />
         </div>
         <div className="feature w-full bg-purple-400 relative overflow-hidden py-[70px] xl:h-[800px]">
@@ -1096,7 +1215,7 @@ function Home() {
             orientation="horizontal"
             className="bottom-10 right-16"
           />
-          <div className="container mx-auto px-4 relative flex flex-col gap-16  lg:px-14 xl:flex-row justify-between ">
+          <div className="container mx-auto px-4 relative flex flex-col gap-16   xl:flex-row justify-between ">
             <FeatureBooks />
           </div>
         </div>
@@ -1127,7 +1246,7 @@ function Home() {
             <TestimonialCard />
           </div>
         </div>
-        <div className="latest container mx-auto flex flex-col text-start px-4  md:py-[50px] lg:px-14">
+        <div className="latest container mx-auto flex flex-col text-start px-4  md:py-[50px] ">
           <div className="flex justify-between items-end mb-10 lg:mb-10 lg:w-4/6 ">
             <TitleOfEachSection
               title="Letest News"
@@ -1178,7 +1297,7 @@ function Home() {
             />
           </div>
         </div>
-        <div className="counter container mx-auto md:py-[20px] lg:px-14">
+        <div className="counter container mx-auto md:py-[20px] ">
           <div className="flex flex-col mx-auto gap-6 justify-between sm:grid grid-cols-2 md:gap-y-10 lg:grid-cols-4">
             <SectionsBooks
               section="Happy Customers"

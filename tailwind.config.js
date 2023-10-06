@@ -20,6 +20,7 @@ export default {
           200: "var(--orange-02)",
           300: "var(--orange-03)",
           400: "var(--orange-04)",
+          500: "var(--orange-05)",
         },
         gray: {
           100: "var(--gray-01)",

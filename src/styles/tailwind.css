@@ -29,6 +29,8 @@
   --orange-02: #ffe7d4;
   --orange-03: #f5dcc8;
   --orange-04: #ff754c;
+  --orange-05: #d8544f;
+
   --blue-01: #e4f1fd;
   --blue-02: #d5ebff;
   --blue-03: #76c7ff;
@@ -60,6 +62,18 @@
 }
 .boxShadow {
   box-shadow: 0px 25px 33px 0px rgba(108, 93, 211, 0.25);
+}
+.ToastRoot {
+  border-radius: 6px;
+  box-shadow:
+    hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
+    hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
+  padding: 15px;
+  display: grid;
+  grid-template-areas: "title action" "description action";
+  grid-template-columns: auto max-content;
+  column-gap: 15px;
+  align-items: center;
 }
 
 @media (min-width: 1024px) {

@@ -36,7 +36,7 @@ function Select({
         <RuiSelect.Content
           sideOffset={10}
           position="popper"
-          className="relative z-10 w-[--radix-select-trigger-width] overflow-hidden bg-white rounded-md shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]"
+          className="relative z-20 w-[--radix-select-trigger-width] bg-white rounded-md shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]"
         >
           <RuiSelect.Viewport className="p-[5px] w-full">
             {options.map((option) => (

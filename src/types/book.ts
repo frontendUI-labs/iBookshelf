@@ -1,4 +1,5 @@
 export type Book = {
+  quantity: number;
   author: string;
   categories: {
     name: string;

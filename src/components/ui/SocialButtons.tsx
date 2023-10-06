@@ -1,5 +1,5 @@
-import { Minus, Plus } from "lucide-react";
-import { ReactNode, useState } from "react";
+import { Minus, Plus, Trash2 } from "lucide-react";
+import { ReactNode } from "react";
 import { twMerge } from "tailwind-merge";
 
 function SocialButtons({ children }: { children: ReactNode }) {
@@ -27,18 +27,22 @@ export function ButtonsSocials({
   );
 }
 
-export function MoreandLessButton({ gap }: { gap?: string }) {
-  const [counter, setCounter] = useState(1);
-
-  function addCounter() {
-    setCounter(counter + 1);
-  }
-  function reduceCounter() {
-    if (counter <= 1) return;
-    setCounter(counter - 1);
-  }
+export function MoreandLessButton({
+  gap,
+  counter,
+  reduceCounter,
+  addToCart,
+  bookTotalPrice,
+}: {
+  gap?: string;
+  counter: number;
+  reduceCounter?: () => void;
+  addToCart?: () => void;
+  bookTotalPrice?: any;
+}) {
   return (
-    <>
+    <div className="flex flex-col justify-between items-end">
+      {bookTotalPrice > 0 ? <p>$ {bookTotalPrice} USD</p> : null}
       <div
         className={twMerge(
           "flex items-center gap-4 border border-gray-400 rounded-lg",
@@ -46,13 +50,17 @@ export function MoreandLessButton({ gap }: { gap?: string }) {
         )}
       >
         <ButtonsSocials onClick={reduceCounter}>
-          <Minus className="text-purple-600" />
+          {counter === 1 ? (
+            <Trash2 className="text-orange-500 active:text-orange-500" />
+          ) : (
+            <Minus className="text-purple-600 active:text-orange-500" />
+          )}
         </ButtonsSocials>
         <span className="font-bold">{counter}</span>
-        <ButtonsSocials onClick={addCounter}>
-          <Plus className="text-purple-600" />
+        <ButtonsSocials onClick={addToCart}>
+          <Plus className="text-purple-600 active:text-green-600" />
         </ButtonsSocials>
       </div>
-    </>
+    </div>
   );
 }

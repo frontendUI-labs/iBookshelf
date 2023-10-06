@@ -1,32 +1,69 @@
-import { ShoppingCart } from "lucide-react";
 import { StarIcon } from "../components/ui/Icons";
-import Button from "./Button";
 import { useGetRelatedBooks } from "../hooks/books";
 import { Link } from "react-router-dom";
 import IsLoading from "../states/is-loading";
+import CartButton from "../components/ui/CartButton";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../redux/cartSlice";
 import { Book } from "../types/book";
 
-function RelatedBooks({ relatedbook }: { relatedbook: Book }) {
+function RelatedBooks({
+  relatedbook,
+  onClick,
+}: {
+  relatedbook: Book;
+  onClick: () => void;
+}) {
+  // function RelatedBooks({
+  //   cover,
+  //   title,
+  //   category,
+  //   rate,
+  //   totalReviews,
+  //   price,
+  //   slug,
+  //   onClick,
+  // }: {
+  //   cover: string;
+  //   title: string;
+  //   category: string;
+  //   rate: number;
+  //   totalReviews: number;
+  //   price: number;
+  //   slug: string;
+  //   onClick?: () => void;
+  // }) {
   return (
     <div className="flex flex-col gap-4  mt-4 ">
       <div className="flex gap-4">
-        <img
-          className="object-cover aspect-[2/3] h-[190px] rounded-md"
-          src={relatedbook.cover}
-          alt=""
-        />
+        <Link to={`/details/${relatedbook.slug}`}>
+          <img
+            className="object-cover  aspect-[4/3] h-[190px] rounded-md border-[0.5px] border-slate-600 hover:scale-105 duration-200"
+            src={relatedbook.cover}
+            alt=""
+          />
+        </Link>
         <div className="w-full flex flex-col gap-4">
           <div className="flex flex-col gap-1">
-            <Link to={`/details/${relatedbook.slug}`}>
-              <h3 className="text-purple-700 font-bold line-clamp-1 hover:text-purple-600">
+            <h3 className="text-purple-700 font-bold line-clamp-1 hover:text-purple-600">
+              <Link
+                onClick={() => {
+                  window.scrollTo(0, 0);
+                }}
+                to={`/details/${relatedbook.slug}`}
+              >
                 {relatedbook.title}
-              </h3>
-            </Link>
+              </Link>
+            </h3>
             <Link
-              to={`/${relatedbook.categorySlug}`}
-              className="text-purple-600 font-bold text-[15px] capitalize"
+              onClick={() => {
+                window.scrollTo(0, 0);
+              }}
+              to={`/filter/${relatedbook.categorySlug}`}
             >
-              {relatedbook.categorySlug}
+              <p className="text-purple-600 font-bold text-[15px] capitalize hover:text-orange-600">
+                {relatedbook.categorySlug}
+              </p>
             </Link>
           </div>
           <div className="flex items-center gap-2 ">
@@ -47,11 +84,11 @@ function RelatedBooks({ relatedbook }: { relatedbook: Book }) {
             </h4>
             <span className="text-gray-100 text-xs line-through">$98.4</span>
           </div>
-          <Button variant="icon">
-            {" "}
-            <ShoppingCart />
-            <span>Add to cart</span>
-          </Button>
+          <CartButton
+            onClick={onClick}
+            bg="bg-slate-100 p-1 text-purple-600 hover:bg-trasnparent"
+            text="Add to Cart"
+          />
         </div>
       </div>
     </div>
@@ -70,12 +107,24 @@ function RelatedBooksContainer({
     bookSlug
   );
 
+  const dispatch = useDispatch();
+  const handleAddToCart = (book: Book) => {
+    dispatch(addToCart(book));
+  };
+
+  if (!relatedBooks) return;
   return (
     <div className="p-4 pr-0 font-heading">
       <h2 className="font-bold text-3xl text-purple-700">Related Books</h2>
       {isLoading && <IsLoading />}
       {relatedBooks?.map((relatedbook) => (
-        <RelatedBooks key={relatedbook.id} relatedbook={relatedbook} />
+        <RelatedBooks
+          key={relatedbook.id}
+          relatedbook={relatedbook}
+          onClick={() => {
+            handleAddToCart(relatedbook);
+          }}
+        />
       ))}
     </div>
   );
