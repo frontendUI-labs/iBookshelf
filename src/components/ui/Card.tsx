@@ -3,17 +3,22 @@ import Button from "../../common/Button";
 import { ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Book } from "../../types/book";
-import { useAppContext } from "../../bookContext/AppContext";
+import { useDispatch, useSelector } from "react-redux";
+import { addBook } from "../../redux/book-slice";
+import { RootBookState } from "../../redux/store";
 
 export function CardListLayout({ book }: { book: Book }) {
   const oldPrice = (book.price * 0.5 + book.price).toFixed(2);
   const categories = book.categories.name;
-  const { getfavoriteBooks, favoriteBooks } = useAppContext();
+  const favoriteBooks: Book[] = useSelector(
+    (state: RootBookState) => state.user.bookState
+  );
+
   const indexOfCard = [...favoriteBooks].findIndex(
     (favoriteBook) => favoriteBook.id === book.id
   );
 
-  // const { isFavorite, setIsFavorite } = useAppContext();
+  const dispatch = useDispatch();
 
   return (
     <div className="flex rounded-sm p-[20px] gap-[40px] border border-gray-300 hover:scale-[1.01] duration-100 hover:shadow-2xl hover:shadow-purple-300">
@@ -90,7 +95,7 @@ export function CardListLayout({ book }: { book: Book }) {
               </Button>
               <HeartIcon
                 onClick={() => {
-                  getfavoriteBooks(book);
+                  dispatch(addBook(book));
                 }}
                 variant={!!favoriteBooks[indexOfCard]}
                 bg="purple-400"
@@ -104,18 +109,15 @@ export function CardListLayout({ book }: { book: Book }) {
 }
 
 function CardComponent({ book }: { book: Book }) {
-  const categories = book.categories.name;
-  const { getfavoriteBooks, favoriteBooks } = useAppContext();
-
-  // const indexOfCard = favoriteBooks.findIndex(
-  //   (favoritedBook) => favoritedBook.id === book.id
-  // );
-  const indexOfCard = [...favoriteBooks].findIndex(
-    (favoriteBook) => favoriteBook.id === book.id
+  const favoriteBooks: Book[] = useSelector(
+    (state: RootBookState) => state.user.bookState
   );
-  // const indexOfCard = favoriteBooks.filter(
-  //   (favoritedBook) => favoritedBook.id === book.id
-  // );
+
+  const categories = book.categories.name;
+  const indexOfCard = [...favoriteBooks].findIndex(
+    (favoritedBook) => favoritedBook.id === book.id
+  );
+  const dispatch = useDispatch();
 
   return (
     <div className="border-[1px] border-gray-200 rounded-lg p-4 flex flex-col items-center">
@@ -128,7 +130,7 @@ function CardComponent({ book }: { book: Book }) {
         <div className="absolute top-[10px] right-[10px]">
           <HeartIcon
             onClick={() => {
-              getfavoriteBooks(book);
+              dispatch(addBook(book));
             }}
             variant={!!favoriteBooks[indexOfCard]}
             bg="white"

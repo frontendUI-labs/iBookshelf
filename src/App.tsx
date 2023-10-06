@@ -8,7 +8,10 @@ import PaymentPage from "./pages/PaymentPage";
 import DetailsPage from "./pages/DetailsPage";
 import Footer from "./components/layout/Footer";
 import Header from "./components/layout/header";
-import { AppProvider } from "./bookContext/AppContext";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistStore } from "redux-persist";
 
 const queryClient = new QueryClient();
 
@@ -22,25 +25,27 @@ function MainLayout() {
   );
 }
 const App = (): FunctionComponent => {
+  const persistor = persistStore(store);
   return (
-    <AppProvider>
-      <BrowserRouter>
-        <QueryClientProvider client={queryClient}>
-          <ReactQueryDevtools />
-
-          <Routes>
-            <Route path="/" element={<MainLayout />}>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/filter" element={<FilterPage />} />
-              <Route path="/filter/:category" element={<FilterPage />} />
-              <Route path="/details/:bookSlug" element={<DetailsPage />} />
-              <Route path="/checkout" element={<PaymentPage />} />
-            </Route>
-          </Routes>
-          {/* <ReactQueryDevtools initialIsOpen={false} />  */}
-        </QueryClientProvider>
-      </BrowserRouter>
-    </AppProvider>
+    <PersistGate persistor={persistor}>
+      <Provider store={store}>
+        <BrowserRouter>
+          <QueryClientProvider client={queryClient}>
+            <ReactQueryDevtools />
+            <Routes>
+              <Route path="/" element={<MainLayout />}>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/filter" element={<FilterPage />} />
+                <Route path="/filter/:category" element={<FilterPage />} />
+                <Route path="/details/:bookSlug" element={<DetailsPage />} />
+                <Route path="/checkout" element={<PaymentPage />} />
+              </Route>
+            </Routes>
+            {/* <ReactQueryDevtools initialIsOpen={false} />  */}
+          </QueryClientProvider>
+        </BrowserRouter>
+      </Provider>
+    </PersistGate>
   );
 };
 

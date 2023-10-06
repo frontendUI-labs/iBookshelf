@@ -10,7 +10,7 @@ export const getBooks = async (
     category: string;
     initialRange: number;
     finalRange: number;
-    inputValue: string;
+    searchQuery: string;
   }
 ) => {
   const [startRange, endRange] = pageRange;
@@ -26,7 +26,7 @@ export const getBooks = async (
     .filter("categorySlug", filter.category ? "eq" : "not.eq", filter.category)
     .filter("price", "gte", filter.initialRange)
     .filter("price", "lte", filter.finalRange)
-    .filter("title", "ilike", `%${filter.inputValue}%`)
+    .filter("title", "ilike", `%${filter.searchQuery}%`)
     .range(startRange, endRange)
     .order("rating", { ascending: orderBooks });
 
