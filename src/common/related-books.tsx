@@ -122,7 +122,8 @@ function RelatedBooksContainer({
           key={relatedbook.id}
           relatedbook={relatedbook}
           onClick={() => {
-            handleAddToCart(relatedbook);
+            const bookWithQty = { ...relatedbook, quantity: 1 };
+            handleAddToCart(bookWithQty);
           }}
         />
       ))}

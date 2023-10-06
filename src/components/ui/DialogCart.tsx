@@ -11,9 +11,12 @@ import {
   removeAndDecrementBook,
   removeBook,
 } from "../../redux/cartSlice";
+import { CartBookType } from "../../redux/store";
 
 function BookCartDialog() {
-  const cartBooks: Book[] = useSelector((state) => state.cart.cartBooks);
+  const cartBooks: Book[] = useSelector(
+    (state: CartBookType) => state.cart.cartBooks
+  );
 
   const dispatch = useDispatch();
 
@@ -142,7 +145,9 @@ function BookCartDialog() {
 }
 
 const DialogCart = () => {
-  const cartBooks: Book[] = useSelector((state) => state.cart.cartBooks);
+  const cartBooks: Book[] = useSelector(
+    (state: CartBookType) => state.cart.cartBooks
+  );
   const [open, setOpen] = useState(false);
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>

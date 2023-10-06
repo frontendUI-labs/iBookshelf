@@ -43,8 +43,9 @@ export interface RootInputState {
     searchQuery: string;
   };
 }
-// export interface CartBookType {
-//   cart: {
-//     cartBooks: Book[];
-//   };
-// }
+
+export interface CartBookType {
+  cart: {
+    cartBooks: Book[];
+  };
+}

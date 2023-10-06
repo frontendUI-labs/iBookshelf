@@ -19,16 +19,10 @@ export const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action) => {
       const newState = [...state.cartBooks];
-      console.log(state, "state");
-
       const selectedBookIdx = newState.findIndex((book) => {
         return book.id === action.payload.id;
       });
-      console.log(action.payload, "book");
-
       const bookSelected = newState[selectedBookIdx] as Book;
-      console.log(bookSelected, "select");
-
       if (selectedBookIdx < 0) {
         state.cartBooks = [...newState, { ...action.payload, quantity: 1 }];
       } else {
@@ -36,7 +30,6 @@ export const cartSlice = createSlice({
           ...bookSelected,
           quantity: bookSelected.quantity + 1,
         };
-
         state.cartBooks = [
           ...newState.slice(0, selectedBookIdx),
           addBook,

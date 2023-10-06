@@ -159,7 +159,11 @@ function Details() {
                   <div className="flex gap-2 ">
                     <CartButton
                       onClick={() => {
-                        handleAddToCart(bookDetails);
+                        const bookWithQty = {
+                          ...bookDetails,
+                          quantity: 1,
+                        };
+                        handleAddToCart(bookWithQty);
                       }}
                       text="Add to cart"
                     />

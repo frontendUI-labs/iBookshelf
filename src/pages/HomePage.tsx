@@ -602,7 +602,11 @@ const SpecialsBooks = () => {
                   <div>
                     <CartButton
                       onClick={() => {
-                        handleAddToCart(book);
+                        const bookWithQty = {
+                          ...book,
+                          quantity: 1,
+                        };
+                        handleAddToCart(bookWithQty);
                       }}
                       text="Add to cart"
                     />
@@ -759,7 +763,8 @@ const FlashBooks = () => {
           </div>
           <CartButton
             onClick={() => {
-              handleAddToCart(book);
+              const bookWithQty = { ...book, quantity: 1 };
+              handleAddToCart(bookWithQty);
             }}
             text="Add to cart"
           />
@@ -775,10 +780,10 @@ const FeatureBooks = () => {
   const handleAddToCart = (book: Book) => {
     dispatch(addToCart(book));
   };
-
   useEffect(() => {
-    if (isSuccess) {
-      setSelectedBook(booksFeature[0]);
+    if (isSuccess && booksFeature[0]) {
+      const bookWithQty = { ...booksFeature[0], quantity: 1 };
+      setSelectedBook(bookWithQty);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [booksFeature]);
@@ -904,9 +909,9 @@ const FeatureBooks = () => {
               <button
                 className="hover:scale-105 duration-300"
                 key={book.title}
-                //@git-
                 onClick={() => {
-                  handleBookClick(book);
+                  const bookWithQty = { ...book, quantity: 1 };
+                  handleBookClick(bookWithQty);
                 }}
               >
                 <img
